@@ -10,7 +10,7 @@ void menu()
     e.grelha[4][3] = VALOR_X;
     e.grelha[3][3] = VALOR_O;
     e.grelha[4][4] = VALOR_O;
-    e.grelha[4][5] = (int) '.';
+    e.grelha[4][5] = VALOR_DOT;
 
     system("clear");
 
@@ -42,7 +42,7 @@ void menu()
             case 'L':
                 printf("Introduza o nome do ficheiro");
                 scanf("%s",file_name);
-                readFile(e,file_name);
+                readFile(&e,file_name);
                 break;
             case 'E':
                 

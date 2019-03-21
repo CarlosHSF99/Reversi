@@ -36,6 +36,10 @@ int cerca(int i, int j, ESTADO e);
 
 int cercaDir(int k, int l, int i, int j, ESTADO e);
 
-void readFile (ESTADO e,char *file_name);
+void readFile (ESTADO *e,char *file_name);
+
+void writeFile();
+
+void jogada();
 
 #endif //PROJ_ESTADO_H

@@ -42,7 +42,7 @@ int cercaDir (int k, int l, int i, int j, ESTADO e)
 
 //ler ficheiro. 
 
-void readFile(ESTADO e,char *file_name){
+void readFile(ESTADO *e,char *file_name){
     FILE *file;
     char file_txt[MAX_LENGTH];
     int l,c,controlo=0;
@@ -57,24 +57,26 @@ void readFile(ESTADO e,char *file_name){
         for(c=0;c!='\n';c++)
             switch(getchar()){
                 case 'M':
-                    e.modo = 0;
+                    e->modo = 0;
                 case 'A':
-                    e.modo = 1;
+                    e->modo = 1;
                 case 'X':
                     if(controlo==0){
-                        e.peca=VALOR_X;
+                        e->peca=VALOR_X;
                         controlo++;
                     }
                     else
-                        e.grelha[l][c] = VALOR_X;
+                        e->grelha[l][c] = VALOR_X;
                 case '-':
-                    e.grelha[l][c] = VAZIA;
+                    e->grelha[l][c] = VAZIA;
                 case 'O':
                     if(controlo==0){
-                        e.peca=VALOR_O;
+                        e->peca=VALOR_O;
                         controlo++;
                     }
                     else
-                        e.grelha[l][c] = VALOR_O;
+                        e->grelha[l][c] = VALOR_O;
             }
 }
+
+void writeFile();
