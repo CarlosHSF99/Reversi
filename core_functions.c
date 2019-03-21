@@ -50,7 +50,7 @@ void readFile(ESTADO *e,char *file_name){
 
 //escreve num ficheiro
 
-void writeFile();
+void writeFile(ESTADO *e,char *filename);
 
 //executa uma jogada
 

@@ -38,15 +38,19 @@ void menu()
             case 'Q':
                 break;
             case 'N':
-                
+                //newVsHuman();
                 break;
+            case 'A':
+                //newVsBot();
             case 'L':
                 printf("Introduza o nome do ficheiro");
                 scanf("%s",file_name);
                 readFile(&e,file_name);
                 break;
             case 'E':
-                
+                printf("Introduza o nime do ficheiro");
+                scanf("%s",file_name); // 4.3anosluz-c*t     9.95c
+                writeFile(&e,file_name);
                 break;
             case 'J':
                 printf("Introduza as coordenadas. (linha,coluna)");
@@ -57,13 +61,10 @@ void menu()
                 something(e);
                 break;
             case 'H':
-                
+                //help()
                 break;
             case 'U':
-                
-                break;
-            case 'A':
-                
+                //undo();
                 break;
             default:
                 printf("Invalid option!");
