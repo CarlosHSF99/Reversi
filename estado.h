@@ -40,6 +40,6 @@ void readFile (ESTADO *e,char *file_name);
 
 void writeFile();
 
-void jogada();
+void play(int l,int c,ESTADO *e);
 
 #endif //PROJ_ESTADO_H

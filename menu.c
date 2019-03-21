@@ -5,6 +5,7 @@ void menu()
     char opt; // menu option
     char file_name[MAX_LENGTH];
     ESTADO e = {VALOR_X};
+    int l,c;
 
     e.grelha[3][4] = VALOR_X;
     e.grelha[4][3] = VALOR_X;
@@ -48,7 +49,9 @@ void menu()
                 
                 break;
             case 'J':
-                
+                printf("Introduza as coordenadas. (linha,coluna)");
+                scanf("(%d,%d)",&l,&c);
+                play(l,c,&e);    ;
                 break;
             case 'S':
                 something(e);

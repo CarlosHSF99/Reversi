@@ -80,3 +80,16 @@ void readFile(ESTADO *e,char *file_name){
 }
 
 void writeFile();
+
+void play(int l,int c,ESTADO *e){
+    
+    if(cerca(l,c,*e)){
+        e->grelha[l][c]=e->peca;
+        if((e->peca)==VALOR_O)
+            e->peca=VALOR_X;
+        else
+            e->peca=VALOR_O;
+    }
+    else
+        printf("Jogada invalida");
+}
