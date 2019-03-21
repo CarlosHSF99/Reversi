@@ -30,16 +30,24 @@ void printg(ESTADO e);
 
 void menu();
 
+void newVsHuman();
+
+void newVsBot();
+
+void readFile (ESTADO *e,char *file_name);
+
+void writeFile();
+
+void play(int l,int c,ESTADO *e); 
+
 void something(ESTADO e);
 
 int cerca(int i, int j, ESTADO e);
 
 int cercaDir(int k, int l, int i, int j, ESTADO e);
 
-void readFile (ESTADO *e,char *file_name);
+void help();
 
-void writeFile();
-
-void play(int l,int c,ESTADO *e);
+void undo();
 
 #endif //PROJ_ESTADO_H
