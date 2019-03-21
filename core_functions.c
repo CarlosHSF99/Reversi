@@ -1,43 +1,12 @@
 #include "estado.h"
 
-//mostrar jogadas possiveis.
+//novo jogo contra um adversario humano
 
-void something(ESTADO e)
-{
-    for (int i = 0; i < DIM; i++)
-        for (int j = 0; j < DIM; j++)
-            if (cerca(i, j, e))
-                e.grelha[i][j] = '.';
-    
-    printg(e);
-}
+void newVsHuman();
 
-int cerca(int i, int j, ESTADO e)
-{
-    return e.grelha[i][j] == VAZIA && (
-           cercaDir(-1, -1, i, j, e) ||
-           cercaDir(-1,  0, i, j, e) ||
-           cercaDir(-1,  1, i, j, e) ||
-           cercaDir( 0, -1, i, j, e) ||
-           cercaDir( 0,  1, i, j, e) ||
-           cercaDir( 1, -1, i, j, e) ||
-           cercaDir( 1,  0, i, j, e) ||
-           cercaDir( 1,  1, i, j, e) );
-}
+//novo jogo contra um bot
 
-int cercaDir (int k, int l, int i, int j, ESTADO e)
-{
-    if (e.grelha[i+=k][j+=l] == e.peca)
-        return 0;
-
-    for (; i < DIM && i >= 0 && j < DIM && j >= 0; i+=k, j+=l)
-        if (e.grelha[i][j] == e.peca)
-            return 1;
-        else if (e.grelha[i][j] == VAZIA || e.grelha[i][j] == VALOR_DOT)
-            return 0;
-
-    return 0;
-}
+void newVsBot();
 
 
 //ler ficheiro. 
@@ -79,7 +48,11 @@ void readFile(ESTADO *e,char *file_name){
             }
 }
 
+//escreve num ficheiro
+
 void writeFile();
+
+//executa uma jogada
 
 void play(int l,int c,ESTADO *e){
     
@@ -93,3 +66,70 @@ void play(int l,int c,ESTADO *e){
     else
         printf("Jogada invalida");
 }
+
+//coloca pontos nas posicoes das jogadas validas
+
+void something(ESTADO e){
+    for (int i = 0; i < DIM; i++)
+        for (int j = 0; j < DIM; j++)
+            if (cerca(i, j, e))
+                e.grelha[i][j] = '.';
+    
+    printg(e);
+ }
+ 
+//verifica jogadas validas
+
+int cerca(int i, int j, ESTADO e){
+    
+    return e.grelha[i][j] == VAZIA && (
+            cercaDir(-1, -1, i, j, e) ||
+            cercaDir(-1,  0, i, j, e) ||
+            cercaDir(-1,  1, i, j, e) ||
+            cercaDir( 0, -1, i, j, e) ||
+            cercaDir( 0,  1, i, j, e) ||
+            cercaDir( 1, -1, i, j, e) ||
+            cercaDir( 1,  0, i, j, e) ||
+            cercaDir( 1,  1, i, j, e) );
+ }
+
+//funcao auxiliar da funcao cerca
+
+int cercaDir (int k, int l, int i, int j, ESTADO e){
+
+    if (e.grelha[i+=k][j+=l] == e.peca)
+         return 0;
+ 
+     for (; i < DIM && i >= 0 && j < DIM && j >= 0; i+=k, j+=l)
+         if (e.grelha[i][j] == e.peca)
+             return 1;
+         else if (e.grelha[i][j] == VAZIA || e.grelha[i][j] == VALOR_DOT)
+             return 0;
+ 
+     return 0;
+ }
+
+//coloca um '?' na jogada aconselhada
+ 
+void help();
+
+//desfaz uma jogada
+
+void undo();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
