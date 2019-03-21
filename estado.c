@@ -1,7 +1,4 @@
-#include <stdio.h>
 #include "estado.h"
-
-#define DIM 8
 
 // exemplo de uma função para imprimir o estado (Tabuleiro)
 void printg(ESTADO e)
@@ -23,8 +20,12 @@ void printg(ESTADO e)
                 case VAZIA:
                     c = '-';
                     break;
-                default:
+                case VALOR_DOT:
                     c = '.';
+                case VALOR_HELP:
+                    c = '?';
+                default:
+                    c = '-';
                     break;
             }
             
