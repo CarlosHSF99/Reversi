@@ -1,8 +1,9 @@
 #include "estado.h"
 
-// exemplo de uma função para imprimir o estado (Tabuleiro)
-void printg(ESTADO e){
-    char c = ' ';
+// imprimie um estado (Tabuleiro)
+void printg(ESTADO e)
+{
+    char c;
     
     for (int i = 0; i < DIM; i++){
         for (int j = 0; j < DIM; j++){
@@ -18,10 +19,12 @@ void printg(ESTADO e){
                     break;
                 case VALOR_DOT:
                     c = '.';
+                    break;
                 case VALOR_HELP:
                     c = '?';
+                    break;
                 default:
-                    c = '-';
+                    c = 'E';
                     break;
             }
             

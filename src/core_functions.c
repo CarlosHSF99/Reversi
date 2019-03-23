@@ -14,46 +14,24 @@ void newVsBot();
 void readFile(ESTADO *e,char *file_name) {
     FILE *file;
     char file_txt[MAX_LENGTH];
-    int l, c, controlo=0;
-
+    int l, c, peca;
+    
     sprintf(file_txt, "./saves/%s.txt", file_name);
-
+    
     file = fopen(file_txt, "r");
     
-    fseek(file, -76, SEEK_END);
+    fseek(file, -133, SEEK_END);
     
-    for(l=0; l<10; l++)
-        for(c=0; c != '\n'; c++)
+    e->modo = fgetc(file) == 'M' ? '0' : '1';
+    fseek(file, 1, SEEK_CUR);
+    e->peca = fgetc(file) == 'X' ? VALOR_X : VALOR_O;
+    fseek(file, 1, SEEK_CUR);
+    
+    for(l=0; l < DIM; l++)
+        for(c=0; c < DIM; c++)
         {
-            printf("0");
-            switch(getchar()) {
-                case 'M':
-                    e->modo = 0;
-                    break;
-                case 'A':
-                    e->modo = 1;
-                    break;
-                case 'X':
-                    if(controlo == 0) {
-                        e->peca = VALOR_X;
-                        controlo++;
-                    }
-                    else
-                        e->grelha[l][c] = VALOR_X;
-                    break;
-                case '-':
-                    e->grelha[l][c] = VAZIA;
-                    break;
-                case 'O':
-                    if(controlo == 0) {
-                        e->peca = VALOR_O;
-                        controlo++;
-                    }
-                    else
-                        e->grelha[l][c] = VALOR_O;
-                    break;
-            }
-            printf("1");
+            e->grelha[l][c] = (peca = fgetc(file)) == '-' ? VAZIA : peca == 'X' ? VALOR_X : VALOR_O;
+            fseek(file, 1, SEEK_CUR);
         }
 }
 
@@ -110,7 +88,7 @@ int cercaDir (int k, int l, int i, int j, ESTADO e)
     if (e.grelha[i+=k][j+=l] == e.peca)
          return 0;
  
-    for (; i<DIM && i>=0 && j<DIM && j>=0; i+=k, j+=l)
+    for (; i < DIM && i>=0 && j < DIM && j>=0; i+=k, j+=l)
          if (e.grelha[i][j] == e.peca)
             return 1;
          else if (e.grelha[i][j] == VAZIA || e.grelha[i][j] == VALOR_DOT)

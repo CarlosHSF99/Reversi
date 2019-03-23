@@ -4,15 +4,15 @@ void menu()
 {
     char opt; // menu option
     char file_name[MAX_LENGTH];
-    ESTADO e = {VALOR_X};
+    ESTADO e; //= {VALOR_X};
     int l,c;
-
+/*
     e.grelha[3][4] = VALOR_X;
     e.grelha[4][3] = VALOR_X;
     e.grelha[3][3] = VALOR_O;
     e.grelha[4][4] = VALOR_O;
     e.grelha[4][5] = VALOR_DOT;
-
+*/
     system("clear");
 
     //printg(e);
@@ -30,9 +30,9 @@ void menu()
         
         // cleans buffer
         while (getchar() != '\n');
-
+        
         system("clear");        
-
+        
         switch (opt)
         {
             case 'Q':
@@ -46,12 +46,16 @@ void menu()
                 printf("Introduza o nome do ficheiro: ");
                 scanf("%s", file_name);
                 
+                while(getchar() != '\n');
+                
                 readFile(&e, file_name);
                 
                 break;
             case 'E':
-                printf("Introduza o nime do ficheiro");
+                printf("Introduza o nome do ficheiro: ");
                 scanf("%s", file_name);
+                
+                while(getchar() != '\n');
                 
                 writeFile(&e, file_name);
                 
@@ -59,6 +63,8 @@ void menu()
             case 'J':
                 printf("Introduza as coordenadas. (linha,coluna)");
                 scanf("(%d,%d)", &l, &c);
+                
+                while(getchar() != '\n');
                 
                 play(l, c, &e);
                 
