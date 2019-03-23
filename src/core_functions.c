@@ -11,57 +11,66 @@ void newVsBot();
 
 //ler ficheiro. 
 
-void readFile(ESTADO *e,char *file_name){
+void readFile(ESTADO *e,char *file_name) {
     FILE *file;
     char file_txt[MAX_LENGTH];
-    int l,c,controlo=0;
+    int l, c, controlo=0;
 
-    sprintf(file_txt,"./saves/%s.txt",file_name);
+    sprintf(file_txt, "./saves/%s.txt", file_name);
 
-    file=fopen(file_txt,"a+");
+    file = fopen(file_txt, "r");
     
-    fseek(file,-74,SEEK_END);
+    fseek(file, -76, SEEK_END);
     
-    for(l=0;l<10;l++)
-        for(c=0;c!='\n';c++)
-            switch(getchar()){
+    for(l=0; l<10; l++)
+        for(c=0; c != '\n'; c++)
+        {
+            printf("0");
+            switch(getchar()) {
                 case 'M':
                     e->modo = 0;
+                    break;
                 case 'A':
                     e->modo = 1;
+                    break;
                 case 'X':
-                    if(controlo==0){
-                        e->peca=VALOR_X;
+                    if(controlo == 0) {
+                        e->peca = VALOR_X;
                         controlo++;
                     }
                     else
                         e->grelha[l][c] = VALOR_X;
+                    break;
                 case '-':
                     e->grelha[l][c] = VAZIA;
+                    break;
                 case 'O':
-                    if(controlo==0){
-                        e->peca=VALOR_O;
+                    if(controlo == 0) {
+                        e->peca = VALOR_O;
                         controlo++;
                     }
                     else
                         e->grelha[l][c] = VALOR_O;
+                    break;
             }
+            printf("1");
+        }
 }
 
 //escreve num ficheiro
 
-void writeFile(ESTADO *e,char *filename);
+void writeFile(ESTADO *e,char *filename)
+{}
 
 //executa uma jogada
 
-void play(int l,int c,ESTADO *e){
-    
-    if(cerca(l,c,*e)){
-        e->grelha[l][c]=e->peca;
-        if((e->peca)==VALOR_O)
-            e->peca=VALOR_X;
+void play(int l,int c,ESTADO *e) {
+    if(cerca(l, c, *e)) {
+        e->grelha[l][c] = e->peca;
+        if((e->peca) == VALOR_O)
+            e->peca = VALOR_X;
         else
-            e->peca=VALOR_O;
+            e->peca = VALOR_O;
     }
     else
         printf("Jogada invalida");
@@ -69,67 +78,53 @@ void play(int l,int c,ESTADO *e){
 
 //coloca pontos nas posicoes das jogadas validas
 
-void something(ESTADO e){
-    for (int i = 0; i < DIM; i++)
-        for (int j = 0; j < DIM; j++)
+void something(ESTADO e)
+{
+    for (int i=0; i < DIM; i++)
+        for (int j=0; j < DIM; j++)
             if (cerca(i, j, e))
                 e.grelha[i][j] = '.';
     
     printg(e);
- }
+}
  
 //verifica jogadas validas
 
-int cerca(int i, int j, ESTADO e){
-    
+int cerca(int i, int j, ESTADO e)
+{
     return e.grelha[i][j] == VAZIA && (
-            cercaDir(-1, -1, i, j, e) ||
-            cercaDir(-1,  0, i, j, e) ||
-            cercaDir(-1,  1, i, j, e) ||
-            cercaDir( 0, -1, i, j, e) ||
-            cercaDir( 0,  1, i, j, e) ||
-            cercaDir( 1, -1, i, j, e) ||
-            cercaDir( 1,  0, i, j, e) ||
-            cercaDir( 1,  1, i, j, e) );
- }
+           cercaDir(-1, -1, i, j, e) ||
+           cercaDir(-1,  0, i, j, e) ||
+           cercaDir(-1,  1, i, j, e) ||
+           cercaDir( 0, -1, i, j, e) ||
+           cercaDir( 0,  1, i, j, e) ||
+           cercaDir( 1, -1, i, j, e) ||
+           cercaDir( 1,  0, i, j, e) ||
+           cercaDir( 1,  1, i, j, e) );
+}
 
 //funcao auxiliar da funcao cerca
 
-int cercaDir (int k, int l, int i, int j, ESTADO e){
-
+int cercaDir (int k, int l, int i, int j, ESTADO e)
+{
     if (e.grelha[i+=k][j+=l] == e.peca)
          return 0;
  
-     for (; i < DIM && i >= 0 && j < DIM && j >= 0; i+=k, j+=l)
+    for (; i<DIM && i>=0 && j<DIM && j>=0; i+=k, j+=l)
          if (e.grelha[i][j] == e.peca)
-             return 1;
+            return 1;
          else if (e.grelha[i][j] == VAZIA || e.grelha[i][j] == VALOR_DOT)
-             return 0;
+            return 0;
  
-     return 0;
- }
+    return 0;
+}
 
 //coloca um '?' na jogada aconselhada
  
-void help();
+void help()
+{}
 
 //desfaz uma jogada
 
-void undo();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+void undo()
+{}

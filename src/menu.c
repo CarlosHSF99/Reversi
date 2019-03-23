@@ -15,7 +15,7 @@ void menu()
 
     system("clear");
 
-    printg(e);
+    //printg(e);
 
     do
     {
@@ -43,19 +43,25 @@ void menu()
             case 'A':
                 //newVsBot();
             case 'L':
-                printf("Introduza o nome do ficheiro");
-                scanf("%s",file_name);
-                readFile(&e,file_name);
+                printf("Introduza o nome do ficheiro: ");
+                scanf("%s", file_name);
+                
+                readFile(&e, file_name);
+                
                 break;
             case 'E':
                 printf("Introduza o nime do ficheiro");
-                scanf("%s",file_name); // 4.3anosluz-c*t     9.95c
-                writeFile(&e,file_name);
+                scanf("%s", file_name);
+                
+                writeFile(&e, file_name);
+                
                 break;
             case 'J':
                 printf("Introduza as coordenadas. (linha,coluna)");
-                scanf("(%d,%d)",&l,&c);
-                play(l,c,&e);    ;
+                scanf("(%d,%d)", &l, &c);
+                
+                play(l, c, &e);
+                
                 break;
             case 'S':
                 something(e);

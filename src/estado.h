@@ -1,5 +1,4 @@
 #ifndef PROJ_ESTADO_H
-
 #define PROJ_ESTADO_H
 
 #include <stdio.h>
@@ -7,7 +6,6 @@
 #include <string.h>
 
 #define DIM 8
-
 #define MAX_LENGTH 1024
 
 /*
@@ -19,8 +17,7 @@ Definição do estado i.e. tabuleiro. Representação matricial do tabuleiro.
 typedef enum {VAZIA, VALOR_X, VALOR_O, VALOR_DOT, VALOR_HELP, END_OF_LINE} VALOR;
 
 // Estrutura que armazena o estado do jogo
-typedef struct estado
-{
+typedef struct estado{
     VALOR peca;         // peça do jogador que vai jogar!
     VALOR grelha[8][8]; // grelha
     char modo; // modo em que se está a jogar! 0-> manual, 1-> contra computador
