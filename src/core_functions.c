@@ -20,7 +20,7 @@ void readFile(ESTADO *e,char *file_name) {
     
     file = fopen(file_txt, "r");
     
-    fseek(file, -133, SEEK_END);
+    fseek(file, -132, SEEK_END);
     
     e->modo = fgetc(file) == 'M' ? '0' : '1';
     fseek(file, 1, SEEK_CUR);
@@ -59,10 +59,15 @@ void play(int l,int c,ESTADO *e) {
 void something(ESTADO e)
 {
     for (int i=0; i < DIM; i++)
+    {
         for (int j=0; j < DIM; j++)
+        {
             if (cerca(i, j, e))
-                e.grelha[i][j] = '.';
-    
+                e.grelha[i][j] = VALOR_DOT;
+            printf("%d ", e.grelha[i][j]);
+        }
+        putchar('\n');
+    }
     printg(e);
 }
  
@@ -78,7 +83,7 @@ int cerca(int i, int j, ESTADO e)
            cercaDir( 0,  1, i, j, e) ||
            cercaDir( 1, -1, i, j, e) ||
            cercaDir( 1,  0, i, j, e) ||
-           cercaDir( 1,  1, i, j, e) );
+           cercaDir( 1,  1, i, j, e));
 }
 
 //funcao auxiliar da funcao cerca

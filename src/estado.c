@@ -3,34 +3,30 @@
 // imprimie um estado (Tabuleiro)
 void printg(ESTADO e)
 {
-    char c;
-    
-    for (int i = 0; i < DIM; i++){
+    for (int i = 0; i < DIM; i++)
         for (int j = 0; j < DIM; j++){
-            switch (e.grelha[i][j]){
+            switch (e.grelha[i][j])
+            {
                 case VALOR_O:
-                    c = 'O';
+                    putchar('O');
                     break;
                 case VALOR_X:
-                    c = 'X';
+                    putchar('X');
                     break;
                 case VAZIA:
-                    c = '-';
+                    putchar('-');
                     break;
                 case VALOR_DOT:
-                    c = '.';
+                    putchar('.');
                     break;
                 case VALOR_HELP:
-                    c = '?';
+                    putchar('?');
                     break;
                 default:
-                    c = 'E';
+                    putchar('E');
                     break;
             }
             
-            printf("%c ", c);
+            putchar(j < DIM-1 ? ' ' : '\n');
         }
-        
-        printf("\n");
-    }
 }
