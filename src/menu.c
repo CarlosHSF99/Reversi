@@ -4,7 +4,7 @@ void menu()
 {
     char opt; // menu option
     char file_name[MAX_LENGTH];
-    ESTADO e = {VALOR_X};
+    ESTADO e = {0, VALOR_X};
     int l,c;
 
     e.grelha[3][4] = VALOR_X;
@@ -69,7 +69,7 @@ void menu()
                 
                 break;
             case 'S':
-                something(e);
+                something(&e);
                 break;
             case 'H':
                 //help()
