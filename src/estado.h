@@ -28,6 +28,7 @@ typedef struct estado {
     VALOR peca;                 // peça do jogador que vai jogar!
     VALOR grelha[DIM][DIM];     // grelha
     POSICAO validas[MAX_POS];   // posiçoes validas
+    int nValidas;               // numero de posiçoes validas
     POSICAO alterar[MAX_POS];   // posiçoes a alterar
     POSICAO ajuda;              // posiçao ajuda
 } ESTADO;
@@ -40,13 +41,13 @@ void newVsHuman();
 
 void newVsBot();
 
-void readFile (ESTADO *e,char *file_name);
+void readFile (ESTADO *e, char *file_name);
 
-void writeFile(ESTADO *e,char *file_name);
+void writeFile(ESTADO *e, char *file_name);
 
-void play(int l,int c,ESTADO *e); 
+void play(int l, int c, ESTADO *e); 
 
-void something(ESTADO e);
+void something(ESTADO *e);
 
 int cerca(int i, int j, ESTADO e);
 

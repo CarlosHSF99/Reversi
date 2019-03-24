@@ -51,14 +51,20 @@ void play(int l,int c,ESTADO *e) {
 }
 
 //coloca pontos nas posicoes das jogadas validas
-void something(ESTADO e)
+void something(ESTADO *e)
 {
+    e->nValidas = 0;
+
     for (int i=0; i < DIM; i++)
         for (int j=0; j < DIM; j++)
-            if (cerca(i, j, e))
-                e.grelha[i][j] = VALOR_DOT;
+            if (cerca(i, j, *e))
+            {
+                e->validas[e->nValidas].l = i;
+                e->validas[e->nValidas].c = j;
+                e->nValidas++;
+            }
     
-    printg(e);
+    printg(*e);
 }
  
 //verifica jogadas valida

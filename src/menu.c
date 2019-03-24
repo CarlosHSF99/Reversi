@@ -69,7 +69,7 @@ void menu()
                 
                 break;
             case 'S':
-                something(e);
+                something(&e);
                 break;
             case 'H':
                 //help()
