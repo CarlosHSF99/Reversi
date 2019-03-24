@@ -1,16 +1,14 @@
 #include "estado.h"
 
 //novo jogo contra um adversario humano
-
-void newVsHuman();
+void newVsHuman()
+{}
 
 //novo jogo contra um bot
-
-void newVsBot();
-
+void newVsBot()
+{}
 
 //ler ficheiro. 
-
 void readFile(ESTADO *e,char *file_name) {
     FILE *file;
     char file_txt[MAX_LENGTH];
@@ -36,12 +34,10 @@ void readFile(ESTADO *e,char *file_name) {
 }
 
 //escreve num ficheiro
-
 void writeFile(ESTADO *e,char *filename)
 {}
 
 //executa uma jogada
-
 void play(int l,int c,ESTADO *e) {
     if(cerca(l, c, *e)) {
         e->grelha[l][c] = e->peca;
@@ -55,25 +51,17 @@ void play(int l,int c,ESTADO *e) {
 }
 
 //coloca pontos nas posicoes das jogadas validas
-
 void something(ESTADO e)
 {
     for (int i=0; i < DIM; i++)
-    {
         for (int j=0; j < DIM; j++)
-        {
             if (cerca(i, j, e))
                 e.grelha[i][j] = VALOR_DOT;
-            
-            printf("%d ", e.grelha[i][j]);
-        }
-        putchar('\n');
-    }
+    
     printg(e);
 }
  
-//verifica jogadas validas
-
+//verifica jogadas valida
 int cerca(int i, int j, ESTADO e)
 {
     return e.grelha[i][j] == VAZIA && (
@@ -88,7 +76,6 @@ int cerca(int i, int j, ESTADO e)
 }
 
 //funcao auxiliar da funcao cerca
-
 int cercaDir (int k, int l, int i, int j, ESTADO e)
 {
     VALOR opnt = 3 - e.peca;
@@ -102,11 +89,9 @@ int cercaDir (int k, int l, int i, int j, ESTADO e)
 }
 
 //coloca um '?' na jogada aconselhada
- 
 void help()
 {}
 
 //desfaz uma jogada
-
 void undo()
 {}
