@@ -20,16 +20,16 @@ typedef enum {VAZIA, VALOR_X, VALOR_O, VALOR_DOT, VALOR_HELP, END_OF_LINE} VALOR
 // posicao
 typedef struct posicao {
     int l, c;
-} POSICAO
+} POSICAO;
 
 // Estrutura que armazena o estado do jogo
 typedef struct estado {
     char modo;                  // modo em que se está a jogar! 0-> manual, 1-> contra computador
     VALOR peca;                 // peça do jogador que vai jogar!
     VALOR grelha[DIM][DIM];     // grelha
-    POSICAO validas[MAX_POS]; // posiçoes validas
-    POSICAO alterar[MAX_POS];
-    POSICAO ajuda;              // posicao ajuda
+    POSICAO validas[MAX_POS];   // posiçoes validas
+    POSICAO alterar[MAX_POS];   // posiçoes a alterar
+    POSICAO ajuda;              // posiçao ajuda
 } ESTADO;
 
 void printg(ESTADO e);
