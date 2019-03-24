@@ -91,20 +91,14 @@ int cerca(int i, int j, ESTADO e)
 
 int cercaDir (int k, int l, int i, int j, ESTADO e)
 {
-    //VALOR opnt = 3 - e.peca;
+    VALOR opnt = 3 - e.peca;
     
     if (e.grelha[i+=k][j+=l] == e.peca)
         return 0;
     
-    for (; i < DIM && i>=0 && j < DIM && j>=0; i+=k, j+=l)
-        if (e.grelha[i][j] == e.peca)
-            return 1;
-        else if (e.grelha[i][j] == VAZIA || e.grelha[i][j] == VALOR_DOT)
-            return 0;
+    for (; i < DIM-1 && i>0 && j < DIM-1 && j>0 && (e.grelha[i][j] == opnt); i+=k, j+=l);
     
-    //for (; i < DIM-1 && i>0 && j < DIM-1 && j>0 && (e.grelha[i][j] == opnt || e.grelha[i][j] == VALOR_DOT); i+=k, j+=l);
-
-    return 0;//e.grelha[i][j] == e.peca ? 1 : 0;
+    return e.grelha[i][j] == e.peca ? 1 : 0;
 }
 
 //coloca um '?' na jogada aconselhada
