@@ -11,7 +11,6 @@ void menu()
     e.grelha[4][3] = VALOR_X;
     e.grelha[3][3] = VALOR_O;
     e.grelha[4][4] = VALOR_O;
-    e.grelha[4][5] = VALOR_DOT;
 
     system("clear");
 
