@@ -13,7 +13,7 @@ int main()
     
     // printa grelha
     printf("\n");
-    printg(e);
+    printg(e, 0, 0);
     printf("\n");
     
     menu();

@@ -1,10 +1,11 @@
 #include "estado.h"
 
 // imprimie um estado (Tabuleiro)
-void printg(ESTADO e)
+void printg(ESTADO e, int validas, int ajuda)
 {
-    for (int i = 0; i < e.nValidas; i++)
-        e.grelha[e.validas[i].l][e.validas[i].c] = VALOR_DOT;
+    if (validas)
+        for (int i = 0; i < e.nValidas; i++)
+            e.grelha[e.validas[i].l][e.validas[i].c] = VALOR_DOT;
     
     for (int i = 0; i < DIM; i++)
         for (int j = 0; j < DIM; j++){

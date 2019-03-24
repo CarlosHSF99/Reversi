@@ -14,7 +14,8 @@ void menu()
 
     system("clear");
 
-    //printg(e);
+    printg(e, 0, 0);
+    putchar('\n');
 
     do
     {
@@ -60,11 +61,12 @@ void menu()
                 
                 break;
             case 'J':
-                printf("Introduza as coordenadas. (linha,coluna)");
+                printf("Introduza as coordenadas (linha,coluna) : ");
                 scanf("(%d,%d)", &l, &c);
                 
                 while(getchar() != '\n');
                 
+                putchar('\n');
                 play(l, c, &e);
                 
                 break;
@@ -81,6 +83,8 @@ void menu()
                 printf("Invalid option!");
                 break;
         }
+
+        putchar('\n');
     }
     while (opt != 'Q');
 }

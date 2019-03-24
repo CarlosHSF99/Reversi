@@ -9,7 +9,8 @@ void newVsBot()
 {}
 
 //ler ficheiro. 
-void readFile(ESTADO *e,char *file_name) {
+void readFile(ESTADO *e,char *file_name)
+{
     FILE *file;
     char file_txt[MAX_LENGTH];
     int l, c, peca;
@@ -38,16 +39,17 @@ void writeFile(ESTADO *e,char *filename)
 {}
 
 //executa uma jogada
-void play(int l,int c,ESTADO *e) {
-    if(cerca(l, c, *e)) {
+void play(int l, int c, ESTADO *e)
+{
+    if(cerca(l, c, *e)) 
+    {
         e->grelha[l][c] = e->peca;
-        if((e->peca) == VALOR_O)
-            e->peca = VALOR_X;
-        else
-            e->peca = VALOR_O;
+        e->peca = 3 - e->peca;
     }
     else
-        printf("Jogada invalida");
+        printf("Jogada invalida!\n");
+
+    printg(*e, 0, 0);
 }
 
 //coloca pontos nas posicoes das jogadas validas
@@ -64,7 +66,7 @@ void something(ESTADO *e)
                 e->nValidas++;
             }
     
-    printg(*e);
+    printg(*e, 1, 0);
 }
  
 //verifica jogadas valida

@@ -33,7 +33,7 @@ typedef struct estado {
     POSICAO ajuda;              // posiçao ajuda
 } ESTADO;
 
-void printg(ESTADO e);
+void printg(ESTADO e, int validas, int ajuda);
 
 void menu();
 
