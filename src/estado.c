@@ -1,6 +1,6 @@
 #include "estado.h"
 
-// imprimie um estado (Tabuleiro)
+// imprime um estado (Tabuleiro)
 void printg(ESTADO e, int validas, int ajuda)
 {
     if (validas)
