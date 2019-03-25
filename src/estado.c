@@ -21,7 +21,6 @@ void printg(ESTADO e, int validas, int ajuda)
         for (int i = 0; i < e.nValidas; i++)
             e.grelha[e.validas[i].l][e.validas[i].c] = VALOR_DOT;
 
-
     for (int i = 0; i < DIM; i++)
         for (int j = 0; j < DIM; j++){
             switch (e.grelha[i][j])
