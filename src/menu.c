@@ -35,14 +35,14 @@ void menu()
         
         switch (opt)
         {
-            case 'Q':
+            case 'q': case 'Q':
                 break;
-            case 'N':
+            case 'n': case 'N':
                 //newVsHuman();
                 break;
-            case 'A':
+            case 'a': case 'A':
                 //newVsBot();
-            case 'L':
+            case 'l': case 'L':
                 printf("Introduza o nome do ficheiro: ");
                 scanf("%s", file_name);
                 
@@ -51,7 +51,7 @@ void menu()
                 readFile(&e, file_name);
                 
                 break;
-            case 'E':
+            case 'e': case 'E':
                 printf("Introduza o nome do ficheiro: ");
                 scanf("%s", file_name);
                 
@@ -60,7 +60,7 @@ void menu()
                 writeFile(&e, file_name);
                 
                 break;
-            case 'J':
+            case 'j': case 'J':
                 printf("Introduza as coordenadas (linha,coluna) : ");
                 scanf("(%d,%d)", &l, &c);
                 
@@ -70,13 +70,13 @@ void menu()
                 play(l, c, &e, file_name);
                 
                 break;
-            case 'S':
+            case 's': case 'S':
                 something(&e);
                 break;
-            case 'H':
+            case 'h': case 'H':
                 //help()
                 break;
-            case 'U':
+            case 'u': case 'U':
                 //undo();
                 break;
             default:
