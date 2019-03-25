@@ -13,7 +13,7 @@ void readFile(ESTADO *e,char *file_name)
 {
     FILE *file;
     char file_txt[MAX_LENGTH];
-    int l, c, peca;
+    int peca;
     
     sprintf(file_txt, "../saves/%s.txt", file_name);
     
@@ -26,8 +26,8 @@ void readFile(ESTADO *e,char *file_name)
     e->peca = fgetc(file) == 'X' ? VALOR_X : VALOR_O;
     fseek(file, 1, SEEK_CUR);
     
-    for(l=0; l < DIM; l++)
-        for(c=0; c < DIM; c++)
+    for(int l = 0; l < DIM; l++)
+        for(int c = 0; c < DIM; c++)
         {
             e->grelha[l][c] = (peca = fgetc(file)) == '-' ? VAZIA : peca == 'X' ? VALOR_X : VALOR_O;
             fseek(file, 1, SEEK_CUR);
@@ -37,50 +37,55 @@ void readFile(ESTADO *e,char *file_name)
 }
 
 //escreve num ficheiro
-void writeFile(ESTADO *e,char *filename)
+void writeFile(ESTADO *e, char *file_name)
 {
     FILE *file;
-    int l, c;
-    
-    file = fopen(filename,"a+");
+    char file_txt[MAX_LENGTH];
+   
+    sprintf(file_txt, "../saves/%s.txt", file_name);
 
-    fprintf(file,"%c %c\n",e->modo=='0' ? 'M':'A',e->peca==VALOR_X ? 'X' : 'O');
+    file = fopen(file_txt, "a+");
 
-    for(l=0;l<DIM;l++)
-        for(c=0;c<DIM;c++){
+    fprintf(file, "%c %c\n", e->modo == '0' ? 'M' : 'A', e->peca == VALOR_X ? 'X' : 'O');
 
-                switch(e->grelha[l][c]){
+    for(int l = 0; l < DIM; l++)
+        for(int c = 0; c < DIM; c++)
+        {
+                switch(e->grelha[l][c])
+                {
                     case (VALOR_O):
-                        fprintf(file,"O");
+                        fprintf(file, "O");
                         break;
                     case (VALOR_X):
-                        fprintf(file,"X");
+                        fprintf(file, "X");
                         break;
                     case (VAZIA):
-                        fprintf(file,"-");
+                        fprintf(file, "-");
                         break;
                     default:
-                        fprintf(file,"-");
+                        fprintf(file, "-");
                         break;
                 }
-        fprintf(file,c<DIM-1 ? " " : "\n");
-    }
+        
+        fprintf(file, c < DIM-1 ? " " : "\n");
+        }
+    
     fprintf(file,"\n");
 }
 
 //executa uma jogada
-void play(int l, int c, ESTADO *e,char *filename)
+void play(int l, int c, ESTADO *e)
 {
     if(cerca(l, c, *e)) 
     {
         e->grelha[l][c] = e->peca;
         e->peca = 3 - e->peca;
+        writeFile(e, "default");
     }
     else
         printf("Jogada invalida!\n");
 
     printg(*e, 0, 0);
-    writeFile(e,filename);
 }
 
 //coloca pontos nas posicoes das jogadas validas
@@ -133,4 +138,6 @@ void help()
 
 //desfaz uma jogada
 void undo()
-{}
+{
+
+}

@@ -11,8 +11,8 @@ void menu()
     e.grelha[4][3] = VALOR_X;
     e.grelha[3][3] = VALOR_O;
     e.grelha[4][4] = VALOR_O;
-
-    system("clear");
+    
+    CLEAR;
 
     printg(e, 0, 0);
     putchar('\n');
@@ -71,7 +71,7 @@ void menu()
                 while(getchar() != '\n');
                 
                 putchar('\n');
-                play(l, c, &e, file_name);
+                play(l, c, &e);
                 
                 break;
             case 's': case 'S':

@@ -8,6 +8,7 @@
 #define DIM 8
 #define MAX_LENGTH 1024
 #define MAX_POS 64
+#define CLEAR system("clear")
 
 /*
 estado.h
@@ -45,7 +46,7 @@ void readFile (ESTADO *e, char *file_name);
 
 void writeFile(ESTADO *e, char *file_name);
 
-void play(int l, int c, ESTADO *e, char *file_name); 
+void play(int l, int c, ESTADO *e); 
 
 void something(ESTADO *e);
 
