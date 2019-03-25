@@ -3,16 +3,11 @@
 void menu()
 {
     char opt; // menu option
-    ESTADO e = {'1', VALOR_X};
+    ESTADO e = {0};
     char file_name[MAX_LENGTH];
     int l,c;
 
-    e.grelha[3][4] = VALOR_X;
-    e.grelha[4][3] = VALOR_X;
-    e.grelha[3][3] = VALOR_O;
-    e.grelha[4][4] = VALOR_O;
-
-    system("clear");
+    CLEAR;
 
     printg(e, 0, 0);
     putchar('\n');
@@ -31,18 +26,24 @@ void menu()
         // cleans buffer
         while (getchar() != '\n');
         
-        system("clear");        
-        
+        CLEAR;
+
         switch (opt)
         {
             case 'q': case 'Q':
                 break;
             case 'n': case 'N':
                 //newVsHuman();
-                //Caso queiramos escolher quem começa primeiro...
-                e.modo=0;
-                printg(e,0,0);
+                //Caso queiramos escolher quem começa primeiro temos de fazer;
+                e.modo = '0';
                 
+                e.grelha[3][4] = VALOR_X;
+                e.grelha[4][3] = VALOR_X;
+                e.grelha[3][3] = VALOR_O;
+                e.grelha[4][4] = VALOR_O;
+                
+                printg(e,0,0);
+
                 break;
             case 'a': case 'A':
                 //newVsBot();
@@ -65,6 +66,14 @@ void menu()
                 
                 break;
             case 'j': case 'J':
+                
+                
+                if (e.peca == VALOR_X && e.modo == '0')
+                    e.peca=VALOR_O;
+                else e.peca=VALOR_X;
+
+                printg(e,0,0);
+                
                 printf("Introduza as coordenadas (linha,coluna) : ");
                 scanf("(%d,%d)", &l, &c);
                 
