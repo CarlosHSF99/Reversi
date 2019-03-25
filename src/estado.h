@@ -10,6 +10,8 @@
 #define MAX_POS 64
 #define CLEAR system("clear")
 
+#define CLEAR system("clear")
+
 /*
 estado.h
 Definição do estado i.e. tabuleiro. Representação matricial do tabuleiro.
