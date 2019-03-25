@@ -7,6 +7,10 @@ void printg(ESTADO e, int validas, int ajuda)
         for (int i = 0; i < e.nValidas; i++)
             e.grelha[e.validas[i].l][e.validas[i].c] = VALOR_DOT;
     
+    e.modo='0' ? putchar('M') : putchar('A');
+    putchar(' ');
+    e.peca=VALOR_X?putchar('X'):putchar('O');
+
     for (int i = 0; i < DIM; i++)
         for (int j = 0; j < DIM; j++){
             switch (e.grelha[i][j])

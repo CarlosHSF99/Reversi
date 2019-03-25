@@ -4,7 +4,7 @@ void menu()
 {
     char opt; // menu option
     char file_name[MAX_LENGTH];
-    ESTADO e = {0, VALOR_X};
+    ESTADO e = {'1', VALOR_X};
     int l,c;
 
     e.grelha[3][4] = VALOR_X;
@@ -39,6 +39,10 @@ void menu()
                 break;
             case 'N':
                 //newVsHuman();
+                //Caso queiramos escolher quem começa primeiro...
+                e.modo=0;
+                printg(e,0,0);
+                
                 break;
             case 'A':
                 //newVsBot();
