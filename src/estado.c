@@ -3,13 +3,24 @@
 // imprime um estado (Tabuleiro)
 void printg(ESTADO e, int validas, int ajuda)
 {
+    int nx, no;
+
+    nx = no = 0;
+
+    for (int i = 0; i < DIM; i++)
+        for (int j = 0; j < DIM; j++)
+            e.grelha[i][j] != VAZIA ? e.grelha[i][j] == VALOR_X ? nx++ : no++ : 0 ;
+
+    e.modo = '0' ? putchar('M') : putchar('A');
+    putchar(' ');
+    e.peca = VALOR_X ? putchar('X') : putchar('O');
+    printf("   ");
+    printf("X:%02d O:%02d\n", nx, no);
+    
     if (validas)
         for (int i = 0; i < e.nValidas; i++)
             e.grelha[e.validas[i].l][e.validas[i].c] = VALOR_DOT;
-    
-    e.modo='0' ? putchar('M') : putchar('A');
-    putchar(' ');
-    e.peca=VALOR_X?putchar('X'):putchar('O');
+
 
     for (int i = 0; i < DIM; i++)
         for (int j = 0; j < DIM; j++){
