@@ -15,11 +15,11 @@ void readFile(ESTADO *e,char *file_name)
     char file_txt[MAX_LENGTH];
     int l, c, peca;
     
-    sprintf(file_txt, "./saves/%s.txt", file_name);
+    sprintf(file_txt, "../saves/%s.txt", file_name);
     
     file = fopen(file_txt, "r");
     
-    fseek(file, -132, SEEK_END);
+    fseek(file, -134, SEEK_END);
     
     e->modo = fgetc(file) == 'M' ? '0' : '1';
     fseek(file, 1, SEEK_CUR);
@@ -32,14 +32,44 @@ void readFile(ESTADO *e,char *file_name)
             e->grelha[l][c] = (peca = fgetc(file)) == '-' ? VAZIA : peca == 'X' ? VALOR_X : VALOR_O;
             fseek(file, 1, SEEK_CUR);
         }
+
+    printg(*e, 0, 0);
 }
 
 //escreve num ficheiro
 void writeFile(ESTADO *e,char *filename)
-{}
+{
+    FILE *file;
+    int l, c;
+    
+    file = fopen(filename,"a+");
+
+    fprintf(file,"%c %c\n",e->modo=='0' ? 'M':'A',e->peca==VALOR_X ? 'X' : 'O');
+
+    for(l=0;l<DIM;l++)
+        for(c=0;c<DIM;c++){
+
+                switch(e->grelha[l][c]){
+                    case (VALOR_O):
+                        fprintf(file,"O");
+                        break;
+                    case (VALOR_X):
+                        fprintf(file,"X");
+                        break;
+                    case (VAZIA):
+                        fprintf(file,"-");
+                        break;
+                    default:
+                        fprintf(file,"-");
+                        break;
+                }
+        fprintf(file,c<DIM-1 ? " " : "\n");
+    }
+    fprintf(file,"\n");
+}
 
 //executa uma jogada
-void play(int l, int c, ESTADO *e)
+void play(int l, int c, ESTADO *e,char *filename)
 {
     if(cerca(l, c, *e)) 
     {
@@ -50,13 +80,14 @@ void play(int l, int c, ESTADO *e)
         printf("Jogada invalida!\n");
 
     printg(*e, 0, 0);
+    writeFile(e,filename);
 }
 
 //coloca pontos nas posicoes das jogadas validas
 void something(ESTADO *e)
 {
     e->nValidas = 0;
-
+    
     for (int i=0; i < DIM; i++)
         for (int j=0; j < DIM; j++)
             if (cerca(i, j, *e))

@@ -15,7 +15,7 @@ Definição do estado i.e. tabuleiro. Representação matricial do tabuleiro.
 */
 
 // definição de valores possiveis no tabuleiro
-typedef enum {VAZIA, VALOR_X, VALOR_O, VALOR_DOT, VALOR_HELP, END_OF_LINE} VALOR;
+typedef enum {VAZIA, VALOR_X, VALOR_O, VALOR_DOT, VALOR_HELP} VALOR;
 
 // posicao
 typedef struct posicao {
@@ -45,7 +45,7 @@ void readFile (ESTADO *e, char *file_name);
 
 void writeFile(ESTADO *e, char *file_name);
 
-void play(int l, int c, ESTADO *e); 
+void play(int l, int c, ESTADO *e, char *file_name); 
 
 void something(ESTADO *e);
 
