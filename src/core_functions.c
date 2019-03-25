@@ -15,11 +15,11 @@ void readFile(ESTADO *e,char *file_name)
     char file_txt[MAX_LENGTH];
     int l, c, peca;
     
-    sprintf(file_txt, "./saves/%s.txt", file_name);
+    sprintf(file_txt, "../saves/%s.txt", file_name);
     
     file = fopen(file_txt, "r");
     
-    fseek(file, -132, SEEK_END);
+    fseek(file, -134, SEEK_END);
     
     e->modo = fgetc(file) == 'M' ? '0' : '1';
     fseek(file, 1, SEEK_CUR);
@@ -32,6 +32,8 @@ void readFile(ESTADO *e,char *file_name)
             e->grelha[l][c] = (peca = fgetc(file)) == '-' ? VAZIA : peca == 'X' ? VALOR_X : VALOR_O;
             fseek(file, 1, SEEK_CUR);
         }
+
+    printg(*e, 0, 0);
 }
 
 //escreve num ficheiro
@@ -56,7 +58,7 @@ void play(int l, int c, ESTADO *e)
 void something(ESTADO *e)
 {
     e->nValidas = 0;
-
+    
     for (int i=0; i < DIM; i++)
         for (int j=0; j < DIM; j++)
             if (cerca(i, j, *e))
