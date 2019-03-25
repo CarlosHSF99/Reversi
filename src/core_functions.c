@@ -36,10 +36,37 @@ void readFile(ESTADO *e,char *file_name)
 
 //escreve num ficheiro
 void writeFile(ESTADO *e,char *filename)
-{}
+{
+    FILE *file;
+    char file_txt[MAX_LENGTH];
+    int l, c, peca;
+    
+    file = fopen(filename,"a+");
+
+    fprintf(file,"%c %c",e->modo,e->peca==VALOR_X ? 'X' : 'O');
+
+    for(l=0;l<DIM;l++)
+        for(c=0;c<DIM;c++)
+            
+            switch(e->grelha[l][c]){
+                case (VALOR_O):
+                    fprintf(file,"O");
+                    break;
+                case (VALOR_X):
+                    fprintf(file,"X");
+                    break;
+                case (VAZIA):
+                    fprintf(file,"-");
+                    break;
+                default:
+                    fprintf(file,"-");
+                    break;
+        }
+    fprintf(file,"/n/n");
+}
 
 //executa uma jogada
-void play(int l, int c, ESTADO *e)
+void play(int l, int c, ESTADO *e,char *filename)
 {
     if(cerca(l, c, *e)) 
     {
@@ -50,6 +77,7 @@ void play(int l, int c, ESTADO *e)
         printf("Jogada invalida!\n");
 
     printg(*e, 0, 0);
+    writeFile(e,filename);
 }
 
 //coloca pontos nas posicoes das jogadas validas

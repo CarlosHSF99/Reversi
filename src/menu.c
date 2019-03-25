@@ -3,7 +3,7 @@
 void menu()
 {
     char opt; // menu option
-    char file_name[MAX_LENGTH];
+    char file_name[MAX_LENGTH]="new_game";
     ESTADO e = {0, VALOR_X};
     int l,c;
 
@@ -67,7 +67,7 @@ void menu()
                 while(getchar() != '\n');
                 
                 putchar('\n');
-                play(l, c, &e);
+                play(l, c, &e, file_name);
                 
                 break;
             case 'S':
