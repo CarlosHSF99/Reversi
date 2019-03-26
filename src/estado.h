@@ -46,7 +46,7 @@ void readFile (ESTADO *e, char *file_name);
 
 void writeFile(ESTADO *e, char *file_name);
 
-void play(int l, int c, ESTADO *e, char *file_name); 
+void play(int l, int c, ESTADO *e); 
 
 void something(ESTADO *e);
 
