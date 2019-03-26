@@ -71,7 +71,6 @@ void saveFile(ESTADO *e, char *file_name)
     while((ch=fgetc(def_file)) != EOF)
         fputc(ch,file);
 
-
     fclose(file);
     fclose(def_file);
 }
@@ -118,7 +117,7 @@ void play(int l, int c, ESTADO *e)
     if(cerca(l, c, *e)) 
     {
         e->grelha[l][c] = e->peca;
-        e->peca = e->peca==VALOR_O ? VALOR_X : VALOR_O;
+        e->peca = e->peca == VALOR_O ? VALOR_X : VALOR_O;
         writeEstado(e);
     }
     else
@@ -176,11 +175,17 @@ void help()
 {}
 
 //desfaz uma jogada
-void undo(ESTADO *e,char *file_name)
+void undo(ESTADO *e)
 {
-    readFile(e, file_name, UNDO);
+    readFile(e, "default", UNDO);
 
+    FILE *file;
+
+    file = fopen("../saves/default.txt", "a");
+
+    ftruncate(fileno(file), ftell(file) + READ);
+    
+    fclose(file);
+    
     printg(*e, 0, 0);
-
-    getchar();
 }

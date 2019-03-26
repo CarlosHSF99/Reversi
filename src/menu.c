@@ -75,7 +75,7 @@ void menu()
                 //help()
                 break;
             case 'u': case 'U':
-                undo(&e,file_name);
+                undo(&e);
                 break;
             default:
                 printf("Invalid option!");

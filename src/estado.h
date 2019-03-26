@@ -4,13 +4,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 #define DIM 8
 #define MAX_LENGTH 1024
 #define MAX_POS 64
 #define CLEAR system("clear")
 #define READ -133
-#define UNDO -269
+#define UNDO -266
 
 /*
 estado.h
@@ -60,6 +61,6 @@ int cercaDir(int k, int l, int i, int j, ESTADO e);
 
 void help();
 
-void undo(ESTADO *e,char *file_name);
+void undo(ESTADO *e);
 
 #endif //PROJ_ESTADO_H
