@@ -51,7 +51,7 @@ void writeEstado(ESTADO *e);
 
 void saveFile(ESTADO *e, char *filename);
 
-void play(int l, int c, ESTADO *e); 
+void play(int l, int c, ESTADO *e, int *over); 
 
 void something(ESTADO *e);
 
@@ -62,5 +62,7 @@ int cercaDir(int k, int l, int i, int j, ESTADO e);
 void help();
 
 void undo(ESTADO *e);
+
+void isGameOver(ESTADO e,int *over);
 
 #endif //PROJ_ESTADO_H

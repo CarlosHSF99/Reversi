@@ -20,8 +20,17 @@ void newVsHuman(ESTADO *e)
     printg(*e,0,0);
 }
 
-void newVsBot()
-{}
+void newVsBot(ESTADO *e)
+{
+    e->modo = '1';
+
+    e->grelha[3][4] = VALOR_X;                                                                                                                          
+    e->grelha[4][3] = VALOR_X;
+    e->grelha[3][3] = VALOR_O;                                                                                                                          
+    e->grelha[4][4] = VALOR_O; 
+
+    printg(*e,0,0);
+}
 
 //ler ficheiro. 
 void readFile(ESTADO *e, char *file_name, int tipo)
@@ -112,13 +121,14 @@ void writeEstado(ESTADO *e)
 }
 
 //executa uma jogada
-void play(int l, int c, ESTADO *e)
+void play(int l, int c, ESTADO *e,int *over)
 {
     if(cerca(l, c, *e)) 
     {
         e->grelha[l][c] = e->peca;
         e->peca = e->peca == VALOR_O ? VALOR_X : VALOR_O;
         writeEstado(e);
+        isGameOver(*e,over);
     }
     else
         printf("Jogada invalida!\n");
@@ -188,4 +198,29 @@ void undo(ESTADO *e)
     fclose(file);
     
     printg(*e, 0, 0);
+}
+
+void isGameOver(ESTADO e,int *over)
+{ //se no O ou no X ou no Vazia ou nao ha jogadas possiveis para ambos os jogadores
+     int O=0, X=0, V=0, D, l, c;
+    
+     for(l=0;l<DIM;l++){
+         for(c=0;c<DIM;c++){
+            if(e.grelha[l][c]==VAZIA)
+                V++;
+            else
+                if(e.grelha[l][c]==VALOR_X)
+                    X++;
+                else
+                    O++;
+         }
+     }
+    something(&e);
+    
+    D=(e.nValidas==0);
+    e.peca=(e.peca==VALOR_O) ? VALOR_X : VALOR_O;
+    D= D && (e.nValidas==0);
+
+    *over=!(O && X && V && D);
+        
 }
