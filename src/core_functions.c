@@ -1,21 +1,21 @@
 #include "estado.h"
 
-//novo jogo contra um adversario humano
-void newVsHuman(ESTADO e)
+//novo jogo contra adversario humano
+void newVsHuman(ESTADO *e)
 {
     FILE *file;
 
-    e.modo = '0';                                                                                                                                      
-        
-    e.grelha[3][4] = VALOR_X;                                                                                                                          
-    e.grelha[4][3] = VALOR_X;
-    e.grelha[3][3] = VALOR_O;                                                                                                                          
-    e.grelha[4][4] = VALOR_O;                                                                                                                          
+    e->modo = '0';                                                                                                                                      
+
+    e->grelha[3][4] = VALOR_X;                                                                                                                          
+    e->grelha[4][3] = VALOR_X;
+    e->grelha[3][3] = VALOR_O;                                                                                                                          
+    e->grelha[4][4] = VALOR_O;                                                                                                                          
     
-    file = fopen("../saves/default","w"); //só para limpar o ficheiro
+    file = fopen("../saves/default.txt","w"); //só para limpar o ficheiro
     fclose(file);
 
-    printg(e,0,0);                                                                                                                                     
+    printg(*e,0,0);                                                                                                                                     
 }
 
 void newVsBot()
@@ -51,15 +51,35 @@ void readFile(ESTADO *e, char *file_name, int tipo)
     printg(*e, 0, 0);
 }
 
-//escreve num ficheiro
-void writeFile(ESTADO *e, char *file_name)
+
+//copia do default para o ficheiro destino defenido pelo jogador
+void saveFile(ESTADO *e, char *file_name)
 {
     FILE *file;
-    char file_txt[MAX_LENGTH];
-   
-    sprintf(file_txt, "../saves/%s.txt", file_name);
+    FILE *def_file;
+    char ch;
+    char file_pre_name[MAX_LENGTH];
 
-    file = fopen(file_txt, "a+");
+    sprintf(file_pre_name, "../saves/%s.txt", file_name);
+
+    file=fopen(file_name,"w");
+
+    def_file=fopen("../saves/default.txt","r");
+
+    while((ch=fgetc(def_file)) != EOF)
+        fputc(ch,file);
+
+
+    fclose(file);
+    fclose(def_file);
+}
+
+//Guarda jogadas
+void writeEstado(ESTADO *e)
+{
+    FILE *file;
+
+    file = fopen("../saves/default.txt", "a+");
 
     fprintf(file, "%c %c\n", e->modo == '0' ? 'M' : 'A', e->peca == VALOR_X ? 'X' : 'O');
 
@@ -96,8 +116,8 @@ void play(int l, int c, ESTADO *e)
     if(cerca(l, c, *e)) 
     {
         e->grelha[l][c] = e->peca;
-        e->peca = 3 - e->peca;
-        writeFile(e, "default");
+        e->peca =((e->peca==VALOR_O) ? 'X' : 'O');
+        writeEstado(e);
     }
     else
         printf("Jogada invalida!\n");
@@ -154,9 +174,9 @@ void help()
 {}
 
 //desfaz uma jogada
-void undo(ESTADO *e)
+void undo(ESTADO *e,char *file_name)
 {
-    readFile(e, "default", UNDO);
+    readFile(e, file_name, UNDO);
 
     printg(*e, 0, 0);
 

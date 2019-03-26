@@ -7,7 +7,7 @@ void menu()
     char file_name[MAX_LENGTH];
     int l,c;
 
-    CLEAR;
+    e.peca = VALOR_O;
 
     printg(e, 0, 0);
     putchar('\n');
@@ -25,16 +25,15 @@ void menu()
         
         // cleans buffer
         while (getchar() != '\n');
-        
-        CLEAR;
 
         switch (opt)
         {
             case 'q': case 'Q':
+                remove("../saves/default.txt");
                 break;
             case 'n': case 'N':
                 //Caso queiramos escolher quem começa primeiro temos de fazer;
-                newVsHuman(e);
+                newVsHuman(&e);
                 break;
             case 'a': case 'A':
                 //newVsBot();
@@ -53,12 +52,10 @@ void menu()
                 
                 while(getchar() != '\n');
                 
-                writeFile(&e, file_name);
+                saveFile(&e, file_name);
                 
                 break;
             case 'j': case 'J':
-                e.peca = e.peca == VALOR_X && e.modo == '0' ? VALOR_O : VALOR_X; //para que serve verificar aqui o modo?
-                
                 printg(e,0,0);
                 
                 printf("Introduza as coordenadas (linha,coluna) : ");
@@ -77,7 +74,7 @@ void menu()
                 //help()
                 break;
             case 'u': case 'U':
-                //undo();
+                undo(&e,file_name);
                 break;
             default:
                 printf("Invalid option!");

@@ -40,13 +40,15 @@ void printg(ESTADO e, int validas, int ajuda);
 
 void menu();
 
-void newVsHuman();
+void newVsHuman(ESTADO *e);
 
 void newVsBot();
 
 void readFile(ESTADO *e, char *file_name, int tipo);
 
-void writeFile(ESTADO *e, char *file_name);
+void writeEstado(ESTADO *e);
+
+void saveFile(ESTADO *e, char *filename);
 
 void play(int l, int c, ESTADO *e); 
 
@@ -58,6 +60,6 @@ int cercaDir(int k, int l, int i, int j, ESTADO e);
 
 void help();
 
-void undo();
+void undo(ESTADO *e,char *file_name);
 
 #endif //PROJ_ESTADO_H
