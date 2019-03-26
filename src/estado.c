@@ -11,10 +11,8 @@ void printg(ESTADO e, int validas, int ajuda)
         for (int j = 0; j < DIM; j++)
             e.grelha[i][j] != VAZIA ? e.grelha[i][j] == VALOR_X ? nx++ : no++ : 0 ;
 
-    //e.modo = '0' ? putchar('M') : putchar('A');
     putchar(e.modo == '0' ? 'M' : 'A');
     putchar(' ');
-    //e.peca = VALOR_X ? putchar('X') : putchar('O');
     putchar(e.peca == VALOR_X ? 'X' : 'O');
     printf("   X:%02d O:%02d\n", nx, no);
     

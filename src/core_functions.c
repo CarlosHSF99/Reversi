@@ -18,8 +18,17 @@ void newVsHuman(ESTADO *e)
     printg(*e,0,0);                                                                                                                                     
 }
 
-void newVsBot()
-{}
+void newVsBot(ESTADO *e)
+{
+    e->modo = '1';
+
+    e->grelha[3][4] = VALOR_X;                                                                                                                          
+    e->grelha[4][3] = VALOR_X;
+    e->grelha[3][3] = VALOR_O;                                                                                                                          
+    e->grelha[4][4] = VALOR_O; 
+
+    printg(*e,0,0);
+}
 
 //ler ficheiro. 
 void readFile(ESTADO *e, char *file_name, int tipo)

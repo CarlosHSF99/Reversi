@@ -37,6 +37,8 @@ void menu()
                 break;
             case 'a': case 'A':
                 //newVsBot();
+                newVsBot(&e);
+                break;
             case 'l': case 'L':
                 printf("Introduza o nome do ficheiro: ");
                 scanf("%s", file_name);
