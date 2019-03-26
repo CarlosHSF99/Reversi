@@ -5,7 +5,7 @@ void menu()
     char opt; // menu option
     ESTADO e = {0};
     char file_name[MAX_LENGTH];
-    int l,c;
+    int l,c,over=0;
 
     e.peca = VALOR_O;
 
@@ -57,22 +57,35 @@ void menu()
                 
                 break;
             case 'j': case 'J':
-                printg(e,0,0);
+                if (!over){
+                    printg(e,0,0);
+        
+                    printf("Introduza as coordenadas (linha,coluna) : ");
+                    scanf("(%d,%d)", &l, &c);
                 
-                printf("Introduza as coordenadas (linha,coluna) : ");
-                scanf("(%d,%d)", &l, &c);
+                    while(getchar() != '\n');
                 
-                while(getchar() != '\n');
+                    putchar('\n');
+                    play(l, c, &e,&over);
                 
-                putchar('\n');
-                play(l, c, &e);
-                
-                break;
+                    break;
+                }
+                else
+                    break;
             case 's': case 'S':
-                something(&e);
-                break;
+                if(!over){
+                    something(&e);
+                    break;
+                }
+                else
+                    break;
             case 'h': case 'H':
-                //help()
+                if(!over){
+                    //help()
+                    break;
+                }
+                else
+                    break;
                 break;
             case 'u': case 'U':
                 undo(&e,file_name);

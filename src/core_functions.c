@@ -113,13 +113,14 @@ void writeEstado(ESTADO *e)
 }
 
 //executa uma jogada
-void play(int l, int c, ESTADO *e)
+void play(int l, int c, ESTADO *e,int *over)
 {
     if(cerca(l, c, *e)) 
     {
         e->grelha[l][c] = e->peca;
         e->peca = e->peca==VALOR_O ? VALOR_X : VALOR_O;
         writeEstado(e);
+        isGameOver(*e,over);
     }
     else
         printf("Jogada invalida!\n");
@@ -183,4 +184,29 @@ void undo(ESTADO *e,char *file_name)
     printg(*e, 0, 0);
 
     getchar();
+}
+
+void isGameOver(ESTADO e,int *over)
+{ //se no O ou no X ou no Vazia ou nao ha jogadas possiveis para ambos os jogadores
+     int O=0, X=0, V=0, D, l, c;
+    
+     for(l=0;l<DIM;l++){
+         for(c=0;c<DIM;c++){
+            if(e.grelha[l][c]==VAZIA)
+                V++;
+            else
+                if(e.grelha[l][c]==VALOR_X)
+                    X++;
+                else
+                    O++;
+         }
+     }
+    something(&e);
+    
+    D=(e.nValidas==0);
+    e.peca=(e.peca==VALOR_O) ? VALOR_X : VALOR_O;
+    D= D && (e.nValidas==0);
+
+    *over=!(O && X && V && D);
+        
 }
