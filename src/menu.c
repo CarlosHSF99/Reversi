@@ -33,17 +33,8 @@ void menu()
             case 'q': case 'Q':
                 break;
             case 'n': case 'N':
-                //newVsHuman();
                 //Caso queiramos escolher quem começa primeiro temos de fazer;
-                e.modo = '0';
-                
-                e.grelha[3][4] = VALOR_X;
-                e.grelha[4][3] = VALOR_X;
-                e.grelha[3][3] = VALOR_O;
-                e.grelha[4][4] = VALOR_O;
-                
-                printg(e,0,0);
-                
+                newVsHuman(e);
                 break;
             case 'a': case 'A':
                 //newVsBot();

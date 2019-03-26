@@ -1,10 +1,23 @@
 #include "estado.h"
 
 //novo jogo contra um adversario humano
-void newVsHuman()
-{}
+void newVsHuman(ESTADO e)
+{
+    FILE *file;
 
-//novo jogo contra um bot
+    e.modo = '0';                                                                                                                                      
+        
+    e.grelha[3][4] = VALOR_X;                                                                                                                          
+    e.grelha[4][3] = VALOR_X;
+    e.grelha[3][3] = VALOR_O;                                                                                                                          
+    e.grelha[4][4] = VALOR_O;                                                                                                                          
+    
+    file = fopen("../saves/default","w"); //só para limpar o ficheiro
+    fclose(file);
+
+    printg(e,0,0);                                                                                                                                     
+}
+
 void newVsBot()
 {}
 
@@ -23,7 +36,7 @@ void readFile(ESTADO *e, char *file_name, int tipo)
     
     e->modo = fgetc(file) == 'M' ? '0' : '1';
     fseek(file, 1, SEEK_CUR);
-    e->peca = fgetc(file) == 'X' ? VALOR_X : VALOR_O;
+	e->peca = fgetc(file) == 'X' ? VALOR_X : VALOR_O;
     fseek(file, 1, SEEK_CUR);
     
     for(int l = 0; l < DIM; l++)
