@@ -5,17 +5,19 @@ void newVsHuman(ESTADO *e)
 {
     FILE *file;
 
-    e->modo = '0';                                                                                                                                      
+    e->modo = '0';
 
-    e->grelha[3][4] = VALOR_X;                                                                                                                          
+    e->grelha[3][4] = VALOR_X;
     e->grelha[4][3] = VALOR_X;
-    e->grelha[3][3] = VALOR_O;                                                                                                                          
-    e->grelha[4][4] = VALOR_O;                                                                                                                          
+    e->grelha[3][3] = VALOR_O;
+    e->grelha[4][4] = VALOR_O;
     
     file = fopen("../saves/default.txt","w"); //só para limpar o ficheiro
     fclose(file);
 
-    printg(*e,0,0);                                                                                                                                     
+    writeEstado(e);
+
+    printg(*e,0,0);
 }
 
 void newVsBot(ESTADO *e)
@@ -67,11 +69,11 @@ void saveFile(ESTADO *e, char *file_name)
     FILE *file;
     FILE *def_file;
     char ch;
-    char file_pre_name[MAX_LENGTH];
+    char file_pos_name[MAX_LENGTH];
 
-    sprintf(file_pre_name, "../saves/%s.txt", file_name);
+    sprintf(file_pos_name, "../saves/%s.txt", file_name);
 
-    file=fopen(file_name,"w");
+    file=fopen(file_pos_name,"w");
 
     def_file=fopen("../saves/default.txt","r");
 
@@ -125,7 +127,7 @@ void play(int l, int c, ESTADO *e)
     if(cerca(l, c, *e)) 
     {
         e->grelha[l][c] = e->peca;
-        e->peca =((e->peca==VALOR_O) ? 'X' : 'O');
+        e->peca = e->peca==VALOR_O ? VALOR_X : VALOR_O;
         writeEstado(e);
     }
     else

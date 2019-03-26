@@ -9,8 +9,7 @@ void menu()
 
     e.peca = VALOR_O;
 
-    printg(e, 0, 0);
-    putchar('\n');
+    CLEAR;
 
     do
     {
@@ -25,7 +24,9 @@ void menu()
         
         // cleans buffer
         while (getchar() != '\n');
-
+        
+        CLEAR;
+        
         switch (opt)
         {
             case 'q': case 'Q':
