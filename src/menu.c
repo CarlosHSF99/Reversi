@@ -43,7 +43,7 @@ void menu()
                 e.grelha[4][4] = VALOR_O;
                 
                 printg(e,0,0);
-
+                
                 break;
             case 'a': case 'A':
                 //newVsBot();
@@ -53,7 +53,7 @@ void menu()
                 
                 while(getchar() != '\n');
                 
-                readFile(&e, file_name);
+                readFile(&e, file_name, READ);
                 
                 break;
             case 'e': case 'E':
@@ -66,12 +66,8 @@ void menu()
                 
                 break;
             case 'j': case 'J':
+                e.peca = e.peca == VALOR_X && e.modo == '0' ? VALOR_O : VALOR_X; //para que serve verificar aqui o modo?
                 
-                
-                if (e.peca == VALOR_X && e.modo == '0')
-                    e.peca=VALOR_O;
-                else e.peca=VALOR_X;
-
                 printg(e,0,0);
                 
                 printf("Introduza as coordenadas (linha,coluna) : ");

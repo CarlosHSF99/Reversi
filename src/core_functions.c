@@ -9,7 +9,7 @@ void newVsBot()
 {}
 
 //ler ficheiro. 
-void readFile(ESTADO *e,char *file_name)
+void readFile(ESTADO *e, char *file_name, int tipo)
 {
     FILE *file;
     char file_txt[MAX_LENGTH];
@@ -19,7 +19,7 @@ void readFile(ESTADO *e,char *file_name)
     
     file = fopen(file_txt, "r");
     
-    fseek(file, -134, SEEK_END);
+    fseek(file, tipo, SEEK_END);
     
     e->modo = fgetc(file) == 'M' ? '0' : '1';
     fseek(file, 1, SEEK_CUR);
@@ -32,7 +32,9 @@ void readFile(ESTADO *e,char *file_name)
             e->grelha[l][c] = (peca = fgetc(file)) == '-' ? VAZIA : peca == 'X' ? VALOR_X : VALOR_O;
             fseek(file, 1, SEEK_CUR);
         }
-
+    
+    fclose(file);
+    
     printg(*e, 0, 0);
 }
 
@@ -51,26 +53,28 @@ void writeFile(ESTADO *e, char *file_name)
     for(int l = 0; l < DIM; l++)
         for(int c = 0; c < DIM; c++)
         {
-                switch(e->grelha[l][c])
-                {
-                    case (VALOR_O):
-                        fprintf(file, "O");
-                        break;
-                    case (VALOR_X):
-                        fprintf(file, "X");
-                        break;
-                    case (VAZIA):
-                        fprintf(file, "-");
-                        break;
-                    default:
-                        fprintf(file, "-");
-                        break;
-                }
+            switch(e->grelha[l][c])
+            {
+                case (VALOR_O):
+                    fprintf(file, "O");
+                    break;
+                case (VALOR_X):
+                    fprintf(file, "X");
+                    break;
+                case (VAZIA):
+                    fprintf(file, "-");
+                    break;
+                default:
+                    fprintf(file, "E");
+                    break;
+            }
         
-        fprintf(file, c < DIM-1 ? " " : "\n");
+            fprintf(file, c < DIM-1 ? " " : "\n");
         }
     
-    fprintf(file,"\n");
+    fprintf(file, "\n");
+
+    fclose(file);
 }
 
 //executa uma jogada
@@ -137,7 +141,11 @@ void help()
 {}
 
 //desfaz uma jogada
-void undo()
+void undo(ESTADO *e)
 {
+    readFile(e, "default", UNDO);
 
+    printg(*e, 0, 0);
+
+    getchar();
 }

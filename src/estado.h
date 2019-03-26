@@ -9,6 +9,8 @@
 #define MAX_LENGTH 1024
 #define MAX_POS 64
 #define CLEAR system("clear")
+#define READ -133
+#define UNDO -269
 
 /*
 estado.h
@@ -42,7 +44,7 @@ void newVsHuman();
 
 void newVsBot();
 
-void readFile (ESTADO *e, char *file_name);
+void readFile(ESTADO *e, char *file_name, int tipo);
 
 void writeFile(ESTADO *e, char *file_name);
 
