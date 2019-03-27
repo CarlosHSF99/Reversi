@@ -19,7 +19,7 @@ Definição do estado i.e. tabuleiro. Representação matricial do tabuleiro.
 */
 
 // definição de valores possiveis no tabuleiro
-typedef enum {VAZIA, VALOR_X, VALOR_O, VALOR_DOT, VALOR_HELP} VALOR;
+typedef enum {VAZIA, VALOR_X, VALOR_O, VALIDA, HELP} VALOR;
 
 // posicao
 typedef struct posicao {
@@ -27,20 +27,21 @@ typedef struct posicao {
 } POSICAO;
 
 typedef struct virar {
-    POSICAO jogada;
-    POSICAO posicao[MAX_POS];
-    int nPosicoes;
-} VIRAR;
+    POSICAO valida;
+    POSICAO virar[MAX_POS];
+    int nVirar;
+} VALIDAS;
 
 // Estrutura que armazena o estado do jogo
 typedef struct estado {
     char modo;                  // modo em que se está a jogar! 0-> manual, 1-> contra computador
     VALOR peca;                 // peça do jogador que vai jogar!
     VALOR grelha[DIM][DIM];     // grelha
-    POSICAO validas[MAX_POS];   // posiçoes validas
+    VALIDAS validas[MAX_POS];   // posiçoes validas
     int nValidas;               // numero de posiçoes validas
-    VIRAR virar[MAX_POS];
     POSICAO ajuda;              // posiçao ajuda
+    int NX;                     // numero de pecas X
+    int NO;                     // numero de pecas O
 } ESTADO;
 
 void printg(ESTADO e, int validas, int ajuda);
@@ -69,8 +70,8 @@ void help();
 
 void undo(ESTADO *e);
 
-void isGameOver(ESTADO e,int *over);
+void isGameOver(ESTADO e, int *over);
 
-int elem(POSICAO pos, ESTADO e);
+int elem(int l, int c, ESTADO e);
 
 #endif //PROJ_ESTADO_H

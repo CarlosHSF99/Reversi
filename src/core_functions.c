@@ -4,34 +4,38 @@
 void newVsHuman(ESTADO *e)
 {
     FILE *file;
-
+    
     e->modo = '0';
 
+    for (int i = 0; i < DIM; i++)
+        for (int j = 0; j < DIM; j++)
+            e->grelha[i][j] = VAZIA;
+    
     e->grelha[3][4] = VALOR_X;
     e->grelha[4][3] = VALOR_X;
     e->grelha[3][3] = VALOR_O;
     e->grelha[4][4] = VALOR_O;
     
     something(e);
-
-    file = fopen("../saves/default.txt","w"); //só para limpar o ficheiro
+    
+    file = fopen("../saves/default.txt", "w"); //só para limpar o ficheiro
     fclose(file);
-
+    
     writeEstado(e);
-
-    printg(*e,0,0);
+    
+    printg(*e, 0, 0);
 }
 
 void newVsBot(ESTADO *e)
 {
     e->modo = '1';
-
+    
     e->grelha[3][4] = VALOR_X;
     e->grelha[4][3] = VALOR_X;
     e->grelha[3][3] = VALOR_O;
     e->grelha[4][4] = VALOR_O;
-
-    printg(*e,0,0);
+    
+    printg(*e, 0, 0);
 }
 
 //ler ficheiro. 
@@ -60,6 +64,8 @@ void readFile(ESTADO *e, char *file_name, int tipo)
         }
     
     fclose(file);
+
+    something(e);
     
     printg(*e, 0, 0);
 }
@@ -125,42 +131,57 @@ void writeEstado(ESTADO *e)
 //executa uma jogada
 void play(int l, int c, ESTADO *e, int *over)
 {
-    POSICAO pos;
-
-    pos.l = l;
-    pos.c = c;
-
-    if(elem(pos, *e)) //so tirar o erro
+    int i;
+    
+    if(elem(l, c, *e))
     {
         e->grelha[l][c] = e->peca;
-        e->peca = e->peca == VALOR_O ? VALOR_X : VALOR_O;
+        
+        for (i = 0; (e->validas[i].valida.l != l || e->validas[i].valida.c != c) && i < e->nValidas; i++);
+        
+        for (int j = 0; j < e->validas[i].nVirar; j++)
+        {
+            e->grelha[e->validas[i].virar[j].l][e->validas[i].virar[j].c] = e->peca;
+            printf("B\n");
+        }
+        
+        e->peca = 3 - e->peca;
+        
+        writeEstado(e);
+        
         something(e);
         isGameOver(*e, over);
     }
     else
         printf("Jogada invalida!\n");
-
+    
     printg(*e, 0, 0);
 }
 
 //coloca pontos nas posicoes das jogadas validas
 void something(ESTADO *e)
 {
-    e->nValidas = 0;
+    e->nValidas = e->NX = e->NO = 0;
     
     for (int i=0; i < DIM; i++)
         for (int j=0; j < DIM; j++)
+        {
+            e->grelha[i][j] != VAZIA ? e->grelha[i][j] == VALOR_X ? e->NX++ : e->NO++ : 0 ;
+            
             if (cerca(i, j, e, e->nValidas))
             {
-                e->validas[e->nValidas].l = i;
-                e->validas[e->nValidas].c = j;
+                e->validas[e->nValidas].valida.l = i;
+                e->validas[e->nValidas].valida.c = j;
                 e->nValidas++;
             }
+        }
 }
  
 //verifica jogadas valida
 int cerca(int i, int j, ESTADO *e, int n)
 {
+    e->validas[n].nVirar = 0;
+    
     if (e->grelha[i][j] != VAZIA)
         return 0;
 
@@ -177,19 +198,23 @@ int cerca(int i, int j, ESTADO *e, int n)
 //funcao auxiliar da funcao cerca
 int cercaDir (int k, int l, int i, int j, ESTADO *e, int n)
 {
-    e->virar[n].nPosicoes = 0;
-
     VALOR opnt = 3 - e->peca;
+
+    int counter = 0;
     
     if (e->grelha[i+=k][j+=l] == e->peca)
         return 0;
     
-    for (; i < DIM-1 && i>0 && j < DIM-1 && j>0 && (e->grelha[i][j] == opnt); i+=k, j+=l) //nao funciona para linhas/clonuas nos extremos
+    for (; i < DIM-1 && i>0 && j < DIM-1 && j>0 && (e->grelha[i][j] == opnt); i+=k, j+=l)
     {
-        e->virar[n].posicao[e->virar[n].nPosicoes].l = i;
-        e->virar[n].posicao[e->virar[n].nPosicoes].c = j;
-        e->virar[n].nPosicoes++;
+        e->validas[n].virar[e->validas[n].nVirar].l = i;
+        e->validas[n].virar[e->validas[n].nVirar].c = j;
+        e->validas[n].nVirar++;
+        counter++;
     }
+    
+    if (e->grelha[i][j] != e->peca)
+        e->validas[n].nVirar -= counter;
     
     return e->grelha[i][j] == e->peca ? 1 : 0;
 }
@@ -210,21 +235,19 @@ void undo(ESTADO *e)
     ftruncate(fileno(file), ftell(file) + READ);
     
     fclose(file);
-    
-    printg(*e, 0, 0);
 }
 
-void isGameOver(ESTADO e,int *over) //se no O ou no X ou no Vazia ou nao ha jogadas possiveis para ambos os jogadores
-{
+//se no O ou no X ou no Vazia ou nao ha jogadas possiveis para ambos os jogadores
+void isGameOver(ESTADO e, int *over){
     int O, X, V, D;
     
-     O = X = V = 0;
+    O = X = V = 0;
     
-     for(int l = 0; l < DIM; l++)
-         for(int c = 0; c < DIM; c++)
+    for(int l = 0; l < DIM; l++)
+        for(int c = 0; c < DIM; c++)
             e.grelha[l][c] == VAZIA ? V++ : e.grelha[l][c] == VALOR_X ? X++ : O++;
     
-    something(&e);
+    //something(&e);
     
     D=(e.nValidas==0);
     e.peca=(e.peca==VALOR_O) ? VALOR_X : VALOR_O;
@@ -233,11 +256,11 @@ void isGameOver(ESTADO e,int *over) //se no O ou no X ou no Vazia ou nao ha joga
     *over=!(O && X && V && D);
 }
 
-int elem(POSICAO pos, ESTADO e)
+int elem(int l, int c, ESTADO e)
 {
     for (int i = 0; i < e.nValidas; i++)
-        if (e.validas[i].l == pos.l && e.validas[i].c == pos.c)
+        if (e.validas[i].valida.l == l && e.validas[i].valida.c == c)
             return 1;
-
+    
     return 0;
 }

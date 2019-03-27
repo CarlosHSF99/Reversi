@@ -3,40 +3,32 @@
 // imprime um estado (Tabuleiro)
 void printg(ESTADO e, int validas, int ajuda)
 {
-    int nx, no;
-
-    nx = no = 0;
-
-    for (int i = 0; i < DIM; i++)
-        for (int j = 0; j < DIM; j++)
-            e.grelha[i][j] != VAZIA ? e.grelha[i][j] == VALOR_X ? nx++ : no++ : 0 ;
-
     putchar(e.modo == '0' ? 'M' : 'A');
     putchar(' ');
     putchar(e.peca == VALOR_X ? 'X' : 'O');
-    printf("   X:%02d O:%02d\n", nx, no);
+    printf("   X:%02d O:%02d\n", e.NX, e.NO);
     
     if (validas)
         for (int i = 0; i < e.nValidas; i++)
-            e.grelha[e.validas[i].l][e.validas[i].c] = VALOR_DOT;
-
+            e.grelha[e.validas[i].valida.l][e.validas[i].valida.c] = VALIDA;
+    
     for (int i = 0; i < DIM; i++)
         for (int j = 0; j < DIM; j++){
             switch (e.grelha[i][j])
             {
-                case VALOR_O:
-                    putchar('O');
+                case VAZIA:
+                    putchar('-');
                     break;
                 case VALOR_X:
                     putchar('X');
                     break;
-                case VAZIA:
-                    putchar('-');
+                case VALOR_O:
+                    putchar('O');
                     break;
-                case VALOR_DOT:
+                case VALIDA:
                     putchar('.');
                     break;
-                case VALOR_HELP:
+                case HELP:
                     putchar('?');
                     break;
                 default:

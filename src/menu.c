@@ -5,11 +5,12 @@ void menu()
     char opt; // menu option
     ESTADO e = {0};
     char file_name[MAX_LENGTH];
-    int l,c,over=0;
+    int l, c, over=0;
+    int j, k;
 
     e.peca = VALOR_O;
 
-    CLEAR;
+    //CLEAR;
 
     do
     {
@@ -25,7 +26,7 @@ void menu()
         // cleans buffer
         while (getchar() != '\n');
         
-        CLEAR;
+        //CLEAR;
         
         switch (opt)
         {
@@ -59,36 +60,34 @@ void menu()
                 
                 break;
             case 'j': case 'J':
-                if (!over)
-                {
-                    printg(e, 0, 0);
-                    
+                //if (!over)
+                //{
                     printf("Introduza as coordenadas (linha,coluna) : ");
-                    scanf("(%d,%d)", &l, &c);
+                    scanf("(%d,%d)", &j, &k);
+                    //scanf("(%d,%d)", &l, &c);
                     
                     while(getchar() != '\n');
                     
-                    putchar('\n');
-                    play(l, c, &e,&over);
+                    play(j, k, &e, &over);
                     
                     break;
-                }
-                else
-                    break;
+                //}
+                //else
+                //    break;
             case 's': case 'S':
-                if(!over){
+                //if(!over){
                     printg(e, 1, 0);
                     break;
-                }
-                else
-                    break;
+                //}
+                //else
+                //    break;
             case 'h': case 'H':
-                if(!over){
+                //if(!over){
                     //help()
                     break;
-                }
-                else
-                    break;
+                //}
+                //else
+                //    break;
                 break;
             case 'u': case 'U':
                 undo(&e);
@@ -97,7 +96,7 @@ void menu()
                 printf("Invalid option!");
                 break;
         }
-
+        
         putchar('\n');
     }
     while (opt != 'Q');
