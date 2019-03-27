@@ -59,24 +59,25 @@ void menu()
                 
                 break;
             case 'j': case 'J':
-                if (!over){
-                    printg(e,0,0);
-        
+                if (!over)
+                {
+                    printg(e, 0, 0);
+                    
                     printf("Introduza as coordenadas (linha,coluna) : ");
                     scanf("(%d,%d)", &l, &c);
-                
+                    
                     while(getchar() != '\n');
-                
+                    
                     putchar('\n');
                     play(l, c, &e,&over);
-                
+                    
                     break;
                 }
                 else
                     break;
             case 's': case 'S':
                 if(!over){
-                    something(&e);
+                    printg(e, 1, 0);
                     break;
                 }
                 else

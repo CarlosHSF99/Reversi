@@ -12,6 +12,8 @@ void newVsHuman(ESTADO *e)
     e->grelha[3][3] = VALOR_O;
     e->grelha[4][4] = VALOR_O;
     
+    something(e);
+
     file = fopen("../saves/default.txt","w"); //só para limpar o ficheiro
     fclose(file);
 
@@ -121,15 +123,19 @@ void writeEstado(ESTADO *e)
 }
 
 //executa uma jogada
-void play(int l, int c, ESTADO *e,int *over)
+void play(int l, int c, ESTADO *e, int *over)
 {
-    if(cerca(l, c, e, 1)) //so tirar o erro
-        
+    POSICAO pos;
+
+    pos.l = l;
+    pos.c = c;
+
+    if(elem(pos, *e)) //so tirar o erro
     {
         e->grelha[l][c] = e->peca;
         e->peca = e->peca == VALOR_O ? VALOR_X : VALOR_O;
-        writeEstado(e);
-        isGameOver(*e,over);
+        something(e);
+        isGameOver(*e, over);
     }
     else
         printf("Jogada invalida!\n");
@@ -150,8 +156,6 @@ void something(ESTADO *e)
                 e->validas[e->nValidas].c = j;
                 e->nValidas++;
             }
-    
-    printg(*e, 1, 0);
 }
  
 //verifica jogadas valida
@@ -180,7 +184,7 @@ int cercaDir (int k, int l, int i, int j, ESTADO *e, int n)
     if (e->grelha[i+=k][j+=l] == e->peca)
         return 0;
     
-    for (; i < DIM-1 && i>0 && j < DIM-1 && j>0 && (e->grelha[i][j] == opnt); i+=k, j+=l)
+    for (; i < DIM-1 && i>0 && j < DIM-1 && j>0 && (e->grelha[i][j] == opnt); i+=k, j+=l) //nao funciona para linhas/clonuas nos extremos
     {
         e->virar[n].posicao[e->virar[n].nPosicoes].l = i;
         e->virar[n].posicao[e->virar[n].nPosicoes].c = j;
@@ -227,4 +231,13 @@ void isGameOver(ESTADO e,int *over) //se no O ou no X ou no Vazia ou nao ha joga
     D= D && (e.nValidas==0);
     
     *over=!(O && X && V && D);
+}
+
+int elem(POSICAO pos, ESTADO e)
+{
+    for (int i = 0; i < e.nValidas; i++)
+        if (e.validas[i].l == pos.l && e.validas[i].c == pos.c)
+            return 1;
+
+    return 0;
 }

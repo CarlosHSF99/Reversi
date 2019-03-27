@@ -71,4 +71,6 @@ void undo(ESTADO *e);
 
 void isGameOver(ESTADO e,int *over);
 
+int elem(POSICAO pos, ESTADO e);
+
 #endif //PROJ_ESTADO_H
