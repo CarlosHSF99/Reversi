@@ -70,7 +70,7 @@ void help();
 
 void undo(ESTADO *e);
 
-void isGameOver(ESTADO e, int *over);
+int isGameOver(ESTADO e);
 
 int elem(int l, int c, ESTADO e);
 

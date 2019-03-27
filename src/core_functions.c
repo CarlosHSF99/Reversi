@@ -30,6 +30,10 @@ void newVsBot(ESTADO *e)
 {
     e->modo = '1';
     
+    for (int i = 0; i < DIM; i++)
+        for (int j = 0; j < DIM; j++)
+            e->grelha[i][j] = VAZIA;
+    
     e->grelha[3][4] = VALOR_X;
     e->grelha[4][3] = VALOR_X;
     e->grelha[3][3] = VALOR_O;
@@ -150,7 +154,7 @@ void play(int l, int c, ESTADO *e, int *over)
         writeEstado(e);
         
         something(e);
-        isGameOver(*e, over);
+        isGameOver(*e);
     }
     else
         printf("Jogada invalida!\n");
@@ -205,7 +209,7 @@ int cercaDir (int k, int l, int i, int j, ESTADO *e, int n)
     if (e->grelha[i+=k][j+=l] == e->peca)
         return 0;
     
-    for (; i < DIM-1 && i>0 && j < DIM-1 && j>0 && (e->grelha[i][j] == opnt); i+=k, j+=l)
+    for (; i < DIM && i>=0 && j < DIM && j>=0 && (e->grelha[i][j] == opnt); i+=k, j+=l)
     {
         e->validas[n].virar[e->validas[n].nVirar].l = i;
         e->validas[n].virar[e->validas[n].nVirar].c = j;
@@ -216,6 +220,9 @@ int cercaDir (int k, int l, int i, int j, ESTADO *e, int n)
     if (e->grelha[i][j] != e->peca)
         e->validas[n].nVirar -= counter;
     
+    i-=k;
+    j-=l;
+
     return e->grelha[i][j] == e->peca ? 1 : 0;
 }
 
@@ -232,14 +239,25 @@ void undo(ESTADO *e)
 
     file = fopen("../saves/default.txt", "a");
 
+    fclose(file);
+
     ftruncate(fileno(file), ftell(file) + READ);
     
-    fclose(file);
+    //fclose(file);
 }
 
 //se no O ou no X ou no Vazia ou nao ha jogadas possiveis para ambos os jogadores
-void isGameOver(ESTADO e, int *over){
-    int O, X, V, D;
+int isGameOver(ESTADO e)
+{
+    
+
+    es.peca = 3 - es.peca;
+    
+    something(es);
+    
+    return !(e.nValidas || es.nValidas) ? e.NX == e.NO ? 3 : e.NX > e.NO ? VALOR_X : VALOR_O : 0;
+    
+    /*int O, X, V, D;
     
     O = X = V = 0;
     
@@ -253,7 +271,7 @@ void isGameOver(ESTADO e, int *over){
     e.peca=(e.peca==VALOR_O) ? VALOR_X : VALOR_O;
     D= D && (e.nValidas==0);
     
-    *over=!(O && X && V && D);
+    *over=!(O && X && V && D);*/
 }
 
 int elem(int l, int c, ESTADO e)
