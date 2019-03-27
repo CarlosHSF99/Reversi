@@ -24,10 +24,10 @@ void newVsBot(ESTADO *e)
 {
     e->modo = '1';
 
-    e->grelha[3][4] = VALOR_X;                                                                                                                          
+    e->grelha[3][4] = VALOR_X;
     e->grelha[4][3] = VALOR_X;
-    e->grelha[3][3] = VALOR_O;                                                                                                                          
-    e->grelha[4][4] = VALOR_O; 
+    e->grelha[3][3] = VALOR_O;
+    e->grelha[4][4] = VALOR_O;
 
     printg(*e,0,0);
 }
@@ -123,7 +123,8 @@ void writeEstado(ESTADO *e)
 //executa uma jogada
 void play(int l, int c, ESTADO *e,int *over)
 {
-    if(cerca(l, c, *e)) 
+    if(cerca(l, c, e, 1)) //so tirar o erro
+        
     {
         e->grelha[l][c] = e->peca;
         e->peca = e->peca == VALOR_O ? VALOR_X : VALOR_O;
@@ -143,7 +144,7 @@ void something(ESTADO *e)
     
     for (int i=0; i < DIM; i++)
         for (int j=0; j < DIM; j++)
-            if (cerca(i, j, *e))
+            if (cerca(i, j, e, e->nValidas))
             {
                 e->validas[e->nValidas].l = i;
                 e->validas[e->nValidas].c = j;
@@ -154,30 +155,39 @@ void something(ESTADO *e)
 }
  
 //verifica jogadas valida
-int cerca(int i, int j, ESTADO e)
+int cerca(int i, int j, ESTADO *e, int n)
 {
-    return e.grelha[i][j] == VAZIA && (
-           cercaDir(-1, -1, i, j, e) ||
-           cercaDir(-1,  0, i, j, e) ||
-           cercaDir(-1,  1, i, j, e) ||
-           cercaDir( 0, -1, i, j, e) ||
-           cercaDir( 0,  1, i, j, e) ||
-           cercaDir( 1, -1, i, j, e) ||
-           cercaDir( 1,  0, i, j, e) ||
-           cercaDir( 1,  1, i, j, e));
+    if (e->grelha[i][j] != VAZIA)
+        return 0;
+
+    return cercaDir(-1, -1, i, j, e, n) +
+           cercaDir(-1,  0, i, j, e, n) +
+           cercaDir(-1,  1, i, j, e, n) +
+           cercaDir( 0, -1, i, j, e, n) +
+           cercaDir( 0,  1, i, j, e, n) +
+           cercaDir( 1, -1, i, j, e, n) +
+           cercaDir( 1,  0, i, j, e, n) +
+           cercaDir( 1,  1, i, j, e, n);
 }
 
 //funcao auxiliar da funcao cerca
-int cercaDir (int k, int l, int i, int j, ESTADO e)
+int cercaDir (int k, int l, int i, int j, ESTADO *e, int n)
 {
-    VALOR opnt = 3 - e.peca;
+    e->virar[n].nPosicoes = 0;
+
+    VALOR opnt = 3 - e->peca;
     
-    if (e.grelha[i+=k][j+=l] == e.peca)
+    if (e->grelha[i+=k][j+=l] == e->peca)
         return 0;
     
-    for (; i < DIM-1 && i>0 && j < DIM-1 && j>0 && (e.grelha[i][j] == opnt); i+=k, j+=l);
+    for (; i < DIM-1 && i>0 && j < DIM-1 && j>0 && (e->grelha[i][j] == opnt); i+=k, j+=l)
+    {
+        e->virar[n].posicao[e->virar[n].nPosicoes].l = i;
+        e->virar[n].posicao[e->virar[n].nPosicoes].c = j;
+        e->virar[n].nPosicoes++;
+    }
     
-    return e.grelha[i][j] == e.peca ? 1 : 0;
+    return e->grelha[i][j] == e->peca ? 1 : 0;
 }
 
 //coloca um '?' na jogada aconselhada
@@ -200,27 +210,21 @@ void undo(ESTADO *e)
     printg(*e, 0, 0);
 }
 
-void isGameOver(ESTADO e,int *over)
-{ //se no O ou no X ou no Vazia ou nao ha jogadas possiveis para ambos os jogadores
-     int O=0, X=0, V=0, D, l, c;
+void isGameOver(ESTADO e,int *over) //se no O ou no X ou no Vazia ou nao ha jogadas possiveis para ambos os jogadores
+{
+    int O, X, V, D;
     
-     for(l=0;l<DIM;l++){
-         for(c=0;c<DIM;c++){
-            if(e.grelha[l][c]==VAZIA)
-                V++;
-            else
-                if(e.grelha[l][c]==VALOR_X)
-                    X++;
-                else
-                    O++;
-         }
-     }
+     O = X = V = 0;
+    
+     for(int l = 0; l < DIM; l++)
+         for(int c = 0; c < DIM; c++)
+            e.grelha[l][c] == VAZIA ? V++ : e.grelha[l][c] == VALOR_X ? X++ : O++;
+    
     something(&e);
     
     D=(e.nValidas==0);
     e.peca=(e.peca==VALOR_O) ? VALOR_X : VALOR_O;
     D= D && (e.nValidas==0);
-
+    
     *over=!(O && X && V && D);
-        
 }

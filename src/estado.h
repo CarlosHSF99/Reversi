@@ -26,6 +26,12 @@ typedef struct posicao {
     int l, c;
 } POSICAO;
 
+typedef struct virar {
+    POSICAO jogada;
+    POSICAO posicao[MAX_POS];
+    int nPosicoes;
+} VIRAR;
+
 // Estrutura que armazena o estado do jogo
 typedef struct estado {
     char modo;                  // modo em que se está a jogar! 0-> manual, 1-> contra computador
@@ -33,7 +39,7 @@ typedef struct estado {
     VALOR grelha[DIM][DIM];     // grelha
     POSICAO validas[MAX_POS];   // posiçoes validas
     int nValidas;               // numero de posiçoes validas
-    POSICAO alterar[MAX_POS];   // posiçoes a alterar
+    VIRAR virar[MAX_POS];
     POSICAO ajuda;              // posiçao ajuda
 } ESTADO;
 
@@ -55,9 +61,9 @@ void play(int l, int c, ESTADO *e, int *over);
 
 void something(ESTADO *e);
 
-int cerca(int i, int j, ESTADO e);
+int cerca(int i, int j, ESTADO *e, int n);
 
-int cercaDir(int k, int l, int i, int j, ESTADO e);
+int cercaDir(int k, int l, int i, int j, ESTADO *e, int n);
 
 void help();
 
