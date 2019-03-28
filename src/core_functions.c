@@ -206,7 +206,7 @@ int cercaDir (int k, int l, int i, int j, ESTADO *e, int n)
     if (e->grelha[i+=k][j+=l] == e->peca)
         return 0;
     
-    for (; i < DIM-1 && i>0 && j < DIM-1 && j>0 && (e->grelha[i][j] == opnt); i+=k, j+=l)
+    for (; i < DIM && i>=0 && j < DIM && j>=0 && (e->grelha[i][j] == opnt); i+=k, j+=l) //fazer nao puro
     {
         e->validas[n].virar[e->validas[n].nVirar].l = i;
         e->validas[n].virar[e->validas[n].nVirar].c = j;
@@ -217,10 +217,7 @@ int cercaDir (int k, int l, int i, int j, ESTADO *e, int n)
     if (e->grelha[i-k][j-l] == opnt && e->grelha[i][j] != e->peca)
         e->validas[n].nVirar -= counter;
     
-    //i-=k;
-    //j-=l;
-    
-    return e->grelha[i][j] == e->peca ? 1 : 0;
+    return e->grelha[i][j] == e->peca && i < DIM && i>=0 && j < DIM && j>=0 ? 1 : 0;
 }
 
 //coloca um '?' na jogada aconselhada
