@@ -10,12 +10,12 @@ void menu()
 
     e.peca = VALOR_O;
 
-    //CLEAR;
+    CLEAR;
 
     do
     {
         // prints the menu options
-        printf("[N]ovo [L]er [E]screver [J]ogar [S]omething [H]elp [U]ndo [A]utomatico [Q]uit\n");
+        printf("[N]ovo [L]er [E]screver [J]ogar [S]how [H]elp [U]ndo [A]utomatico [Q]uit\n");
         
         // prints prompt
         printf("\n: ");
@@ -26,12 +26,12 @@ void menu()
         // cleans buffer
         while (getchar() != '\n');
         
-        //CLEAR;
+        CLEAR;
         
         switch (opt)
         {
             case 'q': case 'Q':
-                remove("../saves/default.txt");
+                remove("../.saves/.default.txt");
                 break;
             case 'n': case 'N':
                 //Caso queiramos escolher quem começa primeiro temos de fazer;
@@ -99,5 +99,5 @@ void menu()
         
         putchar('\n');
     }
-    while (opt != 'Q');
+    while (opt != 'Q' && opt != 'q');
 }

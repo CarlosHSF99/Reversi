@@ -17,8 +17,8 @@ void newVsHuman(ESTADO *e)
     e->grelha[4][4] = VALOR_O;
     
     something(e);
-    
-    file = fopen("../saves/default.txt", "w"); //só para limpar o ficheiro
+
+    file = fopen("../saves/.default.txt", "w"); //só para limpar o ficheiro
     fclose(file);
     
     writeEstado(e);
@@ -87,7 +87,7 @@ void saveFile(ESTADO *e, char *file_name)
 
     file=fopen(file_pos_name,"w");
 
-    def_file=fopen("../saves/default.txt","r");
+    def_file=fopen("../saves/.default.txt","r");
 
     while((ch=fgetc(def_file)) != EOF)
         fputc(ch,file);
@@ -101,12 +101,12 @@ void writeEstado(ESTADO *e)
 {
     FILE *file;
 
-    file = fopen("../saves/default.txt", "a+");
+    file = fopen("../saves/.default.txt", "a+");
 
     fprintf(file, "%c %c\n", e->modo == '0' ? 'M' : 'A', e->peca == VALOR_X ? 'X' : 'O');
 
-    for(int l = 0; l < DIM; l++)
-        for(int c = 0; c < DIM; c++)
+    for (int l = 0; l < DIM; l++)
+        for (int c = 0; c < DIM; c++)
         {
             switch(e->grelha[l][c])
             {
@@ -136,7 +136,7 @@ void writeEstado(ESTADO *e)
 void play(int l, int c, ESTADO *e, int *over)
 {
     int i;
-    
+
     if(elem(l, c, *e))
     {
         e->grelha[l][c] = e->peca;
@@ -144,17 +144,14 @@ void play(int l, int c, ESTADO *e, int *over)
         for (i = 0; (e->validas[i].valida.l != l || e->validas[i].valida.c != c) && i < e->nValidas; i++);
         
         for (int j = 0; j < e->validas[i].nVirar; j++)
-        {
             e->grelha[e->validas[i].virar[j].l][e->validas[i].virar[j].c] = e->peca;
-            printf("B\n");
-        }
         
         e->peca = 3 - e->peca;
         
         writeEstado(e);
         
         something(e);
-        isGameOver(*e);
+        //isGameOver(*e);
     }
     else
         printf("Jogada invalida!\n");
@@ -167,8 +164,8 @@ void something(ESTADO *e)
 {
     e->nValidas = e->NX = e->NO = 0;
     
-    for (int i=0; i < DIM; i++)
-        for (int j=0; j < DIM; j++)
+    for (int i = 0; i < DIM; i++)
+        for (int j = 0; j < DIM; j++)
         {
             e->grelha[i][j] != VAZIA ? e->grelha[i][j] == VALOR_X ? e->NX++ : e->NO++ : 0 ;
             
@@ -188,7 +185,7 @@ int cerca(int i, int j, ESTADO *e, int n)
     
     if (e->grelha[i][j] != VAZIA)
         return 0;
-
+    
     return cercaDir(-1, -1, i, j, e, n) +
            cercaDir(-1,  0, i, j, e, n) +
            cercaDir(-1,  1, i, j, e, n) +
@@ -202,14 +199,14 @@ int cerca(int i, int j, ESTADO *e, int n)
 //funcao auxiliar da funcao cerca
 int cercaDir (int k, int l, int i, int j, ESTADO *e, int n)
 {
-    VALOR opnt = 3 - e->peca;
-
     int counter = 0;
+    
+    VALOR opnt = 3 - e->peca;
     
     if (e->grelha[i+=k][j+=l] == e->peca)
         return 0;
     
-    for (; i < DIM && i>=0 && j < DIM && j>=0 && (e->grelha[i][j] == opnt); i+=k, j+=l)
+    for (; i < DIM-1 && i>0 && j < DIM-1 && j>0 && (e->grelha[i][j] == opnt); i+=k, j+=l)
     {
         e->validas[n].virar[e->validas[n].nVirar].l = i;
         e->validas[n].virar[e->validas[n].nVirar].c = j;
@@ -217,12 +214,12 @@ int cercaDir (int k, int l, int i, int j, ESTADO *e, int n)
         counter++;
     }
     
-    if (e->grelha[i][j] != e->peca)
+    if (e->grelha[i-k][j-l] == opnt && e->grelha[i][j] != e->peca)
         e->validas[n].nVirar -= counter;
     
-    i-=k;
-    j-=l;
-
+    //i-=k;
+    //j-=l;
+    
     return e->grelha[i][j] == e->peca ? 1 : 0;
 }
 
@@ -233,31 +230,30 @@ void help()
 //desfaz uma jogada
 void undo(ESTADO *e)
 {
-    readFile(e, "default", UNDO);
-
     FILE *file;
-
-    file = fopen("../saves/default.txt", "a");
-
-    fclose(file);
-
+    
+    readFile(e, ".default", UNDO);
+    
+    file = fopen("../saves/.default.txt", "a");
+    
     ftruncate(fileno(file), ftell(file) + READ);
     
-    //fclose(file);
+    fclose(file);
 }
 
 //se no O ou no X ou no Vazia ou nao ha jogadas possiveis para ambos os jogadores
 int isGameOver(ESTADO e)
 {
+    /*
+    ESTADO es = e;
     
-
     es.peca = 3 - es.peca;
     
-    something(es);
+    something(&es);
     
     return !(e.nValidas || es.nValidas) ? e.NX == e.NO ? 3 : e.NX > e.NO ? VALOR_X : VALOR_O : 0;
     
-    /*int O, X, V, D;
+    int O, X, V, D;
     
     O = X = V = 0;
     
@@ -279,6 +275,6 @@ int elem(int l, int c, ESTADO e)
     for (int i = 0; i < e.nValidas; i++)
         if (e.validas[i].valida.l == l && e.validas[i].valida.c == c)
             return 1;
-    
+
     return 0;
 }
