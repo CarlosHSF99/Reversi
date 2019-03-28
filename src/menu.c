@@ -5,10 +5,8 @@ void menu()
     char opt; // menu option
     ESTADO e = {0};
     char file_name[MAX_LENGTH];
-    int l, c, over=0;
-    int j, k;
-
-    e.peca = VALOR_O;
+    int l, c;
+    VALOR n;
 
     CLEAR;
 
@@ -23,6 +21,18 @@ void menu()
         // prompts for menu option
         opt = getchar();
         
+        if (opt == 'j' || opt == 'J')
+            scanf(" %d %d", &l, &c);
+        else if (opt == 'n' || opt == 'N')
+        {
+            getchar();
+            n = getchar() == 'X' ? VALOR_X : VALOR_O;
+        }
+        else if (opt == 'l' || opt == 'L')
+            scanf(" %s", &file_name);
+        else if (opt == 'e' || opt == 'E')
+            scanf(" %s", &file_name);
+        
         // cleans buffer
         while (getchar() != '\n');
         
@@ -34,60 +44,24 @@ void menu()
                 remove("../saves/.default.txt");
                 break;
             case 'n': case 'N':
-                //Caso queiramos escolher quem começa primeiro temos de fazer;
-                newVsHuman(&e);
+                newVsHuman(&e, n);
                 break;
             case 'a': case 'A':
-                //newVsBot();
                 newVsBot(&e);
                 break;
             case 'l': case 'L':
-                printf("Introduza o nome do ficheiro: ");
-                scanf("%s", file_name);
-                
-                while(getchar() != '\n');
-                
                 readFile(&e, file_name, READ);
-                
                 break;
             case 'e': case 'E':
-                printf("Introduza o nome do ficheiro: ");
-                scanf("%s", file_name);
-                
-                while(getchar() != '\n');
-                
                 saveFile(&e, file_name);
-                
                 break;
             case 'j': case 'J':
-                //if (!over)
-                //{
-                    printf("Introduza as coordenadas (linha,coluna) : ");
-                    scanf("(%d,%d)", &j, &k);
-                    //scanf("(%d,%d)", &l, &c);
-                    
-                    while(getchar() != '\n');
-                    
-                    play(j, k, &e, &over);
-                    
-                    break;
-                //}
-                //else
-                //    break;
+                play(l, c, &e);
+                break;
             case 's': case 'S':
-                //if(!over){
-                    printg(e, 1, 0);
-                    break;
-                //}
-                //else
-                //    break;
+                printg(e, 1, 0);
+                break;
             case 'h': case 'H':
-                //if(!over){
-                    //help()
-                    break;
-                //}
-                //else
-                //    break;
                 break;
             case 'u': case 'U':
                 undo(&e);
@@ -97,7 +71,8 @@ void menu()
                 break;
         }
         
-        putchar('\n');
+        if (opt != 'q' && opt != 'Q' && opt != 'e' && opt != 'E') 
+            putchar('\n');
     }
     while (opt != 'Q' && opt != 'q');
 }

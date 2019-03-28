@@ -1,12 +1,13 @@
 #include "estado.h"
 
 //novo jogo contra adversario humano
-void newVsHuman(ESTADO *e)
+void newVsHuman(ESTADO *e, VALOR n)
 {
     FILE *file;
     
     e->modo = '0';
-
+    e->peca = n;
+    
     for (int i = 0; i < DIM; i++)
         for (int j = 0; j < DIM; j++)
             e->grelha[i][j] = VAZIA;
@@ -17,7 +18,7 @@ void newVsHuman(ESTADO *e)
     e->grelha[4][4] = VALOR_O;
     
     something(e);
-
+    
     file = fopen("../saves/.default.txt", "w"); //só para limpar o ficheiro
     fclose(file);
     
@@ -68,12 +69,11 @@ void readFile(ESTADO *e, char *file_name, int tipo)
         }
     
     fclose(file);
-
+    
     something(e);
     
     printg(*e, 0, 0);
 }
-
 
 //copia do default para o ficheiro destino defenido pelo jogador
 void saveFile(ESTADO *e, char *file_name)
@@ -82,16 +82,16 @@ void saveFile(ESTADO *e, char *file_name)
     FILE *def_file;
     char ch;
     char file_pos_name[MAX_LENGTH];
-
+    
     sprintf(file_pos_name, "../saves/%s.txt", file_name);
-
+    
     file=fopen(file_pos_name,"w");
-
+    
     def_file=fopen("../saves/.default.txt","r");
-
+    
     while((ch=fgetc(def_file)) != EOF)
         fputc(ch,file);
-
+    
     fclose(file);
     fclose(def_file);
 }
@@ -100,11 +100,11 @@ void saveFile(ESTADO *e, char *file_name)
 void writeEstado(ESTADO *e)
 {
     FILE *file;
-
+    
     file = fopen("../saves/.default.txt", "a+");
-
+    
     fprintf(file, "%c %c\n", e->modo == '0' ? 'M' : 'A', e->peca == VALOR_X ? 'X' : 'O');
-
+    
     for (int l = 0; l < DIM; l++)
         for (int c = 0; c < DIM; c++)
         {
@@ -123,7 +123,7 @@ void writeEstado(ESTADO *e)
                     fprintf(file, "E");
                     break;
             }
-        
+            
             fprintf(file, c < DIM-1 ? " " : "\n");
         }
     
@@ -133,7 +133,7 @@ void writeEstado(ESTADO *e)
 }
 
 //executa uma jogada
-void play(int l, int c, ESTADO *e, int *over)
+void play(int l, int c, ESTADO *e)
 {
     int i;
 
@@ -146,11 +146,15 @@ void play(int l, int c, ESTADO *e, int *over)
         for (int j = 0; j < e->validas[i].nVirar; j++)
             e->grelha[e->validas[i].virar[j].l][e->validas[i].virar[j].c] = e->peca;
         
-        e->peca = 3 - e->peca;
+        do
+        {
+            e->peca = 3 - e->peca;
+            something(e);
+        }
+        while (!e->nValidas);
         
         writeEstado(e);
         
-        something(e);
         //isGameOver(*e);
     }
     else
@@ -239,33 +243,16 @@ void undo(ESTADO *e)
 }
 
 //se no O ou no X ou no Vazia ou nao ha jogadas possiveis para ambos os jogadores
-int isGameOver(ESTADO e)
+/*void isGameOver(ESTADO *e)
 {
-    /*
-    ESTADO es = e;
+    int v = e->nValidas;
+
+    something(e);
+
+    v += e->nValidas;
     
-    es.peca = 3 - es.peca;
-    
-    something(&es);
-    
-    return !(e.nValidas || es.nValidas) ? e.NX == e.NO ? 3 : e.NX > e.NO ? VALOR_X : VALOR_O : 0;
-    
-    int O, X, V, D;
-    
-    O = X = V = 0;
-    
-    for(int l = 0; l < DIM; l++)
-        for(int c = 0; c < DIM; c++)
-            e.grelha[l][c] == VAZIA ? V++ : e.grelha[l][c] == VALOR_X ? X++ : O++;
-    
-    //something(&e);
-    
-    D=(e.nValidas==0);
-    e.peca=(e.peca==VALOR_O) ? VALOR_X : VALOR_O;
-    D= D && (e.nValidas==0);
-    
-    *over=!(O && X && V && D);*/
-}
+    return !v ? e->NX == e->NO ? 3 : e->NX > e->NO ? VALOR_X : VALOR_O : 0;
+}*/
 
 int elem(int l, int c, ESTADO e)
 {
