@@ -136,6 +136,7 @@ void writeEstado(ESTADO *e)
 void play(int l, int c, ESTADO *e)
 {
     int i;
+    int j = 0;
 
     if(elem(l, c, *e))
     {
@@ -150,12 +151,13 @@ void play(int l, int c, ESTADO *e)
         {
             e->peca = 3 - e->peca;
             something(e);
+            j++;
         }
-        while (!e->nValidas);
+        while (!e->nValidas && j<2);
         
         writeEstado(e);
         
-        //isGameOver(*e);
+        isGameOver(*e);
     }
     else
         printf("Jogada invalida!\n");
@@ -243,22 +245,29 @@ void undo(ESTADO *e)
 }
 
 //se no O ou no X ou no Vazia ou nao ha jogadas possiveis para ambos os jogadores
-/*void isGameOver(ESTADO *e)
+void isGameOver(ESTADO e)
 {
-    int v = e->nValidas;
-
-    something(e);
-
-    v += e->nValidas;
+    int v = e.nValidas;
     
-    return !v ? e->NX == e->NO ? 3 : e->NX > e->NO ? VALOR_X : VALOR_O : 0;
-}*/
+    something(&e);
+    
+    v += e.nValidas;
+    
+    //!v ? e->NX == e->NO ? 3 : e->NX > e->NO ? VALOR_X : VALOR_O : 0;
+
+    if (!v && e.NX == e.NO)
+        printf("Impate\n");
+    else if (!v && e.NX > e.NO)
+        printf("X ganhou\n");
+    else if (!v && e.NX < e.NO)
+        printf("O ganhou\n");
+}
 
 int elem(int l, int c, ESTADO e)
 {
     for (int i = 0; i < e.nValidas; i++)
         if (e.validas[i].valida.l == l && e.validas[i].valida.c == c)
             return 1;
-
+    
     return 0;
 }

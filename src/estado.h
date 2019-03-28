@@ -42,7 +42,6 @@ typedef struct estado {
     POSICAO ajuda;              // posiçao ajuda
     int NX;                     // numero de pecas X
     int NO;                     // numero de pecas O
-    int over;                   // is game over?
 } ESTADO;
 
 void printg(ESTADO e, int validas, int ajuda);
@@ -71,7 +70,7 @@ void help();
 
 void undo(ESTADO *e);
 
-//void isGameOver(ESTADO &e);
+void isGameOver(ESTADO e);
 
 int elem(int l, int c, ESTADO e);
 
