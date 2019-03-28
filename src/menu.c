@@ -31,7 +31,7 @@ void menu()
         switch (opt)
         {
             case 'q': case 'Q':
-                remove("../.saves/.default.txt");
+                remove("../saves/.default.txt");
                 break;
             case 'n': case 'N':
                 //Caso queiramos escolher quem começa primeiro temos de fazer;
