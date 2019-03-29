@@ -27,6 +27,7 @@ void newVsHuman(ESTADO *e, VALOR n)
     printg(*e, 0, 0);
 }
 
+//
 void newVsBot(ESTADO *e)
 {
     e->modo = '1';
@@ -43,8 +44,8 @@ void newVsBot(ESTADO *e)
     printg(*e, 0, 0);
 }
 
-//ler ficheiro. 
-void readFile(ESTADO *e, char *file_name, int tipo)
+//ler ficheiro
+int readFile(ESTADO *e, char *file_name, int tipo)
 {
     FILE *file;
     char file_txt[MAX_LENGTH];
@@ -53,6 +54,12 @@ void readFile(ESTADO *e, char *file_name, int tipo)
     sprintf(file_txt, "../saves/%s.txt", file_name);
     
     file = fopen(file_txt, "r");
+
+    if (file == NULL)
+    {
+        printf("Save file %s doens't exist!\n", file_name);
+        return 1;
+    }
     
     fseek(file, tipo, SEEK_END);
     
@@ -94,6 +101,8 @@ void saveFile(ESTADO *e, char *file_name)
     
     fclose(file);
     fclose(def_file);
+
+    printg(*e, 0, 0);
 }
 
 //Guarda jogadas
@@ -253,8 +262,6 @@ void isGameOver(ESTADO e)
     
     v += e.nValidas;
     
-    //!v ? e->NX == e->NO ? 3 : e->NX > e->NO ? VALOR_X : VALOR_O : 0;
-
     if (!v && e.NX == e.NO)
         printf("Impate\n");
     else if (!v && e.NX > e.NO)
@@ -265,9 +272,9 @@ void isGameOver(ESTADO e)
 
 int elem(int l, int c, ESTADO e)
 {
-    for (int i = 0; i < e.nValidas; i++)
-        if (e.validas[i].valida.l == l && e.validas[i].valida.c == c)
-            return 1;
+    int i;
     
-    return 0;
+    for (i = 0; (e.validas[i].valida.l != l || e.validas[i].valida.c != c) && i < e.nValidas; i++);
+    
+    return e.validas[i].valida.l == l && e.validas[i].valida.c == c ? 1 : 0;
 }

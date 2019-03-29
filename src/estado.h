@@ -52,7 +52,7 @@ void newVsHuman(ESTADO *e, VALOR n);
 
 void newVsBot();
 
-void readFile(ESTADO *e, char *file_name, int tipo);
+int readFile(ESTADO *e, char *file_name, int tipo);
 
 void writeEstado(ESTADO *e);
 
