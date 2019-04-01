@@ -3,6 +3,7 @@
 // imprime um estado (Tabuleiro)
 void printg(ESTADO e, int validas, int ajuda)
 {
+    printf("  ");
     putchar(e.modo == '0' ? 'M' : 'A');
     putchar(' ');
     putchar(e.peca == VALOR_X ? 'X' : 'O');
@@ -13,6 +14,9 @@ void printg(ESTADO e, int validas, int ajuda)
             e.grelha[e.validas[i].valida.l][e.validas[i].valida.c] = VALIDA;
     
     for (int i = 0; i < DIM; i++)
+    {
+        printf("%d ", i);
+
         for (int j = 0; j < DIM; j++){
             switch (e.grelha[i][j])
             {
@@ -38,4 +42,7 @@ void printg(ESTADO e, int validas, int ajuda)
             
             putchar(j < DIM-1 ? ' ' : '\n');
         }
+    }
+
+    printf("  0 1 2 3 4 5 6 7\n");
 }
