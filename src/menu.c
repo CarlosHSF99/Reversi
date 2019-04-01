@@ -28,6 +28,11 @@ void menu()
             getchar();
             n = getchar() == 'X' ? VALOR_X : VALOR_O;
         }
+        else if (opt == 'a' || opt ==  'A')
+        {
+            getchar();
+            n = getchar() == 'X' ? VALOR_X : VALOR_O;
+        }
         else if (opt == 'l' || opt == 'L')
             scanf(" %s", &file_name);
         else if (opt == 'e' || opt == 'E')
@@ -47,7 +52,7 @@ void menu()
                 newVsHuman(&e, n);
                 break;
             case 'a': case 'A':
-                newVsBot(&e);
+                newVsBot(&e, n);
                 break;
             case 'l': case 'L':
                 readFile(&e, file_name, READ);
@@ -56,8 +61,27 @@ void menu()
                 saveFile(&e, file_name);
                 break;
             case 'j': case 'J':
-                play(l, c, &e);
-                break;
+                if (e.modo == '0')
+                {
+                    play(l, c, &e);
+                    break;
+                }
+                else
+                {
+                if ( e.modo == '1' )
+                    {
+                        if ( e.peca == n)
+                        {
+                            play(l, c, &e);
+                            break;
+                        }
+                        else
+                        {
+                            miniMax(&e, 0, 2);
+                            break;
+                        }
+                    }
+                }
             case 's': case 'S':
                 printg(e, 1, 0);
                 break;

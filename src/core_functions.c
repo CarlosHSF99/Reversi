@@ -28,9 +28,10 @@ void newVsHuman(ESTADO *e, VALOR n)
 }
 
 //
-void newVsBot(ESTADO *e)
+void newVsBot(ESTADO *e, VALOR n)
 {
     e->modo = '1';
+    e->peca = 'n';
     
     for (int i = 0; i < DIM; i++)
         for (int j = 0; j < DIM; j++)
@@ -277,4 +278,50 @@ int elem(int l, int c, ESTADO e)
     for (i = 0; (e.validas[i].valida.l != l || e.validas[i].valida.c != c) && i < e.nValidas; i++);
     
     return e.validas[i].valida.l == l && e.validas[i].valida.c == c ? 1 : 0;
+}
+int miniMax (ESTADO *e, int depth, int max_depth)
+{
+    int score=0, new_score;
+    ESTADO *c;
+    MINMAX bot_output = {0};
+
+    if (depth == max_depth)
+        score = (e->NX - e->NO);
+    else
+    {
+        if (e->peca == VALOR_X) // Maximizing Player
+        {
+            new_score = -1000000000;
+            while ( e->nValidas != 0 )
+            {
+                c = e;
+                play(e->validas->valida.l,e->validas->valida.c,c);
+                new_score = miniMax(e,depth+1,max_depth);
+                if ( new_score > score ){
+                    score = new_score;
+                    bot_output.grid.l = e->validas->valida.l;
+                    bot_output.grid.c = e->validas->valida.c;
+               }
+            }
+        } 
+        if (e->peca == VALOR_O) // Minimizing Player
+        {
+            new_score = 1000000000;
+            while ( e->nValidas != 0 )
+            {
+                c = e;
+                play(e->validas->valida.l,e->validas->valida.c,c);
+                new_score = miniMax( e, depth+1, max_depth );
+                if ( new_score < score ){
+                    score = new_score;
+                    bot_output.grid.l = e->validas->valida.l;
+                    bot_output.grid.c = e->validas->valida.c;
+
+                }
+            }
+        }
+    }
+    play( bot_output.grid.l, bot_output.grid.c, e );
+    bot_output.score = score;
+    return bot_output.score;
 }
