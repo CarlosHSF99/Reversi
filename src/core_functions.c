@@ -146,7 +146,7 @@ void play(int l, int c, ESTADO *e)
 {
     int i;
     int j = 0;
-
+    
     if(elem(l, c, *e))
     {
         e->grelha[l][c] = e->peca;
