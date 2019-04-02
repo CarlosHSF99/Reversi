@@ -28,6 +28,11 @@ void menu()
             getchar();
             n = getchar() == 'X' ? VALOR_X : VALOR_O;
         }
+        else if (opt == 'a' || 'A')
+        {
+            getchar();
+            n = getchar() == 'X' ? VALOR_X : VALOR_O;
+        }
         else if (opt == 'l' || opt == 'L')
             scanf(" %s", &file_name);
         else if (opt == 'e' || opt == 'E')
@@ -47,7 +52,7 @@ void menu()
                 newVsHuman(&e, n);
                 break;
             case 'a': case 'A':
-                newVsBot(&e);
+                newVsBot(&e, n);
                 break;
             case 'l': case 'L':
                 readFile(&e, file_name, READ);
