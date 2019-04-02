@@ -44,6 +44,11 @@ typedef struct estado {
     int NO;                     // numero de pecas O
 } ESTADO;
 
+typedef struct {
+    int score;
+    POSICAO grid;
+} MINMAX;
+
 void printg(ESTADO e, int validas, int ajuda);
 
 void menu();
@@ -74,4 +79,5 @@ void isGameOver(ESTADO e);
 
 int elem(int l, int c, ESTADO e);
 
+int miniMax(ESTADO *e, int depth, int max_depth);
 #endif //PROJ_ESTADO_H
