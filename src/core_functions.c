@@ -300,7 +300,7 @@ int miniMax (ESTADO *e, int depth, int max_depth)
     {
         if (e->peca == VALOR_X) // Maximizing Player
         {
-            new_score = -1000000000;
+            new_score = -64;
             while ( e->nValidas != 0 )
             {
                 c = e;
@@ -315,7 +315,7 @@ int miniMax (ESTADO *e, int depth, int max_depth)
         } 
         if (e->peca == VALOR_O) // Minimizing Player
         {
-            new_score = 1000000000;
+            new_score = 64;
             while ( e->nValidas != 0 )
             {
                 c = e;
