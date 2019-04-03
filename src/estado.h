@@ -44,10 +44,10 @@ typedef struct estado {
     int NO;                     // numero de pecas O
 } ESTADO;
 
-typedef struct {
-    int score;
+typedef struct{
     POSICAO grid;
-} MINMAX;
+    int score;
+} MINIMAX;
 
 void printg(ESTADO e, int validas, int ajuda);
 

@@ -3,7 +3,7 @@
 //novo jogo contra adversario humano
 void newVsHuman(ESTADO *e, VALOR n)
 {
-    FILE *file;
+    //FILE *file;
     
     e->modo = '0';
     e->peca = n;
@@ -19,10 +19,10 @@ void newVsHuman(ESTADO *e, VALOR n)
     
     something(e);
     
-    file = fopen("../saves/.default.txt", "w"); //só para limpar o ficheiro
-    fclose(file);
+    //file = fopen("../saves/.default.txt", "w"); //só para limpar o ficheiro
+    //fclose(file);
     
-    writeEstado(e);
+    //writeEstado(e);
     
     printg(*e, 0, 0);
 }
@@ -31,7 +31,8 @@ void newVsHuman(ESTADO *e, VALOR n)
 void newVsBot(ESTADO *e, VALOR n)
 {
     e->modo = '1';
-    e->peca = 'n';
+    //e->peca = 'n';
+    e->peca = VALOR_X;
     
     for (int i = 0; i < DIM; i++)
         for (int j = 0; j < DIM; j++)
@@ -41,8 +42,13 @@ void newVsBot(ESTADO *e, VALOR n)
     e->grelha[4][3] = VALOR_X;
     e->grelha[3][3] = VALOR_O;
     e->grelha[4][4] = VALOR_O;
-    
+   
+    something(e);
+
     printg(*e, 0, 0);
+
+    if (n == VALOR_O)
+        miniMax(e,0,1);
 }
 
 //ler ficheiro
@@ -165,7 +171,7 @@ void play(int l, int c, ESTADO *e)
         }
         while (!e->nValidas && j<2);
         
-        writeEstado(e);
+        //writeEstado(e);
         
         isGameOver(*e);
     }
@@ -283,15 +289,19 @@ int miniMax (ESTADO *e, int depth, int max_depth)
 {
     int score=0, new_score;
     ESTADO *c;
-    MINMAX bot_output = {0};
+
+    MINIMAX bot_output = {0};
 
     if (depth == max_depth)
-        score = (e->NX - e->NO);
+    {
+        c = e;
+        score = (c->NX - c->NO);
+    }
     else
     {
         if (e->peca == VALOR_X) // Maximizing Player
         {
-            new_score = -1000000000;
+            new_score = -64;
             while ( e->nValidas != 0 )
             {
                 c = e;
@@ -306,7 +316,7 @@ int miniMax (ESTADO *e, int depth, int max_depth)
         } 
         if (e->peca == VALOR_O) // Minimizing Player
         {
-            new_score = 1000000000;
+            new_score = 64;
             while ( e->nValidas != 0 )
             {
                 c = e;
@@ -314,9 +324,8 @@ int miniMax (ESTADO *e, int depth, int max_depth)
                 new_score = miniMax( e, depth+1, max_depth );
                 if ( new_score < score ){
                     score = new_score;
-                    bot_output.grid.l = e->validas->valida.l;
-                    bot_output.grid.c = e->validas->valida.c;
-
+                    bot_output.grid.l = c->validas->valida.l;
+                    bot_output.grid.c = c->validas->valida.c;
                 }
             }
         }
