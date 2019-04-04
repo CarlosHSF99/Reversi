@@ -19,6 +19,9 @@ void newVsHuman(ESTADO *e, VALOR n)
     
     something(e);
     
+    for (int i = 0; i < e->nValidas; i++)
+        printf("(%d,%d)\n", e->validas[i].valida.l, e->validas[i].valida.c);
+    
     file = fopen("../saves/.default.txt", "w"); //só para limpar o ficheiro
     fclose(file);
     
@@ -30,8 +33,10 @@ void newVsHuman(ESTADO *e, VALOR n)
 //
 void newVsBot(ESTADO *e, VALOR n)
 {
+    FILE *file;
+    
     e->modo = '1';
-    e->peca = 'n';
+    e->peca = n;
     
     for (int i = 0; i < DIM; i++)
         for (int j = 0; j < DIM; j++)
@@ -41,6 +46,13 @@ void newVsBot(ESTADO *e, VALOR n)
     e->grelha[4][3] = VALOR_X;
     e->grelha[3][3] = VALOR_O;
     e->grelha[4][4] = VALOR_O;
+
+    something(e);
+    
+    file = fopen("../saves/.default.txt", "w"); //só para limpar o ficheiro
+    fclose(file);
+    
+    writeEstado(e);
     
     printg(*e, 0, 0);
 }
@@ -275,10 +287,11 @@ int elem(int l, int c, ESTADO e)
 {
     int i;
     
-    for (i = 0; (e.validas[i].valida.l != l || e.validas[i].valida.c != c) && i < e.nValidas; i++);
+    for (i = 0; (e.validas[i].valida.l != l || e.validas[i].valida.c != c) && i+1 < e.nValidas; i++);
     
     return e.validas[i].valida.l == l && e.validas[i].valida.c == c ? 1 : 0;
 }
+
 int miniMax (ESTADO *e, int depth, int max_depth)
 {
     int score=0, new_score;
@@ -287,41 +300,48 @@ int miniMax (ESTADO *e, int depth, int max_depth)
 
     if (depth == max_depth)
         score = (e->NX - e->NO);
-    else
+    else if (e->peca == VALOR_X) // Maximizing Player
     {
-        if (e->peca == VALOR_X) // Maximizing Player
+        new_score = -1000000000;
+        
+        while ( e->nValidas != 0 )
         {
-            new_score = -1000000000;
-            while ( e->nValidas != 0 )
+            c = e;
+            
+            play(e->validas->valida.l,e->validas->valida.c,c);
+            new_score = miniMax(e,depth+1,max_depth);
+            
+            if ( new_score > score )
             {
-                c = e;
-                play(e->validas->valida.l,e->validas->valida.c,c);
-                new_score = miniMax(e,depth+1,max_depth);
-                if ( new_score > score ){
-                    score = new_score;
-                    bot_output.grid.l = e->validas->valida.l;
-                    bot_output.grid.c = e->validas->valida.c;
-               }
+                score = new_score;
+                bot_output.grid.l = e->validas->valida.l;
+                bot_output.grid.c = e->validas->valida.c;
             }
-        } 
-        if (e->peca == VALOR_O) // Minimizing Player
+        }
+    } 
+    else // Minimizing Player
+    {
+        new_score = 1000000000;
+        
+        while (e->nValidas != 0)
         {
-            new_score = 1000000000;
-            while ( e->nValidas != 0 )
+            c = e;
+            
+            play(e->validas->valida.l, e->validas->valida.c, c);
+            new_score = miniMax( e, depth+1, max_depth );
+            
+            if (new_score < score)
             {
-                c = e;
-                play(e->validas->valida.l,e->validas->valida.c,c);
-                new_score = miniMax( e, depth+1, max_depth );
-                if ( new_score < score ){
-                    score = new_score;
-                    bot_output.grid.l = e->validas->valida.l;
-                    bot_output.grid.c = e->validas->valida.c;
-
-                }
+                score = new_score;
+                bot_output.grid.l = e->validas->valida.l;
+                bot_output.grid.c = e->validas->valida.c;
             }
         }
     }
-    play( bot_output.grid.l, bot_output.grid.c, e );
+    
+    play(bot_output.grid.l, bot_output.grid.c, e);
+    
     bot_output.score = score;
+    
     return bot_output.score;
 }
