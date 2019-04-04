@@ -10,8 +10,6 @@ void menu()
 
     CLEAR;
 
-    printf("%d\n", 60*sizeof(e));
-
     do
     {
         // prints the menu options
