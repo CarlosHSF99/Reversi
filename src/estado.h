@@ -41,13 +41,13 @@ typedef struct estado {
     int nValidas;               // numero de posiçoes validas
     int NX;                     // numero de pecas X
     int NO;                     // numero de pecas O
-    struct estado *next;        // proximo estado
+    //struct estado *next;        // proximo estado
 } ESTADO;
 
-typedef struct {
-    int score;
+typedef struct{
     POSICAO grid;
-} MINMAX;
+    int score;
+} MINIMAX;
 
 void printg(ESTADO e, int validas, int ajuda);
 
