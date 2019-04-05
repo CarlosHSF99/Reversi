@@ -5,6 +5,11 @@ void newVsHuman(ESTADO *e, VALOR n)
 {
     FILE *file;
     
+    //free_estado(e);
+    
+    //if (!(e = (ESTADO*)malloc(sizeof(ESTADO))))
+    //    exit(0);
+    
     e->modo = '0';
     e->peca = n;
     
@@ -18,9 +23,6 @@ void newVsHuman(ESTADO *e, VALOR n)
     e->grelha[4][4] = VALOR_O;
     
     something(e);
-    
-    for (int i = 0; i < e->nValidas; i++)
-        printf("(%d,%d)\n", e->validas[i].valida.l, e->validas[i].valida.c);
     
     file = fopen("../saves/.default.txt", "w"); //só para limpar o ficheiro
     fclose(file);
@@ -67,7 +69,7 @@ int readFile(ESTADO *e, char *file_name, int tipo)
     sprintf(file_txt, "../saves/%s.txt", file_name);
     
     file = fopen(file_txt, "r");
-
+    
     if (file == NULL)
     {
         printf("Save file %s doens't exist!\n", file_name);
@@ -276,7 +278,7 @@ void isGameOver(ESTADO e)
     v += e.nValidas;
     
     if (!v && e.NX == e.NO)
-        printf("Impate\n");
+        printf("Empate\n");
     else if (!v && e.NX > e.NO)
         printf("X ganhou\n");
     else if (!v && e.NX < e.NO)

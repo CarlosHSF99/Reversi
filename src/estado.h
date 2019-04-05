@@ -39,9 +39,9 @@ typedef struct estado {
     VALOR grelha[DIM][DIM];     // grelha
     VALIDAS validas[MAX_POS];   // posiçoes validas
     int nValidas;               // numero de posiçoes validas
-    POSICAO ajuda;              // posiçao ajuda
     int NX;                     // numero de pecas X
     int NO;                     // numero de pecas O
+    struct estado *next;        // proximo estado
 } ESTADO;
 
 typedef struct {
