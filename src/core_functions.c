@@ -24,8 +24,8 @@ void newVsHuman(ESTADO *e, VALOR n)
     
     something(e);
     
-    for (int i = 0; i < e->nValidas; i++)
-        printf("(%d,%d)\n", e->validas[i].valida.l, e->validas[i].valida.c);
+    //for (int i = 0; i < e->nValidas; i++)
+    //    printf("(%d,%d)\n", e->validas[i].valida.l, e->validas[i].valida.c);
     
     file = fopen("../saves/.default.txt", "w"); //só para limpar o ficheiro
     fclose(file);
@@ -185,7 +185,7 @@ void play(int l, int c, ESTADO *e)
         }
         while (!e->nValidas && j<2);
         
-        //writeEstado(e);
+        writeEstado(e);
         
         isGameOver(*e);
     }
