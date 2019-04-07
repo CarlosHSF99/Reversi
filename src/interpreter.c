@@ -8,8 +8,6 @@ void interpreter(ESTADO e)
     for (int i = 0; i < DIM+1; i++)
         strcpy(lines[i], "\n");
     
-    CLEAR;
-    
     while (1)
     {
         printg(e, lines);
@@ -58,7 +56,7 @@ int interpret(ESTADO *e, char *line)
             else
                 return -1;
             
-            newVsHuman(e, value);
+            manual(e, value);
             
             break;
         }
@@ -76,7 +74,7 @@ int interpret(ESTADO *e, char *line)
             else
                 return -1;
             
-            newVsBot(e, value);
+            automatic(e, value);
             
             break;
         }
@@ -138,6 +136,9 @@ int interpret(ESTADO *e, char *line)
             if (i > 1)
                 return 1;
             
+            if (e->modo == HELP) //if statment doesn't have realtion with previous if statment
+                return 3;
+            
             e->showHelp = 1;
             
             break;
@@ -155,6 +156,7 @@ int interpret(ESTADO *e, char *line)
             if (i > 1)
                 return 1;
             
+            CLEAR;
             exit(0);
             
             break;

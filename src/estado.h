@@ -10,9 +10,15 @@
 #define DIM 8
 #define MAX_STR 1024
 #define MAX_POS 64
-#define CLEAR system("clear")
 #define READ -133
 #define UNDO -266
+
+//trocar isto por ncurses
+#ifdef _WIN32
+    #define CLEAR system("cls")
+#else
+    #define CLEAR system("clear")
+#endif
 
 /*
 estado.h
@@ -58,8 +64,8 @@ void printg(ESTADO e, char lines[DIM][MAX_STR]);
 void interpreter(ESTADO e);
 int interpret(ESTADO *e, char *line);
 
-void newVsHuman(ESTADO *e, VALOR n);
-void newVsBot();
+void manual(ESTADO *e, VALOR n);
+void automatic(ESTADO *e, VALOR n);
 
 int readFile(ESTADO *e, char *file_name, int tipo);
 void writeEstado(ESTADO *e);

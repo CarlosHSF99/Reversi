@@ -1,7 +1,7 @@
 #include "estado.h"
 
 //novo jogo contra adversario humano
-void newVsHuman(ESTADO *e, VALOR n)
+void manual(ESTADO *e, VALOR n)
 {
     FILE *file;
     
@@ -24,9 +24,6 @@ void newVsHuman(ESTADO *e, VALOR n)
     
     validate(e);
     
-    //for (int i = 0; i < e->nValidas; i++)
-    //    printf("(%d,%d)\n", e->validas[i].valida.l, e->validas[i].valida.c);
-    
     file = fopen("../saves/.default.txt", "w"); //só para limpar o ficheiro
     fclose(file);
     
@@ -34,7 +31,7 @@ void newVsHuman(ESTADO *e, VALOR n)
 }
 
 //
-void newVsBot(ESTADO *e, VALOR n)
+void automatic(ESTADO *e, VALOR n)
 {
     FILE *file;
     
@@ -300,10 +297,10 @@ int elem(int l, int c, ESTADO e)
 // imprime um estado (Tabuleiro)
 void printg(ESTADO e, char lines[DIM][MAX_STR])
 {
-    CLEAR;
+    //CLEAR;
     
     printf("  ");
-    putchar(e.modo == '2' ? '?' : e.modo == '0' ? 'M' : 'A');
+    putchar(e.modo == HELP ? '?' : e.modo == '0' ? 'M' : 'A');
     putchar(' ');
     putchar(e.peca == HELP ? '?' : e.peca == VALOR_X ? 'X' : 'O');
     printf("   X:%02d O:%02d", e.NX, e.NO);
