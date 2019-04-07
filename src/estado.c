@@ -52,7 +52,7 @@ void newVsBot(ESTADO *e, VALOR n)
     
     validate(e);
     
-    printg(*e);
+    //printg(*e);
     
     file = fopen("../saves/.default.txt", "w"); //só para limpar o ficheiro
     fclose(file);
@@ -298,13 +298,16 @@ int elem(int l, int c, ESTADO e)
 }
 
 // imprime um estado (Tabuleiro)
-void printg(ESTADO e)
+void printg(ESTADO e, char lines[DIM][MAX_STR])
 {
+    CLEAR;
+    
     printf("  ");
     putchar(e.modo == '2' ? '?' : e.modo == '0' ? 'M' : 'A');
     putchar(' ');
     putchar(e.peca == HELP ? '?' : e.peca == VALOR_X ? 'X' : 'O');
-    printf("   X:%02d O:%02d\n", e.NX, e.NO);
+    printf("   X:%02d O:%02d", e.NX, e.NO);
+    printf(" ┊ %s", lines[0]);
     
     if (e.showValid)
         for (int i = 0; i < e.nValidas; i++)
@@ -317,7 +320,8 @@ void printg(ESTADO e)
     {
         printf("%d ", i);
         
-        for (int j = 0; j < DIM; j++){
+        for (int j = 0; j < DIM; j++)
+        {
             switch (e.grelha[i][j])
             {
                 case VAZIA:
@@ -339,12 +343,10 @@ void printg(ESTADO e)
                     printf("E ");
                     break;
             }
-            
-            //putchar(j < DIM-1 ? ' ' : '\n');
         }
         
-        puts("");
+        printf("┊ %s", lines[i+1]);
     }
     
-    printf("  0 1 2 3 4 5 6 7\n");
+    printf("  0 1 2 3 4 5 6 7 ┊ reversi> ");
 }

@@ -53,7 +53,7 @@ typedef struct{
     int score;
 } MINIMAX;
 
-void printg(ESTADO e);
+void printg(ESTADO e, char lines[DIM][MAX_STR]);
 
 void interpreter(ESTADO e);
 int interpret(ESTADO *e, char *line);

@@ -2,17 +2,26 @@
 
 void interpreter(ESTADO e)
 {
+    char lines[DIM+1][MAX_STR];
     char line[MAX_STR];
+
+    for (int i = 0; i < DIM+1; i++)
+        strcpy(lines[i], "\n");
     
-    //CLEAR;
+    CLEAR;
     
     while (1)
     {
-        printg(e);
+        printg(e, lines);
         e.showValid = e.showHelp = 0;
         
         if (!fgets(line, MAX_STR, stdin))
             exit(0);
+        
+        for (int i = 0; i < DIM; i++)
+            strcpy(lines[i], lines[i+1]);
+        
+        sprintf(lines[DIM], "reversi> %s", line);
         
         interpret(&e, line);
     }
@@ -20,14 +29,10 @@ void interpreter(ESTADO e)
 
 int interpret(ESTADO *e, char *line)
 {
-    char option;
-    char file_name[MAX_STR];
     char *cmd[MAX_STR];
     int l, c;
     int i;
     VALOR value;
-    
-    //CLEAR;
     
     cmd[0] = strtok(line, " \n");
     
@@ -36,11 +41,6 @@ int interpret(ESTADO *e, char *line)
     
     for (i = 0; cmd[i]; i++)
         cmd[i+1] = strtok(NULL, " \n");
-    
-    //for (int j = 0; cmd[j]; j++)
-    //    printf("/%s/", cmd[j]);
-    
-    //CLEAR;
     
     switch (cmd[0][0])
     {
@@ -165,6 +165,6 @@ int interpret(ESTADO *e, char *line)
             break;
         }
     }
-
+    
     return 0;
 }
