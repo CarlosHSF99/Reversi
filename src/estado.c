@@ -22,17 +22,15 @@ void newVsHuman(ESTADO *e, VALOR n)
     e->grelha[3][3] = VALOR_O;
     e->grelha[4][4] = VALOR_O;
     
-    something(e);
+    validate(e);
     
-    for (int i = 0; i < e->nValidas; i++)
-        printf("(%d,%d)\n", e->validas[i].valida.l, e->validas[i].valida.c);
+    //for (int i = 0; i < e->nValidas; i++)
+    //    printf("(%d,%d)\n", e->validas[i].valida.l, e->validas[i].valida.c);
     
     file = fopen("../saves/.default.txt", "w"); //só para limpar o ficheiro
     fclose(file);
     
     writeEstado(e);
-    
-    printg(*e, 0, 0);
 }
 
 //
@@ -51,16 +49,16 @@ void newVsBot(ESTADO *e, VALOR n)
     e->grelha[4][3] = VALOR_X;
     e->grelha[3][3] = VALOR_O;
     e->grelha[4][4] = VALOR_O;
-   
-    something(e);
+    
+    validate(e);
+    
+    printg(*e);
     
     file = fopen("../saves/.default.txt", "w"); //só para limpar o ficheiro
     fclose(file);
     
     writeEstado(e);
     
-    printg(*e, 0, 0);
-
     if (n == VALOR_O)
         miniMax(e, 0, 1);
 }
@@ -69,7 +67,7 @@ void newVsBot(ESTADO *e, VALOR n)
 int readFile(ESTADO *e, char *file_name, int tipo)
 {
     FILE *file;
-    char file_txt[MAX_LENGTH];
+    char file_txt[MAX_STR];
     int peca;
     
     sprintf(file_txt, "../saves/%s.txt", file_name);
@@ -86,7 +84,7 @@ int readFile(ESTADO *e, char *file_name, int tipo)
     
     e->modo = fgetc(file) == 'M' ? '0' : '1';
     fseek(file, 1, SEEK_CUR);
-	e->peca = fgetc(file) == 'X' ? VALOR_X : VALOR_O;
+    e->peca = fgetc(file) == 'X' ? VALOR_X : VALOR_O;
     fseek(file, 1, SEEK_CUR);
     
     for(int l = 0; l < DIM; l++)
@@ -98,9 +96,7 @@ int readFile(ESTADO *e, char *file_name, int tipo)
     
     fclose(file);
     
-    something(e);
-    
-    printg(*e, 0, 0);
+    validate(e);
 }
 
 //copia do default para o ficheiro destino defenido pelo jogador
@@ -109,7 +105,7 @@ void saveFile(ESTADO *e, char *file_name)
     FILE *file;
     FILE *def_file;
     char ch;
-    char file_pos_name[MAX_LENGTH];
+    char file_pos_name[MAX_STR];
     
     sprintf(file_pos_name, "../saves/%s.txt", file_name);
     
@@ -122,8 +118,6 @@ void saveFile(ESTADO *e, char *file_name)
     
     fclose(file);
     fclose(def_file);
-
-    printg(*e, 0, 0);
 }
 
 //Guarda jogadas
@@ -158,7 +152,7 @@ void writeEstado(ESTADO *e)
         }
     
     fprintf(file, "\n");
-
+    
     fclose(file);
 }
 
@@ -180,7 +174,7 @@ void play(int l, int c, ESTADO *e)
         do
         {
             e->peca = 3 - e->peca;
-            something(e);
+            validate(e);
             j++;
         }
         while (!e->nValidas && j<2);
@@ -191,13 +185,13 @@ void play(int l, int c, ESTADO *e)
     }
     else
         printf("Jogada invalida!\n");
-    
-    printg(*e, 0, 0);
 }
 
 //coloca pontos nas posicoes das jogadas validas
-void something(ESTADO *e)
+void validate(ESTADO *e)
 {
+    int nVirarHelp = 0;
+    
     e->nValidas = e->NX = e->NO = 0;
     
     for (int i = 0; i < DIM; i++)
@@ -209,6 +203,13 @@ void something(ESTADO *e)
             {
                 e->validas[e->nValidas].valida.l = i;
                 e->validas[e->nValidas].valida.c = j;
+                
+                if (e->validas[e->nValidas].nVirar > nVirarHelp)
+                {
+                    nVirarHelp = e->validas[e->nValidas].nVirar;
+                    e->help = e->validas[e->nValidas].valida;
+                }
+                
                 e->nValidas++;
             }
         }
@@ -256,10 +257,6 @@ int cercaDir (int k, int l, int i, int j, ESTADO *e, int n)
     return e->grelha[i][j] == e->peca && i < DIM && i>=0 && j < DIM && j>=0 ? 1 : 0;
 }
 
-//coloca um '?' na jogada aconselhada
-void help()
-{}
-
 //desfaz uma jogada
 void undo(ESTADO *e)
 {
@@ -279,7 +276,7 @@ void isGameOver(ESTADO e)
 {
     int v = e.nValidas;
     
-    something(&e);
+    validate(&e);
     
     v += e.nValidas;
     
@@ -301,17 +298,20 @@ int elem(int l, int c, ESTADO e)
 }
 
 // imprime um estado (Tabuleiro)
-void printg(ESTADO e, int validas, int ajuda)
+void printg(ESTADO e)
 {
     printf("  ");
-    putchar(e.modo == '0' ? 'M' : 'A');
+    putchar(e.modo == '2' ? '?' : e.modo == '0' ? 'M' : 'A');
     putchar(' ');
-    putchar(e.peca == VALOR_X ? 'X' : 'O');
+    putchar(e.peca == HELP ? '?' : e.peca == VALOR_X ? 'X' : 'O');
     printf("   X:%02d O:%02d\n", e.NX, e.NO);
     
-    if (validas)
+    if (e.showValid)
         for (int i = 0; i < e.nValidas; i++)
             e.grelha[e.validas[i].valida.l][e.validas[i].valida.c] = VALIDA;
+    
+    if (e.showHelp)
+        e.grelha[e.help.l][e.help.c] = HELP;
     
     for (int i = 0; i < DIM; i++)
     {
@@ -321,27 +321,29 @@ void printg(ESTADO e, int validas, int ajuda)
             switch (e.grelha[i][j])
             {
                 case VAZIA:
-                    putchar('-');
+                    printf("- ");
                     break;
                 case VALOR_X:
-                    putchar('X');
+                    printf("X ");
                     break;
                 case VALOR_O:
-                    putchar('O');
+                    printf("O ");
                     break;
                 case VALIDA:
-                    putchar('.');
+                    printf(". ");
                     break;
                 case HELP:
-                    putchar('?');
+                    printf("? ");
                     break;
                 default:
-                    putchar('E');
+                    printf("E ");
                     break;
             }
             
-            putchar(j < DIM-1 ? ' ' : '\n');
+            //putchar(j < DIM-1 ? ' ' : '\n');
         }
+        
+        puts("");
     }
     
     printf("  0 1 2 3 4 5 6 7\n");

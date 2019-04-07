@@ -1,3 +1,5 @@
+#include "estado.h"
+
 int miniMax (ESTADO *e, int depth, int max_depth)
 {
     int score=0, new_score;

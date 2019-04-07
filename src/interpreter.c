@@ -1,102 +1,170 @@
 #include "estado.h"
 
-void menu()
+void interpreter(ESTADO e)
 {
-    char opt; // menu option
-    ESTADO e = {0};
-    char file_name[MAX_LENGTH];
-    int l, c;
-    VALOR n;
-
-    CLEAR;
-
-    do
+    char line[MAX_STR];
+    
+    //CLEAR;
+    
+    while (1)
     {
-        // prints the menu options
-        printf("[N]ovo [L]er [E]screver [J]ogar [S]how [H]elp [U]ndo [A]utomatico [Q]uit\n");
+        printg(e);
+        e.showValid = e.showHelp = 0;
         
-        // prints prompt
-        printf("\n: ");
+        if (!fgets(line, MAX_STR, stdin))
+            exit(0);
         
-        // prompts for menu option
-        opt = getchar();
-        
-        if (opt == 'j' || opt == 'J')
-            scanf(" %d %d", &l, &c);
-        else if (opt == 'n' || opt == 'N')
-        {
-            getchar();
-            n = getchar() == 'X' ? VALOR_X : VALOR_O;
-        }
-        else if (opt == 'a' || opt ==  'A')
-        {
-            getchar();
-            n = getchar() == 'X' ? VALOR_X : VALOR_O;
-        }
-        else if (opt == 'l' || opt == 'L')
-            scanf(" %s", &file_name);
-        else if (opt == 'e' || opt == 'E')
-            scanf(" %s", &file_name);
-        
-        // cleans buffer
-        while (getchar() != '\n');
-        
-        CLEAR;
-        
-        switch (opt)
-        {
-            case 'q': case 'Q':
-                remove("../saves/.default.txt");
-                break;
-            case 'n': case 'N':
-                newVsHuman(&e, n);
-                break;
-            case 'a': case 'A':
-                newVsBot(&e, n);
-                break;
-            case 'l': case 'L':
-                readFile(&e, file_name, READ);
-                break;
-            case 'e': case 'E':
-                saveFile(&e, file_name);
-                break;
-            case 'j': case 'J':
-                if (e.modo == '0')
-                {
-                    play(l, c, &e);
-                    break;
-                }
-                else
-                {
-                if ( e.modo == '1' )
-                    {
-                        if ( e.peca == n)
-                        {
-                            play(l, c, &e);
-                            break;
-                        }
-                        else
-                        {
-                            miniMax(&e, 0, 2);
-                            break;
-                        }
-                    }
-                }
-            case 's': case 'S':
-                printg(e, 1, 0);
-                break;
-            case 'h': case 'H':
-                break;
-            case 'u': case 'U':
-                undo(&e);
-                break;
-            default:
-                printf("Invalid option!");
-                break;
-        }
-        
-        if (opt != 'q' && opt != 'Q' && opt != 'e' && opt != 'E') 
-            putchar('\n');
+        interpret(&e, line);
     }
-    while (opt != 'Q' && opt != 'q');
+}
+
+int interpret(ESTADO *e, char *line)
+{
+    char option;
+    char file_name[MAX_STR];
+    char *cmd[MAX_STR];
+    int l, c;
+    int i;
+    VALOR value;
+    
+    //CLEAR;
+    
+    cmd[0] = strtok(line, " \n");
+    
+    if (!cmd[0] || strlen(cmd[0]) > 1)
+        return -1;
+    
+    for (i = 0; cmd[i]; i++)
+        cmd[i+1] = strtok(NULL, " \n");
+    
+    //for (int j = 0; cmd[j]; j++)
+    //    printf("/%s/", cmd[j]);
+    
+    //CLEAR;
+    
+    switch (cmd[0][0])
+    {
+        case 'n': case 'N':
+        {
+            if (i < 2)
+                return -1;
+            else if (i > 2)
+                return 1;
+            
+            if (!strcmp(cmd[1], "X"))
+                value = VALOR_X;
+            else if (!strcmp(cmd[1], "O"))
+                value = VALOR_O;
+            else
+                return -1;
+            
+            newVsHuman(e, value);
+            
+            break;
+        }
+        case 'a': case 'A':
+        {
+            if (i < 2)
+                return -1;
+            else if (i > 2)
+                return 1;
+            
+            if (!strcmp(cmd[1], "X"))
+                value = VALOR_X;
+            else if (!strcmp(cmd[1], "O"))
+                value = VALOR_O;
+            else
+                return -1;
+            
+            newVsBot(e, value);
+            
+            break;
+        }
+        case 'l': case 'L':
+        {
+            if (i < 2)
+                return -1;
+            else if (i > 2)
+                return 1;
+            
+            readFile(e, cmd[1], READ);
+            
+            break;
+        }
+        case 'e': case 'E':
+        {
+            if (i < 2)
+                return -1;
+            else if (i > 2)
+                return 1;
+            
+            saveFile(e, cmd[1]);
+            
+            break;
+        }
+        case 'j': case 'J':
+        {
+            if (i < 3)
+                return -1;
+            else if (i > 3)
+                return 1;
+            
+            if (!isdigit(cmd[1][0]) || !isdigit(cmd[2][0]))
+                return 2;
+            
+            l = cmd[1][0] - '0';
+            c = cmd[2][0] - '0';
+            
+            if (e->modo == '0')
+                play(l, c, e);
+            else if (e->peca == value)
+                play(l, c, e);
+            else
+                miniMax(e, 0, 2);
+            
+            break;
+        }
+        case 's': case 'S':
+        {
+            if (i > 1)
+                return 1;
+            
+            e->showValid = 1;
+            
+            break;
+        }
+        case 'h': case 'H':
+        {
+            if (i > 1)
+                return 1;
+            
+            e->showHelp = 1;
+            
+            break;
+        }
+        case 'u': case 'U':
+        {
+            if (i > 1)
+                return 1;
+            
+            undo(e);
+            break;
+        }
+        case 'q': case 'Q':
+        {
+            if (i > 1)
+                return 1;
+            
+            exit(0);
+            
+            break;
+        }
+        default:
+        {
+            puts("RTFM");
+            break;
+        }
+    }
+
+    return 0;
 }

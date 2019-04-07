@@ -2,12 +2,13 @@
 #define PROJ_ESTADO_H
 
 #include <stdio.h>
+#include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
 #define DIM 8
-#define MAX_LENGTH 1024
+#define MAX_STR 1024
 #define MAX_POS 64
 #define CLEAR system("clear")
 #define READ -133
@@ -39,9 +40,12 @@ typedef struct estado {
     VALOR grelha[DIM][DIM];     // grelha
     VALIDAS validas[MAX_POS];   // posiçoes validas
     int nValidas;               // numero de posiçoes validas
+    POSICAO help;               // help piece
     int NX;                     // numero de pecas X
     int NO;                     // numero de pecas O
-    //struct estado *next;        // proximo estado
+    int showValid;              // mostra posicoes validas
+    int showHelp;               // mostra posicao ajuda
+    //struct estado *next;      // proximo estado
 } ESTADO;
 
 typedef struct{
@@ -49,29 +53,23 @@ typedef struct{
     int score;
 } MINIMAX;
 
-void printg(ESTADO e, int validas, int ajuda);
+void printg(ESTADO e);
 
-void menu();
+void interpreter(ESTADO e);
+int interpret(ESTADO *e, char *line);
 
 void newVsHuman(ESTADO *e, VALOR n);
-
 void newVsBot();
 
 int readFile(ESTADO *e, char *file_name, int tipo);
-
 void writeEstado(ESTADO *e);
-
 void saveFile(ESTADO *e, char *filename);
 
 void play(int l, int c, ESTADO *e); 
 
-void something(ESTADO *e);
-
+void validate(ESTADO *e);
 int cerca(int i, int j, ESTADO *e, int n);
-
 int cercaDir(int k, int l, int i, int j, ESTADO *e, int n);
-
-void help();
 
 void undo(ESTADO *e);
 
