@@ -5,7 +5,7 @@ void manual(ESTADO *e, VALOR n)
 {
     FILE *file;
     
-    //free_estado(e);
+    //freeEstado(e);
     
     //if (!(e = (ESTADO*)malloc(sizeof(ESTADO))))
     //    exit(0);
@@ -297,7 +297,7 @@ int elem(int l, int c, ESTADO e)
 // imprime um estado (Tabuleiro)
 void printg(ESTADO e, char lines[DIM][MAX_STR])
 {
-    //CLEAR;
+    CLEAR;
     
     printf("  ");
     putchar(e.modo == HELP ? '?' : e.modo == '0' ? 'M' : 'A');

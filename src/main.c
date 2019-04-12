@@ -2,22 +2,25 @@
 
 int main()
 {
-    ESTADO *e = calloc(1, sizeof(ESTADO));
+    LEst e = calloc(1, sizeof(LEST));
     
     if (!e)
         exit(0);
-
-    e->modo = HELP;
-    e->peca = HELP;
     
-    e->grelha[3][3] = VALOR_O;
-    e->grelha[4][4] = VALOR_O;
-    e->grelha[3][4] = VALOR_X;
-    e->grelha[4][3] = VALOR_X;
+    e->e.modo = HELP;
+    e->e.peca = HELP;
     
-    interpreter(*e);
-
-    free(e);
-
+    e->e.NX = 2;
+    e->e.NO = 2;
+    
+    e->e.grelha[3][3] = VALOR_O;
+    e->e.grelha[4][4] = VALOR_O;
+    e->e.grelha[3][4] = VALOR_X;
+    e->e.grelha[4][3] = VALOR_X;
+    
+    interpreter(e->e);
+    
+    freeEstado(e);
+    
     return 0;
 }

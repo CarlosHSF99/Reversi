@@ -5,7 +5,7 @@ int miniMax (ESTADO *e, int depth, int max_depth)
     int score=0, new_score;
     ESTADO *c;
 
-    MINIMAX bot_output = {0};
+    MINMAX bot_output = {0};
 
     if (depth == max_depth)
     {
@@ -50,7 +50,7 @@ int miniMax (ESTADO *e, int depth, int max_depth)
     }
     
     play(bot_output.grid.l, bot_output.grid.c, e);
-    
+
     bot_output.score = score;
     
     return bot_output.score;

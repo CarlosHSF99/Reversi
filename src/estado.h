@@ -51,19 +51,23 @@ typedef struct estado {
     int NO;                     // numero de pecas O
     int showValid;              // mostra posicoes validas
     int showHelp;               // mostra posicao ajuda
-    //struct estado *next;      // proximo estado
 } ESTADO;
+
+typedef struct history {
+    ESTADO e;
+    struct history *next;       // proximo estado
+} LEST, *LEst;
 
 typedef struct{
     POSICAO grid;
     int score;
-} MINIMAX;
+} MINMAX;
 
-void printg(ESTADO e, char lines[DIM][MAX_STR]);
-
+//interpreter.c
 void interpreter(ESTADO e);
 int interpret(ESTADO *e, char *line);
 
+//estado.c
 void manual(ESTADO *e, VALOR n);
 void automatic(ESTADO *e, VALOR n);
 
@@ -81,7 +85,15 @@ void undo(ESTADO *e);
 
 void isGameOver(ESTADO e);
 
+void printg(ESTADO e, char lines[DIM][MAX_STR]);
+
 int elem(int l, int c, ESTADO e);
 
 int miniMax(ESTADO *e, int depth, int max_depth);
+
+//linked_lists.c
+void freeEstado(LEst e);
+void push(LEst e, ESTADO new_e);
+ESTADO pop(LEst e);
+
 #endif //PROJ_ESTADO_H
