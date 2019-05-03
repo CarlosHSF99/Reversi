@@ -26,7 +26,7 @@ void newGame(LEST* s)
 
 void push(ESTADO e,LEST* s)
 {
-    LEST new_s = malloc(sizeof(LEST));
+    LEST new_s = malloc(sizeof(struct history));
     new_s->e=e;
     new_s->next=(*s);
     s=&(new_s);

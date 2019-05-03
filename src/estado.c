@@ -7,7 +7,7 @@ void manual(ESTADO *e, VALOR n, LEST* s)
 
     newGame(s);
     
-    new_s = malloc(sizeof(LEST));
+    new_s = malloc(sizeof(struct history));
    
     new_s->next=(*s);  
     s=&new_s; 
@@ -36,7 +36,7 @@ void automatic(ESTADO *e, VALOR n,LEST* s)
 
     newGame(s);
     
-    new_s = malloc(sizeof(LEST));
+    new_s = malloc(sizeof(struct history));
     
     new_s->next=(*s);
     s=&new_s;
