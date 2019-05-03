@@ -1,6 +1,6 @@
 #include "estado.h"
 
-void interpreter(ESTADO e)
+void interpreter(ESTADO e,LEST* s)
 {
     char lines[DIM+1][MAX_STR];
     char line[MAX_STR];
@@ -21,11 +21,11 @@ void interpreter(ESTADO e)
         
         sprintf(lines[DIM], "reversi> %s", line);
         
-        interpret(&e, line);
+        interpret(&e, line, s);
     }
 }
 
-int interpret(ESTADO *e, char *line)
+int interpret(ESTADO *e, char *line,LEST* s)
 {
     char *cmd[MAX_STR];
     int l, c;
@@ -56,7 +56,7 @@ int interpret(ESTADO *e, char *line)
             else
                 return -1;
             
-            manual(e, value);
+            manual(e, value, s);
             
             break;
         }
@@ -74,7 +74,7 @@ int interpret(ESTADO *e, char *line)
             else
                 return -1;
             
-            automatic(e, value);
+            automatic(e, value, s);
             
             break;
         }
@@ -96,7 +96,7 @@ int interpret(ESTADO *e, char *line)
             else if (i > 2)
                 return 1;
             
-            saveFile(e, cmd[1]);
+            saveFile(e, cmd[1], *s);
             
             break;
         }
@@ -114,11 +114,11 @@ int interpret(ESTADO *e, char *line)
             c = cmd[2][0] - '0';
             
             if (e->modo == '0')
-                play(l, c, e);
+                play(l, c, e, s);
             else if (e->peca == value)
-                play(l, c, e);
+                play(l, c, e, s);
             else
-                miniMax(e, 0, 2);
+                miniMax(e, 0, 2, s);
             
             break;
         }
@@ -148,7 +148,7 @@ int interpret(ESTADO *e, char *line)
             if (i > 1)
                 return 1;
             
-            undo(e);
+            undo(e,s);
             break;
         }
         case 'q': case 'Q':

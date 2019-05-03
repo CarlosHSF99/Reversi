@@ -1,15 +1,17 @@
 #include "estado.h"
 
 //novo jogo contra adversario humano
-void manual(ESTADO *e, VALOR n)
+void manual(ESTADO *e, VALOR n, LEST* s)
 {
-    FILE *file;
+    LEST new_s=NULL;
+
+    newGame(s);
     
-    //freeEstado(e);
-    
-    //if (!(e = (ESTADO*)malloc(sizeof(ESTADO))))
-    //    exit(0);
-    
+    new_s = malloc(sizeof(LEST));
+   
+    new_s->next=(*s);  
+    s=&new_s; 
+
     e->modo = '0';
     e->peca = n;
     
@@ -24,17 +26,21 @@ void manual(ESTADO *e, VALOR n)
     
     validate(e);
     
-    file = fopen("../saves/.default.txt", "w"); //só para limpar o ficheiro
-    fclose(file);
-    
-    writeEstado(e);
+    (*s)->e=*e;
 }
 
 //
-void automatic(ESTADO *e, VALOR n)
+void automatic(ESTADO *e, VALOR n,LEST* s)
 {
-    FILE *file;
+    LEST new_s=NULL;
+
+    newGame(s);
     
+    new_s = malloc(sizeof(LEST));
+    
+    new_s->next=(*s);
+    s=&new_s;
+
     e->modo = '1';
     e->peca = VALOR_X;
     
@@ -49,15 +55,10 @@ void automatic(ESTADO *e, VALOR n)
     
     validate(e);
     
-    //printg(*e);
-    
-    file = fopen("../saves/.default.txt", "w"); //só para limpar o ficheiro
-    fclose(file);
-    
-    writeEstado(e);
-    
+   (*s)->e=*e;
+
     if (n == VALOR_O)
-        miniMax(e, 0, 1);
+        miniMax(e, 0, 1, s);
 }
 
 //ler ficheiro
@@ -94,27 +95,46 @@ int readFile(ESTADO *e, char *file_name, int tipo)
     fclose(file);
     
     validate(e);
+
+    return 0;
 }
 
-//copia do default para o ficheiro destino defenido pelo jogador
-void saveFile(ESTADO *e, char *file_name)
+void saveFile(ESTADO* e, char* file_name,LEST s)
 {
     FILE *file;
-    FILE *def_file;
-    char ch;
+    int l,c;
     char file_pos_name[MAX_STR];
     
     sprintf(file_pos_name, "../saves/%s.txt", file_name);
     
     file=fopen(file_pos_name,"w");
     
-    def_file=fopen("../saves/.default.txt","r");
     
-    while((ch=fgetc(def_file)) != EOF)
-        fputc(ch,file);
+    while((s)!=NULL){
+        fprintf(file,"%c %c\n",(s->e.modo=='0')?'M':(s->e.modo=='1')?'A':'?',(s->e.peca==VALOR_X)?'X':(s->e.peca==VALOR_O)?'O':'?');
+        
+        for(l=0;l<DIM;l++){
+            for(c=0;c<DIM;c++)
+                switch(s->e.grelha[l][c]){
+                    case VALOR_O:
+                        fputc('O',file);
+                        break;
+                    case VALOR_X:
+                        fputc('X',file);
+                        break;
+                    case VAZIA:
+                        fputc('-',file);
+                        break;
+                    default:
+                        fputc('E',file);
+                        break;
+                }
+            fputc((c<DIM-1)?' ':'\n',file);
+        }
+        s=s->next;
+    }
     
     fclose(file);
-    fclose(def_file);
 }
 
 //Guarda jogadas
@@ -154,7 +174,7 @@ void writeEstado(ESTADO *e)
 }
 
 //executa uma jogada
-void play(int l, int c, ESTADO *e)
+void play(int l, int c, ESTADO *e, LEST* s)
 {
     int i;
     int j = 0;
@@ -176,7 +196,7 @@ void play(int l, int c, ESTADO *e)
         }
         while (!e->nValidas && j<2);
         
-        writeEstado(e);
+        push(*e,s); 
         
         isGameOver(*e);
     }
@@ -255,17 +275,10 @@ int cercaDir (int k, int l, int i, int j, ESTADO *e, int n)
 }
 
 //desfaz uma jogada
-void undo(ESTADO *e)
+void undo(ESTADO *e, LEST* s)
 {
-    FILE *file;
-    
-    readFile(e, ".default", UNDO);
-    
-    file = fopen("../saves/.default.txt", "a");
-    
-    ftruncate(fileno(file), ftell(file) + READ);
-    
-    fclose(file);
+    pop(s);
+    *e=(*s)->e;
 }
 
 //se no O ou no X ou no Vazia ou nao ha jogadas possiveis para ambos os jogadores

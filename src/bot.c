@@ -1,6 +1,6 @@
 #include "estado.h"
 
-int miniMax (ESTADO *e, int depth, int max_depth)
+int miniMax (ESTADO *e, int depth, int max_depth,LEST* s)
 {
     int score=0, new_score;
     ESTADO *c;
@@ -19,9 +19,9 @@ int miniMax (ESTADO *e, int depth, int max_depth)
             {
             c = e;
             
-            play(e->validas->valida.l,e->validas->valida.c,c);
-            new_score = miniMax(e,depth+1,max_depth);
-            
+            play(e->validas->valida.l,e->validas->valida.c,c,s);
+            new_score = miniMax(e,depth+1,max_depth,s);
+        
             if ( new_score > score )
                 {
                 score = new_score;
@@ -38,8 +38,8 @@ int miniMax (ESTADO *e, int depth, int max_depth)
             while ( e->nValidas != 0 )
             {
                 c = e;
-                play(e->validas->valida.l,e->validas->valida.c,c);
-                new_score = miniMax( e, depth+1, max_depth );
+                play(e->validas->valida.l,e->validas->valida.c,c,s);
+                new_score = miniMax( e, depth+1, max_depth, s);
                 if ( new_score < score ){
                     score = new_score;
                     bot_output.grid.l = c->validas->valida.l;
@@ -49,7 +49,7 @@ int miniMax (ESTADO *e, int depth, int max_depth)
         }
     }
     
-    play(bot_output.grid.l, bot_output.grid.c, e);
+    play(bot_output.grid.l, bot_output.grid.c, e,s);
 
     bot_output.score = score;
     

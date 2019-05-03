@@ -1,29 +1,45 @@
 #include "estado.h"
 
-void freeEstado(LEst e)
+void freeStack(LEST* s)
 {
-    LEst new = NULL;
+    LEST temp = *s;
     
-    while (e)
+    while ((*s)!=NULL)
     {
-        new = e->next;
-        free(e);
-        e = new;
-    }
-}
-/*
-void push(LEst e, ESTADO new_e)
-{
-    LEst new_estado;
-    new_estado = calloc(1, sizeof(ESTADO));
-    
-    new_estado->new_e = new_e;
-    new_estado->next = e;
-    e = new_node;
+        temp = (*s);
+        s=&((*s)->next);
+        free(temp);
+     }    
 }
 
-ESTADO pop(LEst *e)
+void newGame(LEST* s)
 {
-    
+    LEST temp = (*s);
+
+    while ((*s)->next!=NULL)
+    {
+        temp = (*s);
+        s=&((*s)->next);
+        free(temp);
+    }
 }
-*/
+
+void push(ESTADO e,LEST* s)
+{
+    LEST new_s = malloc(sizeof(LEST));
+    new_s->e=e;
+    new_s->next=(*s);
+    s=&(new_s);
+}
+
+void pop(LEST* s)
+{
+    LEST temp = (*s);
+    
+    if((*s)->next==NULL)
+        printf("\nStack vazia\n");
+    else{
+        s=&((*s)->next);
+        free(temp);
+    }
+}

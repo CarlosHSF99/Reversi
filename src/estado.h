@@ -56,7 +56,7 @@ typedef struct estado {
 typedef struct history {
     ESTADO e;
     struct history *next;       // proximo estado
-} LEST, *LEst;
+} *LEST;
 
 typedef struct{
     POSICAO grid;
@@ -64,24 +64,24 @@ typedef struct{
 } MINMAX;
 
 //interpreter.c
-void interpreter(ESTADO e);
-int interpret(ESTADO *e, char *line);
+void interpreter(ESTADO e,LEST* s);
+int interpret(ESTADO* e, char* line, LEST* s);
 
 //estado.c
-void manual(ESTADO *e, VALOR n);
-void automatic(ESTADO *e, VALOR n);
+void manual(ESTADO* e, VALOR n, LEST* s);
+void automatic(ESTADO* e, VALOR n, LEST* s);
 
-int readFile(ESTADO *e, char *file_name, int tipo);
-void writeEstado(ESTADO *e);
-void saveFile(ESTADO *e, char *filename);
+int readFile(ESTADO* e, char* file_name, int tipo);
+void writeEstado(ESTADO* e);
+void saveFile(ESTADO* e, char* filename, LEST s);
 
-void play(int l, int c, ESTADO *e); 
+void play(int l, int c, ESTADO* e, LEST* s); 
 
-void validate(ESTADO *e);
-int cerca(int i, int j, ESTADO *e, int n);
-int cercaDir(int k, int l, int i, int j, ESTADO *e, int n);
+void validate(ESTADO* e);
+int cerca(int i, int j, ESTADO* e, int n);
+int cercaDir(int k, int l, int i, int j, ESTADO* e, int n);
 
-void undo(ESTADO *e);
+void undo(ESTADO* e,LEST* s);
 
 void isGameOver(ESTADO e);
 
@@ -89,11 +89,12 @@ void printg(ESTADO e, char lines[DIM][MAX_STR]);
 
 int elem(int l, int c, ESTADO e);
 
-int miniMax(ESTADO *e, int depth, int max_depth);
+int miniMax(ESTADO* e, int depth, int max_depth,LEST* s);
 
 //linked_lists.c
-void freeEstado(LEst e);
-void push(LEst e, ESTADO new_e);
-ESTADO pop(LEst e);
+void freeStack(LEST* s);
+void newGame(LEST* s);
+void push(ESTADO e,LEST* s);
+void pop(LEST* s);
 
 #endif //PROJ_ESTADO_H
