@@ -1,170 +1,180 @@
 #include "estado.h"
 
+// Interpretes
 void interpreter(ESTADO e,LEST* s)
 {
-    char lines[DIM+1][MAX_STR];
+    char lines[DIM][MAX_STR];
     char line[MAX_STR];
 
-    for (int i = 0; i < DIM+1; i++)
-        strcpy(lines[i], "\n");
+    for (int i = 0; i < DIM; i++)               //
+        strcpy(lines[i], "\n");                 //
     
     while (1)
     {
-        printg(e, lines);
-        e.showValid = e.showHelp = 0;
+        printg(e, lines);                       //
+        e.showValid = e.showHelp = 0;           //
         
-        if (!fgets(line, MAX_STR, stdin))
-            exit(0);
+        if (!fgets(line, MAX_STR, stdin))       //
+            exit(0);                            //
         
-        for (int i = 0; i < DIM; i++)
-            strcpy(lines[i], lines[i+1]);
+        updateLines(lines);                     //
+
+        sprintf(lines[7], "reversi> %s", line); //
         
-        sprintf(lines[DIM], "reversi> %s", line);
-        
-        interpret(&e, line, s);
+        interpret(&e, line, s, lines);          //
     }
 }
 
-int interpret(ESTADO *e, char *line,LEST* s)
+// 
+void updateLines(char lines[DIM][MAX_STR])
+{                                                                                                    
+    for (int i = 0; i < 7; i++)         // iterates over CLI lines                                   
+        strcpy(lines[i], lines[i+1]);   // climbs CLI                                                
+} 
+
+//
+int interpret(ESTADO *e, char *line, LEST *s, char lines[DIM][MAX_STR])
 {
-    char *cmd[MAX_STR];
-    int l, c;
-    int i;
-    VALOR value;
+    char *cmd[MAX_STR];                 //
+    int l, c;                           //
+    int i;                              //
+    VALOR value;                        //
     
-    cmd[0] = strtok(line, " \n");
+    cmd[0] = strtok(line, " \n");       //
     
-    if (!cmd[0] || strlen(cmd[0]) > 1)
-        return -1;
+    if (!cmd[0] || strlen(cmd[0]) > 1)  //
+        return -1;                      //
     
-    for (i = 0; cmd[i]; i++)
-        cmd[i+1] = strtok(NULL, " \n");
+    for (i = 0; cmd[i]; i++)            //
+        cmd[i+1] = strtok(NULL, " \n"); //
     
-    switch (cmd[0][0])
+    switch (cmd[0][0])                  //
     {
-        case 'n': case 'N':
+        case 'n': case 'N':                 //
         {
-            if (i < 2)
-                return -1;
-            else if (i > 2)
-                return 1;
+            if (i < 2)                      //
+                return -1;                  //
+            else if (i > 2)                 //
+                return 1;                   //
             
-            if (!strcmp(cmd[1], "X"))
-                value = VALOR_X;
-            else if (!strcmp(cmd[1], "O"))
-                value = VALOR_O;
+            if (!strcmp(cmd[1], "X"))       //
+                value = VALOR_X;            //
+            else if (!strcmp(cmd[1], "O"))  //
+                value = VALOR_O;            //
             else
-                return -1;
+                return -1;                  //
             
-            manual(e, value, s);
+            manual(e, value, s);            //
             
             break;
         }
-        case 'a': case 'A':
+        case 'a': case 'A':                 //
         {
-            if (i < 2)
-                return -1;
-            else if (i > 2)
-                return 1;
+            if (i < 2)                      //
+                return -1;                  //
+            else if (i > 2)                 //
+                return 1;                   //
             
-            if (!strcmp(cmd[1], "X"))
-                value = VALOR_X;
-            else if (!strcmp(cmd[1], "O"))
-                value = VALOR_O;
+            if (!strcmp(cmd[1], "X"))       //
+                value = VALOR_X;            //
+            else if (!strcmp(cmd[1], "O"))  //
+                value = VALOR_O;            //
             else
-                return -1;
+                return -1;                  //
             
-            automatic(e, value, s);
-            
-            break;
-        }
-        case 'l': case 'L':
-        {
-            if (i < 2)
-                return -1;
-            else if (i > 2)
-                return 1;
-            
-            readFile(e, cmd[1], READ);
+            automatic(e, value, s);         //
             
             break;
         }
-        case 'e': case 'E':
+        case 'l': case 'L':             //
         {
-            if (i < 2)
-                return -1;
-            else if (i > 2)
-                return 1;
+            if (i < 2)                  //
+                return -1;              //
+            else if (i > 2)             //
+                return 1;               //
             
-            saveFile(e, cmd[1], *s);
+            readFile(e, cmd[1], READ);  //
             
             break;
         }
-        case 'j': case 'J':
+        case 'e': case 'E':             //
         {
-            if (i < 3)
-                return -1;
-            else if (i > 3)
-                return 1;
+            if (i < 2)                  //
+                return -1;              //
+            else if (i > 2)             //
+                return 1;               //
             
-            if (!isdigit(cmd[1][0]) || !isdigit(cmd[2][0]))
-                return 2;
+            saveFile(e, cmd[1], *s);    //
             
-            l = cmd[1][0] - '0';
-            c = cmd[2][0] - '0';
+            break;
+        }
+        case 'j': case 'J':                                 //
+        {
+            if (i < 3)                                      //
+                return -1;                                  //
+            else if (i > 3)                                 //
+                return 1;                                   //
             
-            if (e->modo == '0')
-                play(l, c, e, s);
-            else if (e->peca == value)
-                play(l, c, e, s);
+            if (!isdigit(cmd[1][0]) || !isdigit(cmd[2][0])) //
+                return 2;                                   //
+            
+            l = cmd[1][0] - '0';                            //
+            c = cmd[2][0] - '0';                            //
+            
+            if (e->modo == '0')                             //
+                play(l, c, e, s, lines);                    //
+            else if (e->peca == value)                      //
+                play(l, c, e, s, lines);                    //
             else
-                miniMax(e, 0, 2, s);
+                miniMax(e, 0, 2, s);                        //
             
-            break;
+            isGameOver(*e, lines);
+            
+            break;                                          //
         }
-        case 's': case 'S':
+        case 's': case 'S':     //
         {
-            if (i > 1)
-                return 1;
+            if (i > 1)          //
+                return 1;       //
             
-            e->showValid = 1;
+            e->showValid = 1;   //
             
-            break;
+            break;              //
         }
-        case 'h': case 'H':
+        case 'h': case 'H':         //
         {
-            if (i > 1)
-                return 1;
+            if (i > 1)              //
+                return 1;           //
             
-            if (e->modo == HELP) //if statment doesn't have realtion with previous if statment
-                return 3;
+            if (e->modo == HELP)    //if statment doesn't have realtion with previous if statment
+                return 3;           //
             
-            e->showHelp = 1;
+            e->showHelp = 1;        //
             
-            break;
+            break;                  //
         }
-        case 'u': case 'U':
+        case 'u': case 'U': //
         {
-            if (i > 1)
-                return 1;
+            if (i > 1)      //
+                return 1;   //
             
-            undo(e,s);
-            break;
+            undo(e,s);      //
+            break;          //
         }
-        case 'q': case 'Q':
+        case 'q': case 'Q': //
         {
-            if (i > 1)
-                return 1;
+            if (i > 1)      //
+                return 1;   //
             
-            CLEAR;
-            exit(0);
+            CLEAR;          //
+            exit(0);        //
             
-            break;
+            break;          //
         }
-        default:
+        default:            //
         {
-            puts("RTFM");
-            break;
+            puts("RTFM");   //
+            break;          //
         }
     }
     

@@ -4,7 +4,7 @@ void freeStack(LEST* s)
 {
     LEST temp = *s;
     
-    while ((*s)!=NULL)
+    while (*s)
     {
         temp = (*s);
         s=&((*s)->next);
@@ -16,10 +16,10 @@ void newGame(LEST* s)
 {
     LEST temp = (*s);
 
-    while ((*s)->next!=NULL)
+    while ((*s)->next)
     {
         temp = (*s);
-        s=&((*s)->next);
+        s = &((*s)->next);
         free(temp);
     }
 }
@@ -36,9 +36,10 @@ void pop(LEST* s)
 {
     LEST temp = (*s);
     
-    if((*s)->next==NULL)
+    if((*s)->next == NULL)
         printf("\nStack vazia\n");
-    else{
+    else
+    {
         s=&((*s)->next);
         free(temp);
     }

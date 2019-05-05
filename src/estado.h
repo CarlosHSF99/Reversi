@@ -7,11 +7,12 @@
 #include <string.h>
 #include <unistd.h>
 
-#define DIM 8
-#define MAX_STR 1024
-#define MAX_POS 64
-#define READ -133
-#define UNDO -266
+#define DIM       8
+#define LIN       7
+#define MAX_STR   1024
+#define MAX_POS   64
+#define READ      -133
+#define UNDO      -266
 
 //trocar isto por ncurses
 #ifdef _WIN32
@@ -32,6 +33,8 @@ typedef enum {VAZIA, VALOR_X, VALOR_O, VALIDA, HELP} VALOR;
 typedef struct posicao {
     int l, c;
 } POSICAO;
+
+//typedef struct vetor
 
 typedef struct virar {
     POSICAO valida;
@@ -64,8 +67,9 @@ typedef struct{
 } MINMAX;
 
 //interpreter.c
-void interpreter(ESTADO e,LEST* s);
-int interpret(ESTADO* e, char* line, LEST* s);
+void interpreter(ESTADO e, LEST* s);
+int interpret(ESTADO* e, char* line, LEST* s, char lines[DIM][MAX_STR]);
+void updateLines(char lines[DIM][MAX_STR]);
 
 //estado.c
 void manual(ESTADO* e, VALOR n, LEST* s);
@@ -75,19 +79,26 @@ int readFile(ESTADO* e, char* file_name, int tipo);
 void writeEstado(ESTADO* e);
 void saveFile(ESTADO* e, char* filename, LEST s);
 
-void play(int l, int c, ESTADO* e, LEST* s); 
+void play(int l, int c, ESTADO* e, LEST* s, char lines[DIM][MAX_STR]); 
 
-void validate(ESTADO* e);
+void update(ESTADO* e);
 int cerca(int i, int j, ESTADO* e, int n);
 int cercaDir(int k, int l, int i, int j, ESTADO* e, int n);
 
 void undo(ESTADO* e,LEST* s);
 
-void isGameOver(ESTADO e);
+void isGameOver(ESTADO e, char lines[DIM][MAX_STR]);
 
 void printg(ESTADO e, char lines[DIM][MAX_STR]);
 
 int elem(int l, int c, ESTADO e);
+
+int inBoard(int l, int c);
+VALOR switchPiece(VALOR piece);
+
+void printFirstLine(ESTADO e);
+void showValid(ESTADO *e);
+void showHelp(ESTADO *e);
 
 int miniMax(ESTADO* e, int depth, int max_depth,LEST* s);
 

@@ -19,7 +19,7 @@ int miniMax (ESTADO *e, int depth, int max_depth,LEST* s)
             {
             c = e;
             
-            play(e->validas->valida.l,e->validas->valida.c,c,s);
+            //play(e->validas->valida.l,e->validas->valida.c,c,s);
             new_score = miniMax(e,depth+1,max_depth,s);
         
             if ( new_score > score )
@@ -38,7 +38,7 @@ int miniMax (ESTADO *e, int depth, int max_depth,LEST* s)
             while ( e->nValidas != 0 )
             {
                 c = e;
-                play(e->validas->valida.l,e->validas->valida.c,c,s);
+                //play(e->validas->valida.l,e->validas->valida.c,c,s);
                 new_score = miniMax( e, depth+1, max_depth, s);
                 if ( new_score < score ){
                     score = new_score;
@@ -49,7 +49,7 @@ int miniMax (ESTADO *e, int depth, int max_depth,LEST* s)
         }
     }
     
-    play(bot_output.grid.l, bot_output.grid.c, e,s);
+    //play(bot_output.grid.l, bot_output.grid.c, e,s);
 
     bot_output.score = score;
     
