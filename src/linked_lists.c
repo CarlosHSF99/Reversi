@@ -1,18 +1,18 @@
 #include "estado.h"
 
-void freeStack(LEST* s)
+void freeStack(LEST *s)
 {
     LEST temp = *s;
     
     while (*s)
     {
         temp = (*s);
-        s=&((*s)->next);
+        s = &((*s)->next);
         free(temp);
      }    
 }
 
-void newGame(LEST* s)
+void newGame(LEST *s)
 {
     LEST temp = (*s);
 
@@ -24,15 +24,15 @@ void newGame(LEST* s)
     }
 }
 
-void push(ESTADO e,LEST* s)
+void push(ESTADO e, LEST *s)
 {
     LEST new_s = malloc(sizeof(struct history));
-    new_s->e=e;
-    new_s->next=(*s);
-    s=&(new_s);
+    new_s->e = e;
+    new_s->next = (*s);
+    s = &(new_s);
 }
 
-void pop(LEST* s)
+void pop(LEST *s)
 {
     LEST temp = (*s);
     
@@ -40,7 +40,7 @@ void pop(LEST* s)
         printf("\nStack vazia\n");
     else
     {
-        s=&((*s)->next);
+        s = &((*s)->next);
         free(temp);
     }
 }

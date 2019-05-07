@@ -83,7 +83,7 @@ void saveFile(ESTADO *e, char* filename, LEST s);
 
 int play(int l, int c, ESTADO* e, LEST *s, char cli[DIM][MAX_STR]); 
 
-int boardUpdate(ESTADO *e);
+int stateUpdate(ESTADO *e);
 void update(ESTADO *e);
 int cerca(int i, int j, ESTADO* e, int n);
 int cercaDir(int k, int l, int i, int j, ESTADO *e, int n);

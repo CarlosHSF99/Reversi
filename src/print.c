@@ -2,8 +2,20 @@
 
 void printg(ESTADO e, char cli[DIM][MAX_STR])
 {
-    CLEAR;                                      // clears screen
+    //CLEAR;                                      // clears screen
     
+    puts("");
+    
+    for (int i = 0; i < e.nValidas; i++)
+    {
+        printf("Valida: (%d , %d)\n", e.validas[i].valida.l, e.validas[i].valida.c);
+        
+        for (int j = 0; j < e.validas[i].nVirar; j++)
+            printf("\t(%d , %d)\n", e.validas[i].virar[j].l, e.validas[i].virar->c);
+        
+        puts("");
+    }
+
     printFirstLine(e);                          // prints first line (mode, score and CLI title)
     
     showValid(&e);                              // cheks if valid positions are to be shown and adds them to the board
@@ -41,7 +53,7 @@ void printg(ESTADO e, char cli[DIM][MAX_STR])
         printf("┊ %s", cli[i]);                 // prints current CLI line
     }
     
-    printf("  0 1 2 3 4 5 6 7 ┊ reversi> ");    // prints columns idexes and prompt line
+    printf("  0 1 2 3 4 5 6 7 ┊ reversi> ");    // prints columns indexes and prompt line (last line)
 }
 
 // Prints first line
@@ -88,4 +100,3 @@ void showHelp(ESTADO *e)
         puts("");
     }
     */
-

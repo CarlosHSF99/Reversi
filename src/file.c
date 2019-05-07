@@ -37,7 +37,7 @@ int readFile(ESTADO *e, char *file_name, int tipo)
     return 0;
 }
 
-void saveFile(ESTADO* e, char* file_name,LEST s)
+void saveFile(ESTADO* e, char* file_name, LEST s)
 {
     FILE *file;
     int l,c;
@@ -45,7 +45,7 @@ void saveFile(ESTADO* e, char* file_name,LEST s)
     
     sprintf(file_pos_name, "../saves/%s.txt", file_name);
     
-    file=fopen(file_pos_name,"w");
+    file=fopen(file_pos_name, "w");
     
     
     while(s)
