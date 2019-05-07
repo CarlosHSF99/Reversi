@@ -7,12 +7,13 @@
 #include <string.h>
 #include <unistd.h>
 
-#define DIM       8
-#define LIN       7
-#define MAX_STR   1024
-#define MAX_POS   64
-#define READ      -133
-#define UNDO      -266
+#define DIM     8       //
+#define CLI     7       //
+#define INPUT   1015    //
+#define MAX_STR 1024    //
+#define MAX_POS 64      //
+#define READ    -133    //
+#define UNDO    -266    //
 
 //trocar isto por ncurses
 #ifdef _WIN32
@@ -67,45 +68,49 @@ typedef struct{
 } MINMAX;
 
 //interpreter.c
-void interpreter(ESTADO e, LEST* s);
-int interpret(ESTADO* e, char* line, LEST* s, char lines[DIM][MAX_STR]);
-void updateLines(char lines[DIM][MAX_STR]);
+void interpreter(ESTADO e, LEST *s);
+int interpret(ESTADO *e, LEST *s, char *input, char cli[DIM][MAX_STR], char *error);
+void updateCLI(char cli[DIM][MAX_STR]/*, int n_times*/);
+void errorHandling(int num, char error, char cli[CLI][MAX_STR]);
 
 //estado.c
-void manual(ESTADO* e, VALOR n, LEST* s);
-void automatic(ESTADO* e, VALOR n, LEST* s);
+void manual(ESTADO *e, VALOR n, LEST *s);
+void automatic(ESTADO *e, VALOR n, LEST *s);
 
-int readFile(ESTADO* e, char* file_name, int tipo);
-void writeEstado(ESTADO* e);
-void saveFile(ESTADO* e, char* filename, LEST s);
+int readFile(ESTADO *e, char *file_name, int tipo);
+void writeEstado(ESTADO *e);
+void saveFile(ESTADO *e, char* filename, LEST s);
 
-void play(int l, int c, ESTADO* e, LEST* s, char lines[DIM][MAX_STR]); 
+int play(int l, int c, ESTADO* e, LEST *s, char cli[DIM][MAX_STR]); 
 
-void update(ESTADO* e);
+int boardUpdate(ESTADO *e);
+void update(ESTADO *e);
 int cerca(int i, int j, ESTADO* e, int n);
-int cercaDir(int k, int l, int i, int j, ESTADO* e, int n);
+int cercaDir(int k, int l, int i, int j, ESTADO *e, int n);
 
-void undo(ESTADO* e,LEST* s);
+void undo(ESTADO* e, LEST *s);
 
-void isGameOver(ESTADO e, char lines[DIM][MAX_STR]);
+int isGameOver(ESTADO e, char cli[DIM][MAX_STR]);
 
 void printg(ESTADO e, char lines[DIM][MAX_STR]);
 
 int elem(int l, int c, ESTADO e);
 
 int inBoard(int l, int c);
-VALOR switchPiece(VALOR piece);
+void switchPiece(VALOR *piece);
 
 void printFirstLine(ESTADO e);
 void showValid(ESTADO *e);
 void showHelp(ESTADO *e);
 
-int miniMax(ESTADO* e, int depth, int max_depth,LEST* s);
+void boardInicial(VALOR grelha[DIM][DIM]);
+
+int miniMax(ESTADO *e, int depth, int max_depth, LEST *s);
 
 //linked_lists.c
-void freeStack(LEST* s);
-void newGame(LEST* s);
-void push(ESTADO e,LEST* s);
-void pop(LEST* s);
+void freeStack(LEST *s);
+void newGame(LEST *s);
+void push(ESTADO e, LEST *s);
+void pop(LEST *s);
 
 #endif //PROJ_ESTADO_H
