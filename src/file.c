@@ -10,11 +10,8 @@ int readFile(ESTADO *e, char *file_name, int tipo)
     
     file = fopen(file_txt, "r");
     
-    if (file == NULL)
-    {
-        printf("Save file %s doens't exist!\n", file_name);
+    if (!file)
         return 1;
-    }
     
     fseek(file, tipo, SEEK_END);
     
@@ -37,7 +34,7 @@ int readFile(ESTADO *e, char *file_name, int tipo)
     return 0;
 }
 
-void saveFile(ESTADO* e, char* file_name, LEST s)
+void saveState(ESTADO* e, char* file_name, LEST s)
 {
     FILE *file;
     int l,c;

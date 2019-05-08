@@ -10,7 +10,7 @@ int miniMax(ESTADO *e, int depth, int max_depth,LEST* s)
     if (depth == max_depth)
     {
         c = e;
-        score = (c->NX - c->NO);
+        score = (c->scoreX - c->scoreO);
     }
     else if (e->peca == VALOR_X) // Maximizing Player
     {

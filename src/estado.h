@@ -35,8 +35,6 @@ typedef struct posicao {
     int l, c;
 } POSICAO;
 
-//typedef struct vetor
-
 typedef struct virar {
     POSICAO valida;
     POSICAO virar[MAX_POS];
@@ -51,8 +49,8 @@ typedef struct estado {
     VALIDAS validas[MAX_POS];   // posiçoes validas
     int nValidas;               // numero de posiçoes validas
     POSICAO help;               // help piece
-    int NX;                     // numero de pecas X
-    int NO;                     // numero de pecas O
+    int scoreX;                 // numero de pecas X
+    int scoreO;                 // numero de pecas O
     int showValid;              // mostra posicoes validas
     int showHelp;               // mostra posicao ajuda
 } ESTADO;
@@ -62,6 +60,20 @@ typedef struct history {
     struct history *next;       // proximo estado
 } *LEST;
 
+#define MODO(e)     e->modo         //
+#define PIECE(e)    e->peca         //
+#define BOARD(l,c)  e->grelha[l][c] //
+#define VALIDS(e)   e->validas      //
+#define nVALID(e)   e->nValidas     //
+#define HELPP(e)    e->help         //
+#define SCOREX(e)   e->NX           //
+#define SCOREO(e)   e->NO           //
+#define SVALID(e)   e->showValid    //
+#define SHELP(e)    e->showHelp     //
+
+#define VALID(e)    e->validas->valida  //
+#define nREVERSE(e) e->validas->nVirar  //
+
 typedef struct{
     POSICAO grid;
     int score;
@@ -69,26 +81,39 @@ typedef struct{
 
 //interpreter.c
 void interpreter(ESTADO e, LEST *s);
-int interpret(ESTADO *e, LEST *s, char *input, char *error);
-void updateCLI(char cli[DIM][MAX_STR]/*, int n_times*/);
-void errorHandling(int num, char error, char cli[CLI][MAX_STR]);
+int interpret(ESTADO *e, LEST *s, char *input);
+void updateCLI(char cli[DIM][MAX_STR]/*,int n_times*/);
+void errorHandling(int num, char cli[CLI][MAX_STR]);
+
+int new(int i, char *cmd, ESTADO *e, LEST *s);
+int automatic(int i, char *cmd, ESTADO *e, LEST *s);
+int load(int i, char *cmd, ESTADO *e);
+int save(int i, char *cmd, ESTADO *e, LEST *s);
+int play(int i, char *cmd[MAX_STR], ESTADO *e, LEST *s);
+int valid(int i, ESTADO *e);
+int help(int i, ESTADO *e);
+int undo(int i, ESTADO *e, LEST *s);
+int quit(int i);
 
 //estado.c
 void manual(ESTADO *e, VALOR n, LEST *s);
-void automatic(ESTADO *e, VALOR n, LEST *s);
+void autoVSbot(ESTADO *e, VALOR n, LEST *s);
 
 int readFile(ESTADO *e, char *file_name, int tipo);
 void writeEstado(ESTADO *e);
-void saveFile(ESTADO *e, char* filename, LEST s);
+void saveState(ESTADO *e, char* filename, LEST s);
 
-int play(int l, int c, ESTADO* e);
+int reverse(int l, int c, ESTADO* e);
+
+void scoreUpdate(ESTADO *e, int l, int c);
+void helpFunc(ESTADO *e, int *nVirarHelp);
 
 int stateUpdate(ESTADO *e);
 void update(ESTADO *e);
 int cerca(int i, int j, ESTADO* e, int n);
 int cercaDir(int k, int l, int i, int j, ESTADO *e, int n);
 
-void undo(ESTADO* e, LEST *s);
+void popundo(ESTADO* e, LEST *s);
 
 int isGameOver(ESTADO e);
 

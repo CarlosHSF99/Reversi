@@ -1,21 +1,10 @@
 #include "estado.h"
 
+// Prints current state (mode, palyer, score, board and CLI)
 void printg(ESTADO e, char cli[DIM][MAX_STR])
 {
-    //CLEAR;                                      // clears screen
+    CLEAR;                                      // clears screen
     
-    puts("");
-    
-    for (int i = 0; i < e.nValidas; i++)
-    {
-        printf("Valida: (%d , %d)\n", e.validas[i].valida.l, e.validas[i].valida.c);
-        
-        for (int j = 0; j < e.validas[i].nVirar; j++)
-            printf("\t(%d , %d)\n", e.validas[i].virar[j].l, e.validas[i].virar->c);
-        
-        puts("");
-    }
-
     printFirstLine(e);                          // prints first line (mode, score and CLI title)
     
     showValid(&e);                              // cheks if valid positions are to be shown and adds them to the board
@@ -63,7 +52,7 @@ void printFirstLine (ESTADO e)
     putchar(e.modo == HELP ? '?' : e.modo == '0' ? 'M' : 'A');        // prints current game mode
     putchar(' ');                                                     // prints blanck spaces for alignment
     putchar(e.peca == HELP ? '?' : e.peca == VALOR_X ? 'X' : 'O');    // prints piece of current player
-    printf("   X:%02d O:%02d", e.NX, e.NO);                           // prints game score
+    printf("   X:%02d O:%02d", e.scoreX, e.scoreO);                   // prints game score
     printf(" ┊ CLI\n");                                               // prints "CLI" title
 }
 

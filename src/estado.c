@@ -23,7 +23,7 @@ void manual(ESTADO *e, VALOR n, LEST* s)
 }
 
 // New game against computer adversary
-void automatic(ESTADO *e, VALOR n, LEST* s)
+void autoVSbot(ESTADO *e, VALOR n, LEST* s)
 {
     LEST new_s = NULL;                      //
 
@@ -61,7 +61,7 @@ void boardInicial(VALOR grelha[DIM][DIM])
 }
 
 //executa uma jogada
-int play(int l, int c, ESTADO *e)
+int reverse(int l, int c, ESTADO *e)
 {
     if (!elem(l, c, *e))                                // cheks if play is valid
         return 1;                                       // returns error
@@ -69,19 +69,16 @@ int play(int l, int c, ESTADO *e)
     e->grelha[l][c] = e->peca;                          // puts playing piece in the chosen position
     
     VALIDAS *valids = e->validas;                       //
-    POSICAO *valid = &valids->valida;                   //
+    POSICAO *valid = &valids->valida;                   // REVER
     
     while (valid->l != l || valid->c != c)              // iterates over valid positions until finding the current one
-        valid = &(++valids)->valida;                    //
+        valid = &(++valids)->valida;                    // REVER
     
     POSICAO *reverse = valids->virar;                   //
     int nReverse = valids->nVirar;                      //
     
-    while (nReverse--)                                  // iterates over reversable positions
-    {
+    for (; nReverse--; ++reverse)                       // iterates over reversable positions
         e->grelha[reverse->l][reverse->c] = e->peca;    // reverses reversable positions
-        ++reverse;                                      //
-    }
     
     return stateUpdate(e);                              //
 }
@@ -89,16 +86,14 @@ int play(int l, int c, ESTADO *e)
 // Updates game state
 int stateUpdate(ESTADO *e)
 {
-    int i = 0;                    //
+    int i = -1;                   //
     
     do                            // checks if jump piece
     {
         switchPiece(&e->peca);    // 
         update(e);                //
-
-        i++;                      //
         
-        if (i > 1)                //
+        if (++i)                  //
             return 1;             //
     }
     while (!e->nValidas);         //
@@ -109,69 +104,81 @@ int stateUpdate(ESTADO *e)
 // Actually updates game state
 void update(ESTADO *e)
 {
-    VALOR pos;
-    int nVirarHelp = 0;                                             //
+    int nVirarHelp = 0;                                  //
     
-    e->nValidas = e->NX = e->NO = 0;                                // resets number of valid positions and score
+    e->nValidas = e->scoreX = e->scoreO = 0;             // resets number of valid positions and score
     
-    for (int i = 0; i < DIM; i++)                                   // iterates over board lines
-        for (int j = 0; j < DIM; j++)                               // iterates over board columns
+    for (int l = 0; l < DIM; l++)                        // iterates over board lines
+        for (int c = 0; c < DIM; c++)                    // iterates over board columns
         {
-            pos = e->grelha[i][j];                                  // sets pos to current position value
+            scoreUpdate(e, l, c);                        //
             
-            e->NX += pos == VALOR_X;                                // increments X by one score if pos is equal to X
-            e->NO += pos == VALOR_O;                                // increments O by one score if pos is equal to O
-            
-            if (cerca(i, j, e, e->nValidas))                        // checks if current position is a valid play
+            if (cerca(l, c, e, e->nValidas))             // checks if current position is a valid play
             {
-                e->validas[e->nValidas].valida.l = i;               // saves valid line to current position
-                e->validas[e->nValidas].valida.c = j;               // saves valid column to current position
+                e->validas[e->nValidas].valida.l = l;    // saves valid line to current position
+                e->validas[e->nValidas].valida.c = c;    // saves valid column to current position
                 
-                if (e->validas[e->nValidas].nVirar > nVirarHelp)    // checks if current pos will flip the most pieces
-                {
-                    nVirarHelp = e->validas[e->nValidas].nVirar;    // 
-                    e->help = e->validas[e->nValidas].valida;       // saves current position as suggestion play
-                }
-                
-                e->nValidas++;                                      // increments number of valid positions by one
+                helpFunc(e, &nVirarHelp);                //
             }
         }
 }
+
+//
+void scoreUpdate(ESTADO *e, int l, int c)
+{
+    VALOR piece = e->grelha[l][c];    // initializes piece to current position value
+
+    e->scoreX += piece == VALOR_X;    // increments X by one score if pos is equal to X
+    e->scoreO += piece == VALOR_O;    // increments O by one score if pos is equal to O
+}
+
+//
+void helpFunc(ESTADO *e, int *nVirarHelp)
+{
+    if (e->validas[e->nValidas].nVirar > *nVirarHelp)    // checks if current pos will flip the most pieces
+    {
+        *nVirarHelp = e->validas[e->nValidas].nVirar;    // 
+        e->help = e->validas[e->nValidas].valida;        // saves current position as suggestion play
+    }
+    
+    e->nValidas++;                                       // increments number of valid positions by one
+}
  
 // Checks if a postion is a valid play
-int cerca(int i, int j, ESTADO *e, int n)
+int cerca(int l, int c, ESTADO *e, int n)
 {
     e->validas[n].nVirar = 0;             // resets number of reversable pieces to zero
     
-    if (e->grelha[i][j])                  // checks if current posiiton is empty
+    if (e->grelha[l][c])                  // checks if current posiiton is empty
         return 0;                         // returns false
     
     return                                // returns true if the current position reverses any piece in the direction
-        cercaDir(i, j, -1,  0, e, n) +    // up
-        cercaDir(i, j,  1,  0, e, n) +    // down
-        cercaDir(i, j,  0,  1, e, n) +    // right
-        cercaDir(i, j,  0, -1, e, n) +    // left
-        cercaDir(i, j, -1,  1, e, n) +    // up   right
-        cercaDir(i, j, -1, -1, e, n) +    // up   left
-        cercaDir(i, j,  1,  1, e, n) +    // down right
-        cercaDir(i, j,  1, -1, e, n);     // down left
+        cercaDir(l, c, -1,  0, e, n) +    // up
+        cercaDir(l, c,  1,  0, e, n) +    // down
+        cercaDir(l, c,  0,  1, e, n) +    // right
+        cercaDir(l, c,  0, -1, e, n) +    // left
+        cercaDir(l, c, -1,  1, e, n) +    // up   right
+        cercaDir(l, c, -1, -1, e, n) +    // up   left
+        cercaDir(l, c,  1,  1, e, n) +    // down right
+        cercaDir(l, c,  1, -1, e, n);     // down left
 }
 
 // Checks if a position is a valid play in a direction and saves reversable positions and how many are they
 int cercaDir (int l, int c, int i, int j, ESTADO *e, int n)
 {
-    POSICAO *reverse = e->validas[n].virar;                                   // initializes reverse to point to thereversable positions array
-    int *nReverse = &e->validas[n].nVirar;                                    // initializes nReverse to point to the number of reversable positions
     VALOR opnt = e->peca;                                                     // initializes onpt to current player piece
-    int counter = 0;                                                          // initializes counter to 0
     
     switchPiece(&opnt);                                                       // sets onpt to oponent player piece
     
+    POSICAO *reverse = e->validas[n].virar;                                   // initializes reverse pointing reversable positions array
+    int *nReverse = &e->validas[n].nVirar;                                    // initializes nReverse pointing number reversable positions
+    int counter = 0;                                                          // initializes counter to 0
+   
     for (l+=i, c+=j; inBoard(l, c) && e->grelha[l][c] == opnt; l+=i, c+=j)    // iterates over board vector
     {
         reverse[*nReverse].l = l;                                             // adds coordenate l to reversable positions
         reverse[*nReverse].c = c;                                             // adds coordenate c to reversable positions
-        ++*nReverse;                                                          // increments number of reversable pieces by one
+        (*nReverse)++;                                                          // increments number of reversable pieces by one
         counter++;                                                            // increments counter by one
     }
     
@@ -196,7 +203,7 @@ void switchPiece(VALOR *piece)
 }
 
 // Desfaz uma jogada
-void undo(ESTADO *e, LEST* s)
+void popundo(ESTADO *e, LEST* s)
 {
     pop(s);         //
     *e = (*s)->e;   //
@@ -205,34 +212,31 @@ void undo(ESTADO *e, LEST* s)
 //se no O ou no X ou no Vazia ou nao ha jogadas possiveis para ambos os jogadores
 int isGameOver(ESTADO e)
 {
-    int v = e.nValidas;                              // 
+    int v = e.nValidas;              // 
     
-    update(&e);                                      // updates state
+    update(&e);                      // updates state
     
-    v += e.nValidas;                                 // sums number of valid plays before and after update
+    v += e.nValidas;                 // sums number of valid plays before and after update
     
-    if (!v)                                          // checks if there are valid plays for both pieces
-        return 1;                                    //
-    /*{
-        updateCLI(lines);
-        
-        if (e.NX ==e.NO)                             // checks if score is tied
-            strcpy(lines[7], "reversi: Draw\n");     // puts "Draw" message in CLI
-        else if (e.NX > e.NO)                        // checks if X has won
-            strcpy(lines[7], "reversi: X Won\n");    // puts "X Won" message in CLI
-        else                                         // else O has won
-            strcpy(lines[7], "reversi: O Won\n");    // puts "O Won" message in CLI
-    }*/
+    if (v)                           // checks if there are valid plays for both pieces
+        return 0;                    //
 
-    return 0;
+    if (e.scoreX == e.scoreO)        // checks if score is tied
+        return 1;                    // puts "Draw" message in CLI
+    else if (e.scoreX > e.scoreO)    // checks if X has won
+        return 1;                    // puts "X Won" message in CLI
+    else                             // else O has won
+        return 1;                    // puts "O Won" message in CLI
 }
 
 //
 int elem(int l, int c, ESTADO e)
 {
-    int i;                                                                                               //
+    VALIDAS *valids = e.validas;                                //
+    POSICAO *valid = &valids->valida;                           //
     
-    for (i = 0; (e.validas[i].valida.l != l || e.validas[i].valida.c != c) && i+1 < e.nValidas; i++);    //
+    while ((valid->l != l || valid->c != c) && --e.nValidas)    //
+        valid = &(++valids)->valida;                            //
     
-    return e.validas[i].valida.l == l && e.validas[i].valida.c == c;                                     //
+    return valid->l == l && valid->c == c;                      //
 }
