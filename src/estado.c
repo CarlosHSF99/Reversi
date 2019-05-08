@@ -61,92 +61,49 @@ void boardInicial(VALOR grelha[DIM][DIM])
 }
 
 //executa uma jogada
-int play(int l, int c, ESTADO *e, LEST* s, char lines[DIM][MAX_STR])
+int play(int l, int c, ESTADO *e)
 {
-    int i;
-    int x;
+    if (!elem(l, c, *e))                                // cheks if play is valid
+        return 1;                                       // returns error
     
-    if (!elem(l, c, *e))                                                                                  // cheks if play is valid
-        return 1;                                                                                         // returns error
+    e->grelha[l][c] = e->peca;                          // puts playing piece in the chosen position
     
-    e->grelha[l][c] = e->peca;                                                                            // puts playing piece in the chosen position
+    VALIDAS *valids = e->validas;                       //
+    POSICAO *valid = &valids->valida;                   //
     
-    VALIDAS *valids = e->validas;
-    POSICAO *valid = &valids->valida;
-    int nValid = e->nValidas;
+    while (valid->l != l || valid->c != c)              // iterates over valid positions until finding the current one
+        valid = &(++valids)->valida;                    //
     
-    for (; valid->l != l || valid->c != c; /*++valids*/)    // iterates over valid positions until finding the current one
+    POSICAO *reverse = valids->virar;                   //
+    int nReverse = valids->nVirar;                      //
+    
+    while (nReverse--)                                  // iterates over reversable positions
     {
-        ++valids;
-        valid = &valids->valida;
-        printf("(%d,%d)\n", valid->l, valid->c);
+        e->grelha[reverse->l][reverse->c] = e->peca;    // reverses reversable positions
+        ++reverse;                                      //
     }
     
-    for (int k = 0; k < e->nValidas; k++)
-        printf("(%d,%d)\n", e->validas[k].valida.l, e->validas[k].valida.c);
-    
-    printf("\n(%d,%d)\n", valid->l, valid->c);
-    
-    for (int j = 0; j < valids->nVirar; j++)                                  // iterates over reversable positions
-        e->grelha[valids->virar[j].l][valids->virar[j].c] = e->peca;                          // reverses reversable positions
-    
-    x = stateUpdate(e);                                                                                   //
-    
-    push(*e, s);                                                                                          //
-    
-    return x;                                                                                             //
+    return stateUpdate(e);                              //
 }
-
-/*
-int play(int l, int c, ESTADO *e, LEST* s, char lines[DIM][MAX_STR])
-{
-    int i;
-    int x;
-    
-    if (!elem(l, c, *e))                                                                                  // cheks if play is valid
-        return 1;                                                                                         // returns error
-    
-    e->grelha[l][c] = e->peca;                                                                            // puts playing piece in the chosen position
-    
-    VALIDAS *valids = &e->validas[0];
-    POSICAO *valid = &valids->valida;
-    int nValid = e->nValidas;
-    
-    //for (i = 0; (e->validas[i].valida.l != l || e->validas[i].valida.c != c) && i < e->nValidas; i++);    // iterates over valid positions until finding the current one
-    
-    for (; (valid->l != l || valid->c != c) && i < nValid; ++valids);    // iterates over valid positions until finding the current one
-    
-    //for (int j = 0; j < e->validas[i].nVirar; j++)                                                        // iterates over reversable positions
-    //    e->grelha[e->validas[i].virar[j].l][e->validas[i].virar[j].c] = e->peca;                          // reverses reversable positions
-    
-    for (int j = 0; j < valids->nVirar; j++)                                                        // iterates over reversable positions
-        e->grelha[valids->virar[j].l][valids->virar[j].c] = e->peca;                          // reverses reversable positions
-    
-    x = stateUpdate(e);                                                                                   //
-    
-    push(*e, s);                                                                                          //
-    
-    return x;                                                                                             //
-}
-*/
 
 // Updates game state
 int stateUpdate(ESTADO *e)
 {
-    int i = 0;                        //
+    int i = 0;                    //
     
-    do                                // checks if jump piece
+    do                            // checks if jump piece
     {
-        switchPiece(&e->peca);        // 
-        update(e);                    //
-        i++;                          //
-        
-        if (i > 1)                    //
-            return 1;                 //
-    }
-    while (!e->nValidas && i < 2);    //
+        switchPiece(&e->peca);    // 
+        update(e);                //
 
-    return 0;                         //
+        i++;                      //
+        
+        if (i > 1)                //
+            return 1;             //
+    }
+    while (!e->nValidas);         //
+
+    return 0;                     //
 }
 
 // Actually updates game state
@@ -246,7 +203,7 @@ void undo(ESTADO *e, LEST* s)
 }
 
 //se no O ou no X ou no Vazia ou nao ha jogadas possiveis para ambos os jogadores
-int isGameOver(ESTADO e, char lines[DIM][MAX_STR])
+int isGameOver(ESTADO e)
 {
     int v = e.nValidas;                              // 
     

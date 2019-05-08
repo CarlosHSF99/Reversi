@@ -23,7 +23,7 @@ void interpreter(ESTADO e, LEST* s)
         
         sprintf(cli[CLI], "reversi> %s", input);        //
         
-        if ((num = interpret(&e, s, input, cli, &error))) // parenteses a mais sugeridos pelo -Wall ... parece estupido
+        if ((num = interpret(&e, s, input, &error)))    // parenteses a mais sugeridos pelo -Wall ... parece estupido
             errorHandling(num, error, cli);
     }
 }
@@ -49,7 +49,7 @@ void errorHandling(int num, char error, char cli[CLI][MAX_STR])
 }
 
 // Actually interpretes
-int interpret(ESTADO *e, LEST *s, char *input, char cli[DIM][MAX_STR], char *error)
+int interpret(ESTADO *e, LEST *s, char *input, char *error)
 {
     char *cmd[MAX_STR];                    //
     int l, c;                              //
@@ -145,7 +145,11 @@ int interpret(ESTADO *e, LEST *s, char *input, char cli[DIM][MAX_STR], char *err
             l = cmd[1][0] - '0';                               //
             c = cmd[2][0] - '0';                               //
             
-            return play(l, c, e, s, cli);
+            if (!play(l, c, e))
+            {
+                push(*e, s);
+                return 0;
+            }
             
             /*
             if (e->modo == '0')                                //
@@ -156,7 +160,7 @@ int interpret(ESTADO *e, LEST *s, char *input, char cli[DIM][MAX_STR], char *err
                 miniMax(e, 0, 2, s);                           //
             */
             
-            return isGameOver(*e, cli);                        //
+            return isGameOver(*e);                             //
             
             break;                                             //
         }

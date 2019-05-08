@@ -69,7 +69,7 @@ typedef struct{
 
 //interpreter.c
 void interpreter(ESTADO e, LEST *s);
-int interpret(ESTADO *e, LEST *s, char *input, char cli[DIM][MAX_STR], char *error);
+int interpret(ESTADO *e, LEST *s, char *input, char *error);
 void updateCLI(char cli[DIM][MAX_STR]/*, int n_times*/);
 void errorHandling(int num, char error, char cli[CLI][MAX_STR]);
 
@@ -81,7 +81,7 @@ int readFile(ESTADO *e, char *file_name, int tipo);
 void writeEstado(ESTADO *e);
 void saveFile(ESTADO *e, char* filename, LEST s);
 
-int play(int l, int c, ESTADO* e, LEST *s, char cli[DIM][MAX_STR]); 
+int play(int l, int c, ESTADO* e);
 
 int stateUpdate(ESTADO *e);
 void update(ESTADO *e);
@@ -90,7 +90,7 @@ int cercaDir(int k, int l, int i, int j, ESTADO *e, int n);
 
 void undo(ESTADO* e, LEST *s);
 
-int isGameOver(ESTADO e, char cli[DIM][MAX_STR]);
+int isGameOver(ESTADO e);
 
 void printg(ESTADO e, char lines[DIM][MAX_STR]);
 
