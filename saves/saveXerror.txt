@@ -1,0 +1,510 @@
+M X
+- - - - - - - -
+- - - - - - - -
+- - - - - - - -
+- - - O X - - -
+- - - X O - - -
+- - - - - - - -
+- - - - - - - -
+- - - - - - - -
+
+M O
+- - - - - - - -
+- - - - - - - -
+- - - X - - - -
+- - - X X - - -
+- - - X O - - -
+- - - - - - - -
+- - - - - - - -
+- - - - - - - -
+
+M X
+- - - - - - - -
+- - - - - - - -
+- - - X - - - -
+- - - X X - - -
+- - O O O - - -
+- - - - - - - -
+- - - - - - - -
+- - - - - - - -
+
+M O
+- - - - - - - -
+- - - - - - - -
+- - - X - - - -
+- - - X X - - -
+- - O X O - - -
+- - - X - - - -
+- - - - - - - -
+- - - - - - - -
+
+M X
+- - - - - - - -
+- - - - - - - -
+- - - X O - - -
+- - - O O - - -
+- - O X O - - -
+- - - X - - - -
+- - - - - - - -
+- - - - - - - -
+
+M O
+- - - - - - - -
+- - - - - - - -
+- - - X X X - -
+- - - O X - - -
+- - O X O - - -
+- - - X - - - -
+- - - - - - - -
+- - - - - - - -
+
+M X
+- - - - - - - -
+- - - - - - - -
+- - - X X X - -
+- - - O X - - -
+- - O O O - - -
+- - - O - - - -
+- - - O - - - -
+- - - - - - - -
+
+M O
+- - - - - - - -
+- - - - - - - -
+- - - X X X - -
+- - - O X - - -
+- - O O X - - -
+- - - O X - - -
+- - - O - - - -
+- - - - - - - -
+
+M X
+- - - - - - - -
+- - - O - - - -
+- - - O X X - -
+- - - O X - - -
+- - O O X - - -
+- - - O X - - -
+- - - O - - - -
+- - - - - - - -
+
+M O
+- - - - - - - -
+- - - O - - - -
+- - - O X X - -
+- - - O X - - -
+- - O O X - - -
+- - - O X - - -
+- - - X - - - -
+- - X - - - - -
+
+M X
+- - - - - - - -
+- - - O - - - -
+- - - O O O O -
+- - - O X - - -
+- - O O X - - -
+- - - O X - - -
+- - - X - - - -
+- - X - - - - -
+
+M O
+- - - - - - - -
+- - - O - - - -
+- - - O O O O -
+- - - O X - - -
+- - O X X - - -
+- - X X X - - -
+- - - X - - - -
+- - X - - - - -
+
+M X
+- - - - - - - -
+- - - O - - - -
+- - - O O O O -
+- - - O O - - -
+- - O X O - - -
+- - X O O - - -
+- - - X O - - -
+- - X - - - - -
+
+M O
+- - - - - - - -
+- - - O - - - -
+- - - O O O O -
+- - - O O - - -
+- - O X X X - -
+- - X O X - - -
+- - - X O - - -
+- - X - - - - -
+
+M X
+- - - - - - - -
+- - - O - - - -
+- - - O O O O -
+- - - O O - - -
+- - O O O O O -
+- - X O X - - -
+- - - X O - - -
+- - X - - - - -
+
+M O
+- - - - - - - -
+- - - O - - - -
+- - - O O O O -
+- - - O O - - -
+- - O O O O O -
+- - X O X - - -
+- - - X X X - -
+- - X - - - - -
+
+M X
+- - - - - - - -
+- - - O - - - -
+- - - O O O O -
+- - - O O - - -
+- - O O O O O -
+- - O O X - - -
+- - O X X X - -
+- - X - - - - -
+
+M O
+- - - - - - - -
+- - - O - - - -
+- - - O O O O -
+- - - O O - X -
+- - O O O X O -
+- - O O X - - -
+- - O X X X - -
+- - X - - - - -
+
+M X
+- - - - - - - -
+- - - O - - - -
+- - - O O O O -
+- - - O O - X -
+- - O O O X O -
+- - O O X - - -
+- - O O X X - -
+- - X O - - - -
+
+M O
+- - - - - - - -
+- - - O - - - -
+- - - O O O O -
+- - - O O - X -
+- - O O O X O -
+- - O O X - - -
+- - O O X X - -
+- - X X X - - -
+
+M X
+- - - - - - - -
+- - - O - - - -
+- - - O O O O -
+- - - O O - X -
+- - O O O X O -
+- - O O X - - -
+- - O O O X - -
+- - X X X O - -
+
+M O
+- - - - - - - -
+- - - O - - - -
+- - - O O O O -
+- - - O O - X -
+- - O O O X O -
+- - O O X X - -
+- - O O X X - -
+- - X X X O - -
+
+M X
+- - - - - - - -
+- - - O - - - -
+- - - O O O O -
+- - - O O O X -
+- - O O O O O -
+- - O O X O - -
+- - O O X O - -
+- - X X X O - -
+
+M O
+- - - X - - - -
+- - - X - - - -
+- - - X O O O -
+- - - X O O X -
+- - O X O O O -
+- - O X X O - -
+- - O X X O - -
+- - X X X O - -
+
+M X
+- - - X - - - -
+- - - X - - - -
+- - - X O O O -
+- - O O O O X -
+- - O O O O O -
+- - O X O O - -
+- - O X X O - -
+- - X X X O - -
+
+M O
+- - - X - - - -
+- - - X X - - -
+- - - X X X O -
+- - O O X O X -
+- - O O X O O -
+- - O X X O - -
+- - O X X O - -
+- - X X X O - -
+
+M X
+- - - X - - - -
+- - - X X - - -
+- - - X X X O -
+- - O O X O X -
+- - O O X O O -
+- - O X X O - -
+- - O X X O - -
+- O O O O O - -
+
+M O
+- - - X - - - -
+- - - X X - - -
+- - - X X X O -
+- - O O X O X -
+- - O O X O O -
+- - O X X O - -
+- - O X X X - -
+- O O O O O X -
+
+M X
+- - - X - - - -
+- - - X X - - -
+- - - X X X O -
+- - O O X O X -
+- - O O X O O -
+- - O X X O - -
+- - O X X X - -
+- O O O O O O O
+
+M O
+- - - X - - - -
+- - - X X - - -
+- - - X X X O -
+- - O O X O X -
+- - O X X O O -
+- - X X X O - -
+- X X X X X - -
+- O O O O O O O
+
+M X
+- - - X - - - -
+- - - X X - - -
+- - - X X X O -
+- - O O X O X -
+- - O X X O O -
+- O O O O O - -
+- O O X X X - -
+- O O O O O O O
+
+M O
+- - - X - - - -
+- - - X X - - -
+- - - X X X O -
+- - O O X O X -
+- - O X X O O -
+- O X O O O - -
+- X O X X X - -
+X X X X X X X X
+
+M X
+- - - X O - - -
+- - - X O - - -
+- - - X O X O -
+- - O O O O X -
+- - O X O O O -
+- O X O O O - -
+- X O X X X - -
+X X X X X X X X
+
+M O
+- - - X O - - -
+- - - X O - - -
+- - - X O X O -
+- - O O X O X -
+- - O X O X X -
+- O X X X X X -
+- X O X X X - -
+X X X X X X X X
+
+M X
+- - - X O - - -
+- - - X O - - -
+- - - X O X O -
+- - O O X O O -
+- - O X O X O -
+- O X X X O O -
+- X O O O O O -
+X X X X X X X X
+
+M O
+- - - X O - - -
+- - - X O - - -
+- - - X O X O -
+- - O O X O O -
+- - O X O X O -
+- O X X X O X -
+- X X X X X X X
+X X X X X X X X
+
+M X
+- - - X O - - -
+- - - X O - - -
+- - - X O X O -
+- - O O X O O -
+- - O X O X O -
+- O X X X O O O
+- X X X X X X X
+X X X X X X X X
+
+M O
+- - - X O - - -
+- - - X O - - -
+- - - X O X O -
+- - X O X O O -
+- X X X O X O -
+- X X X X O O O
+- X X X X X X X
+X X X X X X X X
+
+M X
+- - - X O - - -
+- - - X O - - -
+- - - X O X O -
+- - X O X O O -
+- X O X O X O -
+- O X X X O O O
+O X X X X X X X
+X X X X X X X X
+
+M O
+- - - X O - - -
+- - - X O - - -
+- - - X O X O -
+- - X O X O X -
+- X O X O X X X
+- O X X X O X X
+O X X X X X X X
+X X X X X X X X
+
+M X
+- - - X O - - -
+- - - X O - - -
+- - - X O X O -
+- - X O X O O O
+- X O X O X O X
+- O X X X O X X
+O X X X X X X X
+X X X X X X X X
+
+M O
+- - - X O - - -
+- - - X O - - -
+- - - X O X X X
+- - X O X O X X
+- X O X O X O X
+- O X X X O X X
+O X X X X X X X
+X X X X X X X X
+
+M X
+- - - X O - - -
+- - - X O - - -
+- - - X O X X X
+- O O O X O X X
+- O O X O X O X
+- O X X X O X X
+O X X X X X X X
+X X X X X X X X
+
+M O
+- - - X O - - -
+- - - X O - - -
+- - - X O X X X
+X X X X X O X X
+- X O X O X O X
+- O X X X O X X
+O X X X X X X X
+X X X X X X X X
+
+M X
+- - - X O - - -
+- - - O O - - -
+- - O O O X X X
+X X O O X O X X
+- X O X O X O X
+- O X X X O X X
+O X X X X X X X
+X X X X X X X X
+
+M O
+- - - X O - - -
+- - - O O - - -
+- - O O O X X X
+X X O O X O X X
+- X O X O X O X
+X X X X X O X X
+X X X X X X X X
+X X X X X X X X
+
+M X
+- - - X O - - -
+- - - O O - - -
+- - O O O X X X
+X O O O X O X X
+O O O X O X O X
+X O X X X O X X
+X X O X X X X X
+X X X O X X X X
+
+M O
+- - - X O - - -
+- - X O O - - -
+- - X X O X X X
+X O X O X O X X
+O O X X O X O X
+X O X X X O X X
+X X O X X X X X
+X X X O X X X X
+
+M X
+- - - O O - - -
+- - O O O - - -
+- O O O O X X X
+X O O O X O X X
+O O X O O X O X
+X O X X O O X X
+X X O X X O X X
+X X X O X X O X
+
+M O
+- - - O O - - -
+- X O O O - - -
+- X X O O X X X
+X X O X X O X X
+O X X O X X O X
+X X X X O X X X
+X X O X X O X X
+X X X O X X O X
+
+M X
+- - - O O - - -
+O O O O O - - -
+- O X O O X X X
+X X O X X O X X
+O X X O X X O X
+X X X X O X X X
+X X O X X O X X
+X X X O X X O X
+
