@@ -20,25 +20,27 @@ int readFile(ESTADO *e, char *file_name, LEST* s, int tipo)
     
     fseek(file, 0, SEEK_END);
     
-    while(fgetc(file)!=EOF){
-
-    ch=fgetc(file);
-    e->modo= (ch == 'M' ? '0' : ch == 'A' ? '1' : HELP);
-    fseek(file, -1, SEEK_CUR); 
-
-    ch=fgetc(file);          
-    e->peca= (ch == 'X' ? VALOR_X : ch == 'O'? VALOR_O: HELP); 
-    fseek(file, -1, SEEK_CUR);
-    
-    for(int l=0; l < DIM; l++)                         
-        for(int c=0; c < DIM; c++){                                                                  
-            e->grelha[l][c] =(peca = fgetc(file)) == '-' ? VAZIA : peca == 'X' ? VALOR_X : VALOR_O;  
-            fseek(file, -1, SEEK_CUR);                                                               
-    }  
-
-    update(e);
-    alt_push(*e,s);
+    while(fgetc(file)!=EOF)
+    {
+        ch=fgetc(file);
+        e->modo= (ch == 'M' ? '0' : ch == 'A' ? '1' : HELP);
+        fseek(file, -1, SEEK_CUR); 
+        
+        ch=fgetc(file);          
+        e->peca= (ch == 'X' ? VALOR_X : ch == 'O'? VALOR_O: HELP); 
+        fseek(file, -1, SEEK_CUR);
+        
+        for(int l=0; l < DIM; l++)                         
+            for(int c=0; c < DIM; c++)
+            {                                                                  
+                e->grelha[l][c] = (peca = fgetc(file)) == '-' ? VAZIA : peca == 'X' ? VALOR_X : VALOR_O;  
+                fseek(file, -1, SEEK_CUR);                                                               
+            }
+        
+        update(e);
+        alt_push(*e, s);
     }
+
     fclose(file);    
 
     return 0;
@@ -47,36 +49,41 @@ int readFile(ESTADO *e, char *file_name, LEST* s, int tipo)
 void saveState(ESTADO* e, char* file_name, LEST s)
 {
     FILE *file;
-    int l,c;
+    int l, c;
     char file_pos_name[MAX_STR];
     
     sprintf(file_pos_name, "../saves/%s.txt", file_name);
     
-    file=fopen(file_pos_name,"w");
+    file=fopen(file_pos_name, "w");
     
     
-    while((s)!=NULL){
-        fprintf(file,"%c %c\n",(s->e.modo=='0')?'M':(s->e.modo=='1')?'A':'?',(s->e.peca==VALOR_X)?'X':(s->e.peca==VALOR_O)?'O':'?');
+    while(s)
+    {
+        fprintf(file, "%c %c\n", s->e.modo == '0' ? 'M' : s->e.modo == '1' ? 'A' : '?', s->e.peca == VALOR_X ? 'X' : s->e.peca == VALOR_O ? 'O' : '?');
         
-        for(l=0;l<DIM;l++){
-            for(c=0;c<DIM;c++)
-                switch(s->e.grelha[l][c]){
+        for(l = 0; l < DIM; l++)
+            for(c = 0; c < DIM; c++)
+            {
+                switch(s->e.grelha[l][c])
+                {
                     case VALOR_O:
-                        fputc('O',file);
+                        fputc('O', file);
                         break;
                     case VALOR_X:
-                        fputc('X',file);
+                        fputc('X', file);
                         break;
                     case VAZIA:
-                        fputc('-',file);
+                        fputc('-', file);
                         break;
                     default:
-                        fputc('E',file);
+                        fputc('E', file);
                         break;
                 }
-            fputc((c<DIM-1)?' ':'\n',file);
-        }
-        s=s->next;
+                
+                fputc(c < DIM-1 ? ' ' : '\n', file);
+            }
+        
+        s = s->next;
     }
     
     fclose(file);
