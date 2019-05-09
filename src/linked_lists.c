@@ -46,10 +46,13 @@ void pop(LEST* s)
 
 void alt_push(ESTADO e,LEST* s)  
 {  
-    LEST new_s = malloc(sizeof(struct history));  
-    new_s->e=e;  
-    new_s->next=NULL;
-    (*s)->next=new_s;  
-    *s=(new_s);  
+    if(!s)
+        s=malloc(sizeof(struct history));
+   // else
+     //   LEST new_s = malloc(sizeof(struct history));  
+       // new_s->e=e;  
+       // new_s->next=NULL;
+        //(*s)->next=new_s;  
+        ////*s=(new_s);  
 }  
 
