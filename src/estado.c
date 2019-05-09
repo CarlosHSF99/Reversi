@@ -104,23 +104,32 @@ int stateUpdate(ESTADO *e)
 // Actually updates game state
 void update(ESTADO *e)
 {
-    int nVirarHelp = 0;                                  //
+    int nVirarHelp = 0;                         //
     
-    e->nValidas = e->scoreX = e->scoreO = 0;             // resets number of valid positions and score
+    e->nValidas = e->scoreX = e->scoreO = 0;    // resets number of valid positions and score
     
-    for (int l = 0; l < DIM; l++)                        // iterates over board lines
-        for (int c = 0; c < DIM; c++)                    // iterates over board columns
+    for (int l = 0; l < DIM; l++)               // iterates over board lines
+        for (int c = 0; c < DIM; c++)           // iterates over board columns
         {
-            scoreUpdate(e, l, c);                        //
+            scoreUpdate(e, l, c);               //
             
-            if (cerca(l, c, e, e->nValidas))             // checks if current position is a valid play
-            {
-                e->validas[e->nValidas].valida.l = l;    // saves valid line to current position
-                e->validas[e->nValidas].valida.c = c;    // saves valid column to current position
-                
-                helpFunc(e, &nVirarHelp);                //
-            }
+            if (surround(l, c, e))              //
+                helpUpdate(e, &nVirarHelp);     //
         }
+}
+
+//
+int surround(int l, int c, ESTADO *e)
+{
+    if (!cerca(l, c, e))                      // checks if current position is a valid play
+        return 0;
+    
+    POSICAO *valid = &VALID(e, nVALID(e));    //
+    
+    valid->l = l;    //e->validas[e->nValidas].valida.l = l;     // saves valid line to current position
+    valid->c = c;    //e->validas[e->nValidas].valida.c = c;     // saves valid column to current position
+   
+    return 1;
 }
 
 //
@@ -133,45 +142,47 @@ void scoreUpdate(ESTADO *e, int l, int c)
 }
 
 //
-void helpFunc(ESTADO *e, int *nVirarHelp)
+void helpUpdate(ESTADO *e, int *nVirarHelp)
 {
-    if (e->validas[e->nValidas].nVirar > *nVirarHelp)    // checks if current pos will flip the most pieces
+    VALIDAS *nReverse = &VALIDS(e, nVALID(e));    // VALIDAS *nReverse = &e->validas[e->nValidas];    // initializes
+    
+    if (nReverse->nVirar > *nVirarHelp)           // checks if current pos will flip the most pieces
     {
-        *nVirarHelp = e->validas[e->nValidas].nVirar;    // 
-        e->help = e->validas[e->nValidas].valida;        // saves current position as suggestion play
+        *nVirarHelp = nReverse->nVirar;           // updates counter
+        e->help = nReverse->valida;               // saves current position as suggestion play
     }
     
-    e->nValidas++;                                       // increments number of valid positions by one
+    e->nValidas++;                                // increments number of valid positions by one
 }
  
 // Checks if a postion is a valid play
-int cerca(int l, int c, ESTADO *e, int n)
+int cerca(int l, int c, ESTADO *e)
 {
-    e->validas[n].nVirar = 0;             // resets number of reversable pieces to zero
+    e->validas[e->nValidas].nVirar = 0;    // resets number of reversable pieces to zero
     
-    if (e->grelha[l][c])                  // checks if current posiiton is empty
-        return 0;                         // returns false
+    if (e->grelha[l][c])                   // checks if current posiiton is empty
+        return 0;                          // returns false
     
-    return                                // returns true if the current position reverses any piece in the direction
-        cercaDir(l, c, -1,  0, e, n) +    // up
-        cercaDir(l, c,  1,  0, e, n) +    // down
-        cercaDir(l, c,  0,  1, e, n) +    // right
-        cercaDir(l, c,  0, -1, e, n) +    // left
-        cercaDir(l, c, -1,  1, e, n) +    // up   right
-        cercaDir(l, c, -1, -1, e, n) +    // up   left
-        cercaDir(l, c,  1,  1, e, n) +    // down right
-        cercaDir(l, c,  1, -1, e, n);     // down left
+    return                                 // returns true if the current position reverses any piece in the direction
+        cercaDir(l, c, -1,  0, e) +        // up
+        cercaDir(l, c,  1,  0, e) +        // down
+        cercaDir(l, c,  0,  1, e) +        // right
+        cercaDir(l, c,  0, -1, e) +        // left
+        cercaDir(l, c, -1,  1, e) +        // up   right
+        cercaDir(l, c, -1, -1, e) +        // up   left
+        cercaDir(l, c,  1,  1, e) +        // down right
+        cercaDir(l, c,  1, -1, e);         // down left
 }
 
 // Checks if a position is a valid play in a direction and saves reversable positions and how many are they
-int cercaDir (int l, int c, int i, int j, ESTADO *e, int n)
+int cercaDir (int l, int c, int i, int j, ESTADO *e)
 {
     VALOR opnt = e->peca;                                                     // initializes onpt to current player piece
     
     switchPiece(&opnt);                                                       // sets onpt to oponent player piece
     
-    POSICAO *reverse = e->validas[n].virar;                                   // initializes reverse pointing reversable positions array
-    int *nReverse = &e->validas[n].nVirar;                                    // initializes nReverse pointing number reversable positions
+    POSICAO *reverse = e->validas[e->nValidas].virar;                         // initializes reverse pointing reversable positions array
+    int *nReverse = &e->validas[e->nValidas].nVirar;                          // initializes nReverse pointing number reversable positions
     int counter = 0;                                                          // initializes counter to 0
    
     for (l+=i, c+=j; inBoard(l, c) && e->grelha[l][c] == opnt; l+=i, c+=j)    // iterates over board vector

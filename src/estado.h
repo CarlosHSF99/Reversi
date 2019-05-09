@@ -63,7 +63,7 @@ typedef struct history {
 #define MODO(e)     e->modo         //
 #define PIECE(e)    e->peca         //
 #define BOARD(l,c)  e->grelha[l][c] //
-#define VALIDS(e)   e->validas      //
+#define VALIDS(e, i)   e->validas[i]      //
 #define nVALID(e)   e->nValidas     //
 #define HELPP(e)    e->help         //
 #define SCOREX(e)   e->NX           //
@@ -71,7 +71,7 @@ typedef struct history {
 #define SVALID(e)   e->showValid    //
 #define SHELP(e)    e->showHelp     //
 
-#define VALID(e)    e->validas->valida  //
+#define VALID(e, i)    e->validas[i].valida  //
 #define nREVERSE(e) e->validas->nVirar  //
 
 typedef struct{
@@ -106,12 +106,13 @@ void saveState(ESTADO *e, char* filename, LEST s);
 int reverse(int l, int c, ESTADO* e);
 
 void scoreUpdate(ESTADO *e, int l, int c);
-void helpFunc(ESTADO *e, int *nVirarHelp);
+int surround(int l, int c, ESTADO *e);
+void helpUpdate(ESTADO *e, int *nVirarHelp);
 
 int stateUpdate(ESTADO *e);
 void update(ESTADO *e);
-int cerca(int i, int j, ESTADO* e, int n);
-int cercaDir(int k, int l, int i, int j, ESTADO *e, int n);
+int cerca(int i, int j, ESTADO* e);
+int cercaDir(int k, int l, int i, int j, ESTADO *e);
 
 void popundo(ESTADO* e, LEST *s);
 
