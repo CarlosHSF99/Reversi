@@ -1,6 +1,6 @@
 #include "estado.h"
 
-void interpreter(ESTADO e,LEST* s)
+void interpreter(ESTADO e,LEST s)
 {
     char lines[DIM+1][MAX_STR];
     char line[MAX_STR];
@@ -21,11 +21,11 @@ void interpreter(ESTADO e,LEST* s)
         
         sprintf(lines[DIM], "reversi> %s", line);
         
-        interpret(&e, line, s);
+        interpret(&e, line, &s);
     }
 }
 
-int interpret(ESTADO *e, char *line,LEST* s)
+int interpret(ESTADO* e, char* line,LEST* s)
 {
     char *cmd[MAX_STR];
     int l, c;
@@ -85,7 +85,7 @@ int interpret(ESTADO *e, char *line,LEST* s)
             else if (i > 2)
                 return 1;
             
-            readFile(e, cmd[1], READ);
+            readFile(e, cmd[1], s, READ);
             
             break;
         }

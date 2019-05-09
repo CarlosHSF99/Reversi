@@ -64,15 +64,14 @@ typedef struct{
 } MINMAX;
 
 //interpreter.c
-void interpreter(ESTADO e,LEST* s);
+void interpreter(ESTADO e,LEST s);
 int interpret(ESTADO* e, char* line, LEST* s);
 
 //estado.c
 void manual(ESTADO* e, VALOR n, LEST* s);
 void automatic(ESTADO* e, VALOR n, LEST* s);
 
-int readFile(ESTADO* e, char* file_name, int tipo);
-void writeEstado(ESTADO* e);
+int readFile(ESTADO* e, char* file_name, LEST* s, int tipo);
 void saveFile(ESTADO* e, char* filename, LEST s);
 
 void play(int l, int c, ESTADO* e, LEST* s); 
@@ -94,7 +93,8 @@ int miniMax(ESTADO* e, int depth, int max_depth,LEST* s);
 //linked_lists.c
 void freeStack(LEST* s);
 void newGame(LEST* s);
-void push(ESTADO e,LEST* s);
+void push(ESTADO e, LEST* s);
+void alt_push(ESTADO e, LEST* s);
 void pop(LEST* s);
 
 #endif //PROJ_ESTADO_H

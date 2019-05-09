@@ -1,10 +1,10 @@
 #include "estado.h"
 
-int main()
+int main()   //MUDAR AS FUNÇOES DO INTERPRET PARA RECEBEREM TRIPEL POINTER; 
 {
     LEST* ss=NULL;
     LEST s = calloc(1,sizeof(struct history));
-    ESTADO e;
+    ESTADO e={0};
 
     if (!s)
         exit(0);
@@ -23,7 +23,7 @@ int main()
     s->e=e;
     s->next=NULL;
 
-    interpreter(e,&s);
+    interpreter(e,s);
     
     ss=&s;
     freeStack(ss);
