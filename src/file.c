@@ -3,7 +3,7 @@
 int readFile(ESTADO *e, char *file_name, LEST* s, int tipo)
 {
     FILE *file;
-    char file_txt[MAX_STR],ch;
+    char file_txt[MAX_STR], ch;
     int peca;
     
     sprintf(file_txt, "../saves/%s.txt", file_name);
@@ -82,6 +82,8 @@ void saveState(ESTADO* e, char* file_name, LEST s)
                 
                 fputc(c < DIM-1 ? ' ' : '\n', file);
             }
+        
+        fputc('\n', file);
         
         s = s->next;
     }

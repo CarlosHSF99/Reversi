@@ -6,84 +6,66 @@ void interpreter(ESTADO e, LEST s)
     int num;
     char input[INPUT], cli[DIM][MAX_STR];
 
-    for (int i = 0; i < DIM; i++)                   //
-        strcpy(cli[i], "\n");                       //
+    for (int i = 0; i < DIM; i++)                   // iterates over CLI lines
+        strcpy(cli[i], "\n");                       // sets current CLI line to "\n" (blank)
     
-    while (1)                                       //
+    while (1)                                       // loops infinitely
     {
-        printg(e, cli);                             //
-        e.showValid = e.showHelp = 0;               //
+        printg(e, cli);                             // prints state and CLI
+        e.showValid = e.showHelp = 0;               // resets showValid and showHelp print modifiers to 0
         
-        if (!fgets(input, MAX_STR, stdin))          //
-            exit(0);                                //
+        if (!fgets(input, MAX_STR, stdin))          // recieves input command
+            exit(0);                                // terminates program if there's an error getting input
         
-        updateCLI(cli);                             //
+        updateCLI(cli);                             // updates CLI
         
-        sprintf(cli[CLI], "reversi> %s", input);    //
+        sprintf(cli[CLI], "reversi> %s", input);    // concatenates prompt with input
         
-        if ((num = interpret(&e, &s, input)))       // parenteses a mais sugeridos pelo -Wall ... parece estupido
-            errorHandling(num, cli);                //
+        if ((num = interpret(&e, &s, input)))       // interpretes command and checks if an error code is returned
+            errorHandling(num, cli);                // handles error codes
     }
-}
-
-void errorHandling(int num, char cli[CLI][MAX_STR])
-{
-    updateCLI(cli);
-    strcpy(cli[CLI], "reversi: error\n");
-    /*
-    if (num * num == 1)
-    {
-        sprintf(cli[CLI], "%s: Too %s arguments\n", error == 'N' ? "New" : "" , num > 0 ? "many" : "few");
-        updateCLI(cli);
-        
-        switch(error)
-        {
-            case 'N':
-                strcpy(cli[CLI], "New: N <piece>\n");
-                break;
-        }
-    }
-    */
 }
 
 // Actually interpretes
 int interpret(ESTADO *e, LEST *s, char *input)
 {
-    char *cmd[MAX_STR];                    //
-    int i;                                 //
+    char *cmd[MAX_STR];                        //
+    int i;                                     //
     
-    cmd[0] = strtok(input, " \n");         //
+    cmd[0] = strtok(input, " \n");             //
     
-    if (!cmd[0])                           //
-        return 0;                          //
-    else if (strlen(cmd[0]) > 1)           //
-        return 1;                          //
+    if (!cmd[0])                               //
+        return 0;                              //
+    else if (strlen(cmd[0]) > 1)               //
+        return 1;                              //
     
-    for (i = 0; cmd[i]; i++)               //
-        cmd[i+1] = strtok(NULL, " \n");    //
+    for (i = 0; cmd[i]; i++)                   //
+        cmd[i+1] = strtok(NULL, " \n");        //
     
-    switch (cmd[0][0])                     //
+    switch (cmd[0][0])                         //
     {
-        case 'n': case 'N':                       //
-            return new(i, cmd[1], e, s);          //
-        case 'a': case 'A':                       //
-            return automatic(i, cmd[1], e, s);    //
-        case 'l': case 'L':                       //
-            return load(i, cmd[1], e, s);         //
-        case 'e': case 'E':                       //
-            return save(i, cmd[1], e, s);         //
-        case 'j': case 'J':                       //
-            return play(i, cmd, e, s);            //
-        case 's': case 'S':                       //
-            return valid(i, e);                   //
-        case 'h': case 'H':                       //
-            return help(i, e);                    //
-        case 'u': case 'U':                       //
-            return undo(i, e, s);                 //
-        case 'q': case 'Q':                       //
-            return quit(i);                       //
-        default:                                  //
-            return 1;                             //
+        case 'n': case 'N':                    //
+            return new(i, cmd[1], e, s);       //
+        case 'a': case 'A':                    //
+            return automatic(i, cmd, e, s);    //
+        case 'l': case 'L':                    //
+            return load(i, cmd[1], e, s);      //
+        case 'e': case 'E':                    //
+            return save(i, cmd[1], e, s);      //
+        case 'j': case 'J':                    //
+            return play(i, cmd, e, s);         //
+        case 's': case 'S':                    //
+            return valid(i, e);                //
+        case 'h': case 'H':                    //
+            return help(i, e);                 //
+        case 'u': case 'U':                    //
+            return undo(i, e, s);              //
+        case 'c': case 'C':                    //
+            return championship(i, cmd[1]);    //
+        case 'q': case 'Q':                    //
+            return quit(i);                    //
+        default:                               //
+            return 1;                          //
     }
 }
 
@@ -112,23 +94,30 @@ int new(int i, char *cmd, ESTADO *e, LEST *s)
 //
 int automatic(int i, char *cmd, ESTADO *e, LEST *s)
 {
-    VALOR value;
+    VALOR piece;
     
-    if (i < 3)                     //
-        return 1;                  //
-    if (i > 3)                     //
-        return 1;                  //
+    if (i < 3)                                       //
+        return 1;                                    //
+    if (i > 3)                                       //
+        return 1;                                    //
     
-    if (!strcmp(cmd, "X"))         //
-        value = VALOR_X;           //
-    else if (!strcmp(cmd, "O"))    //
-        value = VALOR_O;           //
-    else                           //
-        return 1;                  //
+    if (!strcmp(cmd, "X"))                           //
+        piece = VALOR_X;                             //
+    else if (!strcmp(cmd, "O"))                      //
+        piece = VALOR_O;                             //
+    else                                             //
+        return 1;                                    //
     
-    autoVSbot(e, value, s);        //
+    if (strlen(cmd[1]) > 1 || strlen(cmd[2]) > 1)    //
+        return 1;                                    //
+    if (!isdigit(cmd[2][0]))                         //
+        return 1;                                    //
+    if (cmd[1][1] > '3')                             //
+        return 1;                                    //
+
+    autoVSbot(piece, dificulty, e, s);               //
     
-    return 0;                      //
+    return 0;                                        //
 }
 
 //
@@ -174,7 +163,7 @@ int play(int i, char *cmd[MAX_STR], ESTADO *e, LEST *s)
         return 1;                                      //
     
     int l, c;
-
+    
     l = cmd[1][0] - '0';                               //
     c = cmd[2][0] - '0';                               //
     
@@ -242,6 +231,38 @@ int quit(int i)
     
     CLEAR;           //
     exit(0);         //
+}
+
+//
+int championship(int i, char *cmd)
+{
+    if (i < 2)              //
+        return 1;           //
+    if (i > 2)              //
+        return 1;           //
+    
+    return playBot(cmd);    //
+}
+
+//
+void errorHandling(int num, char cli[CLI][MAX_STR])
+{
+    updateCLI(cli);
+    strcpy(cli[CLI], "reversi: error\n");
+    /*
+    if (num * num == 1)
+    {
+        sprintf(cli[CLI], "%s: Too %s arguments\n", error == 'N' ? "New" : "" , num > 0 ? "many" : "few");
+        updateCLI(cli);
+        
+        switch(error)
+        {
+            case 'N':
+                strcpy(cli[CLI], "New: N <piece>\n");
+                break;
+        }
+    }
+    */
 }
 
 // 
