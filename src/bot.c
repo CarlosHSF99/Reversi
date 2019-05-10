@@ -11,14 +11,14 @@ int botEasy (ESTADO *e, LEST *s)
     }
     r = (rand() % (max + 1));
 
-    play(e->validas[MAX_POS].virar[r].l, e->validas[MAX_POS].virar[r].c, e, s);
+    reverse(e->validas[MAX_POS].virar[r].l, e->validas[MAX_POS].virar[r].c, e, s);
 }
 
 int botMedium (ESTADO *e, LEST* s)
 {
     if ((e->validas->valida.l != 0) && (e->validas->valida.c != 0))
     {
-        play(e->validas[MAX_POS].valida.l != 0, e->validas[MAX_POS].valida.c != 0, e, s);
+        reverse(e->validas[MAX_POS].valida.l != 0, e->validas[MAX_POS].valida.c != 0, e, s);
     }
     else 
     {
@@ -26,15 +26,17 @@ int botMedium (ESTADO *e, LEST* s)
     }
 }
 
-int miniMax (ESTADO *e, int depth, int max_depth,LEST* s)
+int miniMax(ESTADO *e, int depth, int max_depth,LEST* s)
+>>>>>>> 52ec3ceb2f596622988a823687b1904987e37866
 {
-    int score=0, new_score;
+    int score = 0, new_score;
     ESTADO *c;
 
     MINMAX bot_output = {0};
 
     if (depth == max_depth)
     {
+//<<<<<<< HEAD
         score = (c->NX - c->NO);
     }
     else if (e->peca == VALOR_X) // Maximizing Player
@@ -45,14 +47,27 @@ int miniMax (ESTADO *e, int depth, int max_depth,LEST* s)
             new_score = -64;
         }
 
+//=======
+        c = e;
+        score = (c->scoreX - c->scoreO);
+    }
+    else if (e->peca == VALOR_X) // Maximizing Player
+    {
+        new_score = -64;
+//>>>>>>> 52ec3ceb2f596622988a823687b1904987e37866
         while ( e->nValidas != 0 )
         {
             c = e;
             
-            play(e->validas->valida.l,e->validas->valida.c,c,s);
+            //play(e->validas->valida.l,e->validas->valida.c,c,s);
             new_score = miniMax(e,depth+1,max_depth,s);
+//<<<<<<< HEAD
         
             if ( new_score > score )
+//=======
+            
+            if (new_score > score)
+//>>>>>>> 52ec3ceb2f596622988a823687b1904987e37866
             {
                 score = new_score;
                 bot_output.grid.l = e->validas->valida.l;
@@ -65,12 +80,15 @@ int miniMax (ESTADO *e, int depth, int max_depth,LEST* s)
         while (e->nValidas != 0)
         {
             new_score = 64;
+            
             while ( e->nValidas != 0 )
             {
                 c = e;
-                play(e->validas->valida.l,e->validas->valida.c,c,s);
+                //play(e->validas->valida.l,e->validas->valida.c,c,s);
                 new_score = miniMax( e, depth+1, max_depth, s);
-                if ( new_score < score ){
+                
+                if (new_score < score)
+                {
                     score = new_score;
                     bot_output.grid.l = c->validas->valida.l;
                     bot_output.grid.c = c->validas->valida.c;
@@ -79,7 +97,7 @@ int miniMax (ESTADO *e, int depth, int max_depth,LEST* s)
         }
     }
     
-    play(bot_output.grid.l, bot_output.grid.c, e,s);
+    //play(bot_output.grid.l, bot_output.grid.c, e,s);
 
     bot_output.score = score;
     
