@@ -56,10 +56,8 @@ void saveState(ESTADO* e, char* file_name, LEST s)
     
     file=fopen(file_pos_name, "w");
     
-    
-    while(s)
-    {
-        fprintf(file, "%c %c\n", s->e.modo == '0' ? 'M' : s->e.modo == '1' ? 'A' : '?', s->e.peca == VALOR_X ? 'X' : s->e.peca == VALOR_O ? 'O' : '?');
+    while(s){
+        fprintf(file, "%c %c %c\n", s->e.modo == '0' ? 'M' : s->e.modo == '1' ? 'A' : '?', s->e.peca == VALOR_X ? 'X' : s->e.peca == VALOR_O ? 'O' : '?', s->e.bot_diff);
         
         for(l = 0; l < DIM; l++)
             for(c = 0; c < DIM; c++)
@@ -87,7 +85,6 @@ void saveState(ESTADO* e, char* file_name, LEST s)
         
         s = s->next;
     }
-    
     fclose(file);
 }
 /*

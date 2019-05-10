@@ -92,18 +92,18 @@ int new(int i, char *cmd, ESTADO *e, LEST *s)
 }
 
 //
-int automatic(int i, char *cmd, ESTADO *e, LEST *s)
+int automatic(int i, char *cmd[MAX_STR], ESTADO *e, LEST *s)
 {
-    VALOR piece;
-    
     if (i < 3)                                       //
         return 1;                                    //
     if (i > 3)                                       //
         return 1;                                    //
     
-    if (!strcmp(cmd, "X"))                           //
+    VALOR piece;
+    
+    if (!strcmp(cmd[1], "X"))                        //
         piece = VALOR_X;                             //
-    else if (!strcmp(cmd, "O"))                      //
+    else if (!strcmp(cmd[1], "O"))                   //
         piece = VALOR_O;                             //
     else                                             //
         return 1;                                    //
@@ -112,9 +112,12 @@ int automatic(int i, char *cmd, ESTADO *e, LEST *s)
         return 1;                                    //
     if (!isdigit(cmd[2][0]))                         //
         return 1;                                    //
-    if (cmd[1][1] > '3')                             //
-        return 1;                                    //
+    
+    int dificulty = cmd[2][0] - '0';                 //
 
+    if (dificulty || dificulty > 3)                  //
+        return 1;                                    //
+    
     autoVSbot(piece, dificulty, e, s);               //
     
     return 0;                                        //

@@ -3,7 +3,19 @@
 // Prints current state (mode, palyer, score, board and CLI)
 void printg(ESTADO e, char cli[DIM][MAX_STR])
 {
-    CLEAR;                                      // clears screen
+    //CLEAR;                                      // clears screen
+    
+    puts("");
+    
+    for (int i = 0; i < e.nValidas; i++)
+    {
+        printf("Valida: (%d , %d)\n", e.validas[i].valida.l, e.validas[i].valida.c);
+        
+        for (int j = 0; j < e.validas[i].nVirar; j++)
+            printf("\t(%d , %d)\n", e.validas[i].virar[j].l, e.validas[i].virar->c);
+        
+        puts("");
+    }
     
     printFirstLine(e);                          // prints first line (mode, score and CLI title)
     

@@ -114,7 +114,10 @@ void update(ESTADO *e)
             scoreUpdate(e, l, c);               // updates the score
             
             if (surround(l, c, e))              // checks if current position is a valid play
+            {
                 helpUpdate(e, &nVirarHelp);     // updates suggested position
+                e->nValidas++;                  // increments number of valid positions by one
+            }
         }
 }
 
@@ -128,8 +131,6 @@ int surround(int l, int c, ESTADO *e)
     
     valid->l = l;                             // saves valid line to current position
     valid->c = c;                             // saves valid column to current positio
-    
-    e->nValidas++;                            // increments number of valid positions by one
     
     return 1;                                 // return error code
 }
