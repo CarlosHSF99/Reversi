@@ -4,7 +4,7 @@ int main()
 {
     LEST* ss=NULL;
     LEST s = calloc(1,sizeof(struct history));
-    ESTADO e;
+    ESTADO e={0};
 
     if (!s)
         exit(0);
