@@ -65,9 +65,9 @@ int interpret(ESTADO *e, LEST *s, char *input)
     switch (cmd[0][0])                     //
     {
         case 'n': case 'N':                       //
-            return new(i, cmd[1], e, s);          //
+            return neww(i, cmd[1], e, s);          //
         case 'a': case 'A':                       //
-            return automatic(i, cmd[1], e, s);    //
+            return automatic(i, cmd,e, s);    //
         case 'l': case 'L':                       //
             return load(i, cmd[1], e, s);         //
         case 'e': case 'E':                       //
@@ -110,18 +110,20 @@ int new(int i, char *cmd, ESTADO *e, LEST *s)
 }
 
 //
-int automatic(int i, char *cmd, ESTADO *e, LEST *s)
+int automatic(int i, char *cmd[MAX_STR], ESTADO *e, LEST *s)
 {
     VALOR value;
     
+    e->bot_diff=cmd[2][0];
+
     if (i < 3)                     //
         return 1;                  //
     if (i > 3)                     //
         return 1;                  //
     
-    if (!strcmp(cmd, "X"))         //
+    if (!strcmp(cmd[1], "X"))         //
         value = VALOR_X;           //
-    else if (!strcmp(cmd, "O"))    //
+    else if (!strcmp(cmd[1], "O"))    //
         value = VALOR_O;           //
     else                           //
         return 1;                  //

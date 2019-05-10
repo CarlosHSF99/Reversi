@@ -73,12 +73,11 @@ void saveState(ESTADO* e, char* file_name, LEST s)
                     default:
                         fputc('E',file);
                         break;
-                }
-            fputc((c<DIM-1)?' ':'\n',file);
-        }
+                
+                fputc((c<DIM-1)?' ':'\n',file);   
+            }
         s=s->next;
     }
-    
     fclose(file);
 }
 /*

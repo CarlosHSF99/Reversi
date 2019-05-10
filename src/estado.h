@@ -51,6 +51,7 @@ typedef struct estado {
     POSICAO help;               // help piece
     int scoreX;                 // numero de pecas X
     int scoreO;                 // numero de pecas O
+    char bot_diff;              // dificuldade do bot
     int showValid;              // mostra posicoes validas
     int showHelp;               // mostra posicao ajuda
 } ESTADO;
@@ -85,8 +86,8 @@ int interpret(ESTADO *e, LEST *s, char *input);
 void updateCLI(char cli[DIM][MAX_STR]/*,int n_times*/);
 void errorHandling(int num, char cli[CLI][MAX_STR]);
 
-int new(int i, char *cmd, ESTADO *e, LEST *s);
-int automatic(int i, char *cmd, ESTADO *e, LEST *s);
+int neww(int i, char *cmd, ESTADO *e, LEST *s);
+int automatic(int i, char *cmd[MAX_STR],ESTADO *e, LEST *s);
 int load(int i, char *cmd, ESTADO *e, LEST *s);
 int save(int i, char *cmd, ESTADO *e, LEST *s);
 int play(int i, char *cmd[MAX_STR], ESTADO *e, LEST *s);
