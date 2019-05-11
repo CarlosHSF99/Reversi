@@ -36,7 +36,7 @@ void autoVSbot(VALOR piece, char lvl, ESTADO *e, LEST* s)
     *s = new_s;                             // 
     
     e->modo = '1';                          // stes game mode to manual (1)
-    e->peca = VALOR_X;                      // sets inicial player X
+    e->peca = piece;                        // sets inicial player X
     e->botLVL = lvl;
     
     boardInicial(e->grelha);                // sets board to inicial board

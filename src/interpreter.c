@@ -130,7 +130,7 @@ int automatic(int i, char *cmd[MAX_STR], ESTADO *e, LEST *s)
         return 1;                     //
     
     char lvl = cmd[2][0];             //
-
+    
     if (!(lvl - '0') || lvl > '3')    //
         return 1;                     //
     
