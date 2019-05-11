@@ -3,7 +3,7 @@
 // Interpretes
 void interpreter(ESTADO e, LEST s)
 {
-    int num;
+    int num = 0;
     char input[INPUT], cli[DIM][MAX_STR];
 
     for (int i = 0; i < DIM; i++)                   // iterates over CLI lines
@@ -14,8 +14,8 @@ void interpreter(ESTADO e, LEST s)
         
         printInterface(e, cli);                     // prints state and CLI
         e.showValid = e.showHelp = 0;               // resets showValid and showHelp print modifiers to 0
-
-        if (e.modo == '1' && e.peca == e.botPiece)
+        
+        if (e.modo == '1' && e.peca == e.botPiece && e.nValidas)
         {
             fflush(stdout);
             sleep(1);
@@ -23,14 +23,17 @@ void interpreter(ESTADO e, LEST s)
             switch (e.botLVL)
             {
                 case '1':
-                    bot1(&e, &s);
+                    num = bot1(&e, &s);
                     break;
                 case '2':
-                    bot2(&e, &s);
+                    num = bot2(&e, &s);
                     break;
                 case '3':
-                    bot3(&e, &s);
+                    num = bot3(&e, &s);
                     break;
+                
+                if (num)
+                    errorHandling(num, cli);
             }
         }
         else
@@ -190,30 +193,7 @@ int play(int i, char *cmd[MAX_STR], ESTADO *e, LEST *s)
     int l = cmd[1][0] - '0';                           //
     int c = cmd[2][0] - '0';                           //
     
-    if (!reverse(l, c, e))                             //
-        push(*e, s);                                   //
-    else                                               //
-        return 1;                                      //
-    
-    if (e->modo == '0')
-        return isGameOver(*e);                         //
-/*    
-    printInterface(*e, cli);
-    
-    switch (e->botLVL)
-    {
-        case '1':
-            bot1(e, s);
-            break;
-        case '2':
-            break;
-        case '3':
-            break;
-    }
-    
-    push(*e, s);
-*/
-    return isGameOver(*e);
+    return reverse(l, c, e, s);                        //
 }
 
 //

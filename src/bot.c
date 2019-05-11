@@ -6,18 +6,12 @@ int bot1(ESTADO *e, LEST *s)
     int l = e->validas[randomi].valida.l;
     int c = e->validas[randomi].valida.c;
     
-    reverse(l, c, e);
-    push(*e, s);
-    
-    return 0;
+    return reverse(l, c, e, s);
 }
 
 int bot2(ESTADO *e, LEST* s)
 {
-    reverse(e->help.l, e->help.c, e);
-    push(*e, s);
-    
-    return 0;
+    return reverse(e->help.l, e->help.c, e, s);
 }
 
 int bot3(ESTADO *e, LEST* s)
