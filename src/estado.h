@@ -13,7 +13,6 @@
 #define MAX_STR 1024    //
 #define MAX_POS 64      //
 #define READ    -133    //
-#define UNDO    -266    //
 
 //trocar isto por ncurses
 #ifdef _WIN32
@@ -101,7 +100,7 @@ int quit(int i);
 void manual(ESTADO *e, VALOR n, LEST *s);
 void autoVSbot(VALOR piece, char lvl, ESTADO *e, LEST *s);
 
-int readFile(ESTADO *e, char *file_name, LEST *s, int tipo);
+int readFile(ESTADO *e, char *file_name, LEST *s);
 //void writeEstado(ESTADO *e);
 void saveState(ESTADO *e, char *filename, LEST s);
 
@@ -144,7 +143,7 @@ int miniMax(ESTADO *e, int depth, int max_depth, LEST *s);
 void freeStack(LEST *s);
 void newGame(LEST *s);
 void push(ESTADO e, LEST *s);
-void alt_push(ESTADO e, LEST *s);
+void altPush(ESTADO e, LEST *s);
 void pop(LEST *s);
 
 #endif //PROJ_ESTADO_H

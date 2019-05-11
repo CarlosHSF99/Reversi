@@ -49,7 +49,7 @@ void pop(LEST *s)
     }
 }
 
-void alt_push(ESTADO e,LEST* s)  
+void altPush(ESTADO e,LEST* s)  
 {  
     if(!s)
         s = malloc(sizeof(struct history));

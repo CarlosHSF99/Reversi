@@ -142,12 +142,12 @@ int automatic(int i, char *cmd[MAX_STR], ESTADO *e, LEST *s)
 //
 int load(int i, char *cmd, ESTADO *e, LEST *s)
 {
-    if (i < 2)                           //
-        return 1;                        //
-    if (i > 2)                           //
-        return 1;                        //
+    if (i < 2)                     //
+        return 1;                  //
+    if (i > 2)                     //
+        return 1;                  //
     
-    return readFile(e, cmd, s, READ);    //
+    return readFile(e, cmd, s);    //
 }
 
 //

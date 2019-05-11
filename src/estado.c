@@ -252,6 +252,12 @@ void popundo(ESTADO *e, LEST* s)
 {
     pop(s);         //
     *e = (*s)->e;   //
+    
+    if (e->modo == '1')
+    {
+        pop(s);
+        *e = (*s)->e;
+    }
 }
 
 // Championship function
