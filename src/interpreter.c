@@ -11,7 +11,7 @@ void interpreter(ESTADO e, LEST s)
     
     while (1)                                       // loops infinitely
     {
-        printg(e, cli);                             // prints state and CLI
+        printInterface(e, cli);                     // prints state and CLI
         e.showValid = e.showHelp = 0;               // resets showValid and showHelp print modifiers to 0
         
         if (!fgets(input, MAX_STR, stdin))          // recieves input command
@@ -94,33 +94,33 @@ int new(int i, char *cmd, ESTADO *e, LEST *s)
 //
 int automatic(int i, char *cmd[MAX_STR], ESTADO *e, LEST *s)
 {
-    if (i < 3)                                       //
-        return 1;                                    //
-    if (i > 3)                                       //
-        return 1;                                    //
+    if (i < 3)                        //
+        return 1;                     //
+    if (i > 3)                        //
+        return 1;                     //
     
     VALOR piece;
     
-    if (!strcmp(cmd[1], "X"))                        //
-        piece = VALOR_X;                             //
-    else if (!strcmp(cmd[1], "O"))                   //
-        piece = VALOR_O;                             //
-    else                                             //
-        return 1;                                    //
+    if (!strcmp(cmd[1], "X"))         //
+        piece = VALOR_X;              //
+    else if (!strcmp(cmd[1], "O"))    //
+        piece = VALOR_O;              //
+    else                              //
+        return 1;                     //
     
-    if (strlen(cmd[1]) > 1 || strlen(cmd[2]) > 1)    //
-        return 1;                                    //
-    if (!isdigit(cmd[2][0]))                         //
-        return 1;                                    //
+    if (strlen(cmd[2]) > 1)           //
+        return 1;                     //
+    if (!isdigit(cmd[2][0]))          //
+        return 1;                     //
     
-    int dificulty = cmd[2][0] - '0';                 //
+    char lvl = cmd[2][0];             //
 
-    if (dificulty || dificulty > 3)                  //
-        return 1;                                    //
+    if (!(lvl - '0') || lvl > '3')    //
+        return 1;                     //
     
-    autoVSbot(piece, dificulty, e, s);               //
+    autoVSbot(piece, lvl, e, s);      //
     
-    return 0;                                        //
+    return 0;                         //
 }
 
 //
@@ -165,26 +165,33 @@ int play(int i, char *cmd[MAX_STR], ESTADO *e, LEST *s)
     if (cmd[1][0] > '7' || cmd[1][1] > '7')            //
         return 1;                                      //
     
-    int l, c;
-    
-    l = cmd[1][0] - '0';                               //
-    c = cmd[2][0] - '0';                               //
+    int l = cmd[1][0] - '0';                           //
+    int c = cmd[2][0] - '0';                           //
     
     if (!reverse(l, c, e))                             //
         push(*e, s);                                   //
     else                                               //
         return 1;                                      //
     
-    /*
-    if (e->modo == '0')                                //
-        return (play(l, c, e, s, cli));                //
-    else if (e->peca == value)                         //
-        return (play(l, c, e, s, cli));                //
-    else
-        miniMax(e, 0, 2, s);                           //
-    */
+    if (e->modo == '0')
+        return isGameOver(*e);                         //
+/*    
+    printInterface(*e, cli);
     
-    return isGameOver(*e);                             //
+    switch (e->botLVL)
+    {
+        case '1':
+            bot1(e, s);
+            break;
+        case '2':
+            break;
+        case '3':
+            break;
+    }
+    
+    push(*e, s);
+*/
+    return isGameOver(*e);
 }
 
 //

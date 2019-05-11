@@ -23,7 +23,7 @@ void manual(ESTADO *e, VALOR n, LEST* s)
 }
 
 // New game against computer adversary
-void autoVSbot(VALOR piece, int dificulty, ESTADO *e, LEST* s)
+void autoVSbot(VALOR piece, char lvl, ESTADO *e, LEST* s)
 {
     LEST new_s = NULL;                      //
     
@@ -43,8 +43,19 @@ void autoVSbot(VALOR piece, int dificulty, ESTADO *e, LEST* s)
     
     (*s)->e = *e;                           // adds state to history
     
-    if (piece == VALOR_O)                   // if the human player is O
-        miniMax(e, 0, 1, s);                // then the computer starts playing
+    if (piece == VALOR_X)                   // 
+        switch (lvl)
+        {
+            case '1':
+                bot1(e, s);
+                break;
+            case '2':
+                bot2(e, s);
+                break;
+            case '3':
+                bot3(e, s);
+                break;
+        }
 }
 
 // Sets board to inicial board

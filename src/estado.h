@@ -51,7 +51,7 @@ typedef struct estado {
     POSICAO help;               // help piece
     int scoreX;                 // numero de pecas X
     int scoreO;                 // numero de pecas O
-    char bot_diff;              // dificuldade do bot
+    char botLVL;                // dificuldade do bot
     int showValid;              // mostra posicoes validas
     int showHelp;               // mostra posicao ajuda
 } ESTADO;
@@ -99,7 +99,7 @@ int quit(int i);
 
 //estado.c
 void manual(ESTADO *e, VALOR n, LEST *s);
-void autoVSbot(VALOR piece, int dificulty, ESTADO *e, LEST *s);
+void autoVSbot(VALOR piece, char lvl, ESTADO *e, LEST *s);
 
 int readFile(ESTADO *e, char *file_name, LEST *s, int tipo);
 //void writeEstado(ESTADO *e);
@@ -122,7 +122,7 @@ int isGameOver(ESTADO e);
 
 int playBot(char *file);
 
-void printg(ESTADO e, char lines[DIM][MAX_STR]);
+void printInterface(ESTADO e, char lines[DIM][MAX_STR]);
 
 int isValid(int l, int c, ESTADO e);
 
@@ -135,6 +135,9 @@ void showHelp(ESTADO *e);
 
 void boardInicial(VALOR grelha[DIM][DIM]);
 
+int bot1(ESTADO *e, LEST *s);
+int bot2(ESTADO *e, LEST *s);
+int bot3(ESTADO *e, LEST *s);
 int miniMax(ESTADO *e, int depth, int max_depth, LEST *s);
 
 //linked_lists.c

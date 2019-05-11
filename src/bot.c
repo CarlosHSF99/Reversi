@@ -1,36 +1,27 @@
 #include "estado.h"
 
-int botEasy (ESTADO *e, LEST *s)
+int bot1(ESTADO *e, LEST *s)
 {
-    /*
-    int i, r, min=0;
-    int max = e->nValidas;
+    int randomi = rand() % e->nValidas;
+    int l = e->validas[randomi].valida.l;
+    int c = e->validas[randomi].valida.c;
     
-    if (max == 0)
-    {
-        
-    }
-    r = (rand() % (max + 1));
-    
-    reverse(e->validas[MAX_POS].virar[r].l, e->validas[MAX_POS].virar[r].c, e, s);
-    */
+    reverse(l, c, e);
+    push(*e, s);
     
     return 0;
 }
 
-int botMedium (ESTADO *e, LEST* s)
+int bot2(ESTADO *e, LEST* s)
 {
-    /*
-    if ((e->validas->valida.l != 0) && (e->validas->valida.c != 0))
-    {
-        reverse(e->validas[MAX_POS].valida.l != 0, e->validas[MAX_POS].valida.c != 0, e, s);
-    }
-    else 
-    {
-        //passa o turno?
-    }
-    */
+    reverse(e->help.l, e->help.c, e);
+    push(*e, s);
 
+    return 0;
+}
+
+int bot3(ESTADO *e, LEST* s)
+{
     return 0;
 }
 
