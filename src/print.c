@@ -52,7 +52,9 @@ void printFirstLine (ESTADO e)
     putchar(e.modo == HELP ? '?' : e.modo == '0' ? 'M' : 'A');        // prints current game mode
     putchar(' ');                                                     // prints blanck spaces for alignment
     putchar(e.peca == HELP ? '?' : e.peca == VALOR_X ? 'X' : 'O');    // prints piece of current player
-    printf("   X:%02d O:%02d", e.scoreX, e.scoreO);                   // prints game score
+    putchar(' ');
+    putchar(e.botLVL == '1' ? '1' : e.botLVL == '2' ? '2' : e.botLVL == '3' ? '3' : ' ');
+    printf(" X:%02d O:%02d", e.scoreX, e.scoreO);                   // prints game score
     printf(" ┊ CLI\n");                                               // prints "CLI" title
 }
 

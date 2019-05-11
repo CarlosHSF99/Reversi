@@ -11,18 +11,34 @@ void interpreter(ESTADO e, LEST s)
     
     while (1)                                       // loops infinitely
     {
-        printInterface(e, cli);                     // prints state and CLI
-        e.showValid = e.showHelp = 0;               // resets showValid and showHelp print modifiers to 0
-        
-        if (!fgets(input, MAX_STR, stdin))          // recieves input command
-            exit(0);                                // terminates program if there's an error getting input
-        
-        updateCLI(cli);                             // updates CLI
-        
-        sprintf(cli[CLI], "reversi> %s", input);    // concatenates prompt with input
-        
-        if ((num = interpret(&e, &s, input)))       // interpretes command and checks if an error code is returned
-            errorHandling(num, cli);                // handles error codes
+        if (e.modo == '1' && e.peca == VALOR_X)
+            switch (e.botLVL)
+            {
+                case '1':
+                    bot1(&e, &s);
+                    break;
+                case '2':
+                    bot2(&e, &s);
+                    break;
+                case '3':
+                    bot3(&e, &s);
+                    break;
+            }
+        else
+        {
+            printInterface(e, cli);                     // prints state and CLI
+            e.showValid = e.showHelp = 0;               // resets showValid and showHelp print modifiers to 0
+            
+            updateCLI(cli);                             // updates CLI
+            
+            if (!fgets(input, MAX_STR, stdin))          // recieves input command
+                exit(0);                                // terminates program if there's an error getting input
+            
+            sprintf(cli[CLI], "reversi> %s", input);    // concatenates prompt with input
+            
+            if ((num = interpret(&e, &s, input)))       // interpretes command and checks if an error code is returned
+                errorHandling(num, cli);                // handles error codes
+        }
     }
 }
 

@@ -103,9 +103,9 @@ void autoVSbot(VALOR piece, char lvl, ESTADO *e, LEST *s);
 
 int readFile(ESTADO *e, char *file_name, LEST *s, int tipo);
 //void writeEstado(ESTADO *e);
-void saveState(ESTADO *e, char* filename, LEST s);
+void saveState(ESTADO *e, char *filename, LEST s);
 
-int reverse(int l, int c, ESTADO* e);
+int reverse(int l, int c, ESTADO *e);
 
 void scoreUpdate(ESTADO *e, int l, int c);
 int surround(int l, int c, ESTADO *e);
