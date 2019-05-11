@@ -45,20 +45,6 @@ void autoVSbot(VALOR piece, char lvl, ESTADO *e, LEST* s)
     update(e);                              // updates state parameters
     
     (*s)->e = *e;                           // adds state to history
-    
-    if (piece == VALOR_X)                   // 
-        switch (lvl)
-        {
-            case '1':
-                bot1(e, s);
-                break;
-            case '2':
-                bot2(e, s);
-                break;
-            case '3':
-                bot3(e, s);
-                break;
-        }
 }
 
 // Sets board to inicial board

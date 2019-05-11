@@ -11,7 +11,15 @@ void interpreter(ESTADO e, LEST s)
     
     while (1)                                       // loops infinitely
     {
+        
+        printInterface(e, cli);                     // prints state and CLI
+        e.showValid = e.showHelp = 0;               // resets showValid and showHelp print modifiers to 0
+
         if (e.modo == '1' && e.peca == e.botPiece)
+        {
+            fflush(stdout);
+            sleep(1);
+            
             switch (e.botLVL)
             {
                 case '1':
@@ -24,11 +32,9 @@ void interpreter(ESTADO e, LEST s)
                     bot3(&e, &s);
                     break;
             }
+        }
         else
         {
-            printInterface(e, cli);                     // prints state and CLI
-            e.showValid = e.showHelp = 0;               // resets showValid and showHelp print modifiers to 0
-            
             updateCLI(cli);                             // updates CLI
             
             if (!fgets(input, MAX_STR, stdin))          // recieves input command
@@ -36,7 +42,7 @@ void interpreter(ESTADO e, LEST s)
             
             sprintf(cli[CLI], "reversi> %s", input);    // concatenates prompt with input
             
-            if ((num = interpret(&e, &s, input)))       // interpretes command and checks if an error code is returned
+            if ((num = interpret(&e, &s, input)))       // interpretes command and checks if an error code is returne
                 errorHandling(num, cli);                // handles error codes
         }
     }

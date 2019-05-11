@@ -11,6 +11,7 @@ int main()
     
     e.modo = HELP;                                 // sets value of e.modo to ?
     e.peca = HELP;                                 // sets value of e.peca to ?
+    e.botPiece = HELP;
     
     e.scoreX = 2;                                  // sets X score to 2
     e.scoreO = 2;                                  // sets O score to 2
