@@ -44,6 +44,7 @@ typedef struct virar {
 typedef struct estado {
     char modo;                  // modo em que se está a jogar! 0-> manual, 1-> contra computador
     VALOR peca;                 // peça do jogador que vai jogar!
+    VALOR botPiece;             // peça do bot
     VALOR grelha[DIM][DIM];     // grelha
     VALIDAS validas[MAX_POS];   // posiçoes validas
     int nValidas;               // numero de posiçoes validas

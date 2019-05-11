@@ -16,7 +16,7 @@ int bot2(ESTADO *e, LEST* s)
 {
     reverse(e->help.l, e->help.c, e);
     push(*e, s);
-
+    
     return 0;
 }
 

@@ -11,7 +11,7 @@ void interpreter(ESTADO e, LEST s)
     
     while (1)                                       // loops infinitely
     {
-        if (e.modo == '1' && e.peca == VALOR_X)
+        if (e.modo == '1' && e.peca == e.botPiece)
             switch (e.botLVL)
             {
                 case '1':
