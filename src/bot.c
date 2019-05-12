@@ -18,7 +18,7 @@ int bot3(ESTADO *e, LEST* s)
 {
     POSICAO play;
     
-    miniMax(*e, 2, 1, &play);
+    miniMax(*e, 7, 1, &play);
     
     return doPlay(play.l, play.c, e, s);//reverse(play.l, play.c, e);
 }
@@ -27,18 +27,16 @@ void print();
 
 int miniMax(ESTADO e, int depth, int minmax, POSICAO *play)
 {
-    
+    /*
     printf("\ndepth: %d, scoreX: %d, scoreO: %d\n", depth, e.scoreX, e.scoreO);
     if (depth < 0)
         puts("FFS...");
     fflush(stdout);
     //sleep(2);
-    
-    if (!depth)
-    {
-        //puts("FFS...");
-        return minmax ? e.botPiece == VALOR_X ? e.scoreX : e.scoreO : e.botPiece == VALOR_X ? e.scoreO : e.scoreX;
-    }
+    */
+
+    if (!depth || isGameOver(e))
+        return SCORE(e, e.botPiece);
     
     VALIDAS *valids = e.validas;
     POSICAO *valid = &valids->valida;
@@ -51,10 +49,10 @@ int miniMax(ESTADO e, int depth, int minmax, POSICAO *play)
         for (; nValids--; valid = &(++valids)->valida)
         {
             ESTADO child = e;
-            print(child);
+            //print(child);
             reverse(valid->l, valid->c, &child);
-            //update(&child);
-            print(child);
+            update(&child);
+            //print(child);
             int eval = miniMax(child, depth - 1, !minmax, play);
             if (eval > maxEval)
             {
@@ -73,10 +71,10 @@ int miniMax(ESTADO e, int depth, int minmax, POSICAO *play)
         for (; nValids--; valid = &(++valids)->valida)
         {
             ESTADO child = e;
-            print(child);
+            //print(child);
             reverse(valid->l, valid->c, &child);
-            //update(&child);
-            print(child);
+            update(&child);
+            //print(child);
             int eval = miniMax(child, depth - 1, !minmax, play);
             if (eval < minEval)
             {

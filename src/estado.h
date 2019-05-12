@@ -75,6 +75,8 @@ typedef struct history {
 #define VALID(e, i)     e->validas[i].valida  //
 #define nREVERSE(e)     e->validas->nVirar    //
 
+#define SCORE(e, a)     a == VALOR_X ? e.scoreX : e.scoreO;
+
 typedef struct{
     POSICAO grid;
     int score;
