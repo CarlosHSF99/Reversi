@@ -20,7 +20,13 @@ int main()
     
     s->e = e;                                      //
     s->next = NULL;                                //
-
+    /*
+    e.peca = VALOR_O;
+    e.botPiece = VALOR_X;
+    update(&e);
+    printf("%d\n", miniMax(e, 2, 1));
+    return 0;
+    */
     interpreter(e, s);                             //
     
     ss = &s;                                       //

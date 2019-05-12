@@ -11,7 +11,6 @@ void interpreter(ESTADO e, LEST s)
     
     while (1)                                       // loops infinitely
     {
-        
         printInterface(e, cli);                     // prints state and CLI
         e.showValid = e.showHelp = 0;               // resets showValid and showHelp print modifiers to 0
         
@@ -193,7 +192,15 @@ int play(int i, char *cmd[MAX_STR], ESTADO *e, LEST *s)
     int l = cmd[1][0] - '0';                           //
     int c = cmd[2][0] - '0';                           //
     
-    return reverse(l, c, e, s);                        //
+    return doPlay(l, c, e, s);
+    /*
+    int num;
+    
+    if ((num = reverse(l, c, e)) <= 1)                 //
+        push(*e, s);                                   //
+    
+    return num;
+    */
 }
 
 //

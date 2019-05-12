@@ -6,22 +6,120 @@ int bot1(ESTADO *e, LEST *s)
     int l = e->validas[randomi].valida.l;
     int c = e->validas[randomi].valida.c;
     
-    return reverse(l, c, e, s);
+    return doPlay(l, c, e, s);//reverse(l, c, e);
 }
 
 int bot2(ESTADO *e, LEST* s)
 {
-    return reverse(e->help.l, e->help.c, e, s);
+    return doPlay(e->help.l, e->help.c, e, s);//reverse(e->help.l, e->help.c, e);
 }
 
 int bot3(ESTADO *e, LEST* s)
 {
-    return 0;
+    POSICAO play;
+    
+    miniMax(*e, 2, 1, &play);
+    
+    return doPlay(play.l, play.c, e, s);//reverse(play.l, play.c, e);
 }
 
-int miniMax(ESTADO *e, int depth, int max_depth,LEST* s)
+void print();
+
+int miniMax(ESTADO e, int depth, int minmax, POSICAO *play)
 {
-    return 0;
+    
+    printf("\ndepth: %d, scoreX: %d, scoreO: %d\n", depth, e.scoreX, e.scoreO);
+    if (depth < 0)
+        puts("FFS...");
+    fflush(stdout);
+    //sleep(2);
+    
+    if (!depth)
+    {
+        //puts("FFS...");
+        return minmax ? e.botPiece == VALOR_X ? e.scoreX : e.scoreO : e.botPiece == VALOR_X ? e.scoreO : e.scoreX;
+    }
+    
+    VALIDAS *valids = e.validas;
+    POSICAO *valid = &valids->valida;
+    int nValids = e.nValidas;
+   
+    if (minmax)
+    {
+        double maxEval = -INFINITY;
+        
+        for (; nValids--; valid = &(++valids)->valida)
+        {
+            ESTADO child = e;
+            print(child);
+            reverse(valid->l, valid->c, &child);
+            //update(&child);
+            print(child);
+            int eval = miniMax(child, depth - 1, !minmax, play);
+            if (eval > maxEval)
+            {
+                maxEval = eval;
+                play->l = valid->l;
+                play->c = valid->c;
+            }
+        }
+        
+        return maxEval;
+    }
+    else
+    {
+        double minEval = INFINITY;
+        
+        for (; nValids--; valid = &(++valids)->valida)
+        {
+            ESTADO child = e;
+            print(child);
+            reverse(valid->l, valid->c, &child);
+            //update(&child);
+            print(child);
+            int eval = miniMax(child, depth - 1, !minmax, play);
+            if (eval < minEval)
+            {
+                minEval = eval;
+                play->l = valid->l;
+                play->c = valid->c;
+            }
+        }
+        
+        return minEval;
+    }
+}
+
+void print(ESTADO e)
+{
+    for (int i = 0; i < DIM; i++)
+    {
+        for (int j = 0; j < DIM; j++)
+        {
+            switch (e.grelha[i][j])             // tests current position
+            {
+                case VAZIA:                     // if it's VAZIA
+                    printf("- ");               // prints "- "
+                    break;
+                case VALOR_X:                   // if it's VALOR_X
+                    printf("X ");               // prints "X "
+                    break;
+                case VALOR_O:                   // if it's VALOR_O
+                    printf("O ");               // prints "O"
+                    break;
+                case VALIDA:                    // if it's VALIDA
+                    printf(". ");               // prints ". "
+                    break;
+                case HELP:                      // if it's HELP
+                    printf("? ");               // prints "? "
+                    break;
+                default:                        // by default
+                    printf("E ");               // prints "E" to detect erros
+                    break;
+            }
+        }
+        puts("");
+    }
 }
 /*
 >>>>>>> 52ec3ceb2f596622988a823687b1904987e37866

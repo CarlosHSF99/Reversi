@@ -1,11 +1,24 @@
 #include "estado.h"
 
-// Executa uma jogada
-int reverse(int l, int c, ESTADO *e, LEST *s)
+int doPlay(int l, int c, ESTADO *e, LEST *s)
 {
+    int num;
+    
     if (!isValid(l, c, *e))                             // cheks if play is valid
         return 1;                                       // returns error
     
+    reverse(l, c, e);
+    
+    num = doisEmUm(e);
+    
+    push(*e, s);
+    
+    return num;
+}
+
+// Executa uma jogada
+void reverse(int l, int c, ESTADO *e)
+{
     e->grelha[l][c] = e->peca;                          // puts playing piece in the chosen position
     
     VALIDAS *valids = e->validas;                       // initializes valids to point to valid positions array
@@ -19,12 +32,10 @@ int reverse(int l, int c, ESTADO *e, LEST *s)
     
     for (; nReverse--; ++reverse)                       // iterates over reversable positions
         e->grelha[reverse->l][reverse->c] = e->peca;    // reverses reversable positions
-    
-    return doisEmUm(e, s);
 }
 
 //
-int doisEmUm(ESTADO *e, LEST *s)
+int doisEmUm(ESTADO *e)
 {
     switchPiece(&e->peca);
     update(e);
@@ -36,8 +47,6 @@ int doisEmUm(ESTADO *e, LEST *s)
         
         if (!e->nValidas)
         {
-            push(*e, s);
-            
             if (e->scoreX == e->scoreO)        // checks if score is tied
                 return 1;                      // puts "Draw" message in CLI
             else if (e->scoreX > e->scoreO)    // checks if X has won
@@ -46,12 +55,8 @@ int doisEmUm(ESTADO *e, LEST *s)
                 return 1;                      // puts "O Won" message in CLI
         }
         
-        push(*e, s);
-        
         return 1;
     }
-    
-    push(*e, s);
     
     return 0;
 }

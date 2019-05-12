@@ -6,13 +6,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <math.h>
 
 #define DIM     8       //
 #define CLI     7       //
 #define INPUT   1015    //
 #define MAX_STR 1024    //
 #define MAX_POS 64      //
-#define READ    -133    //
 
 //trocar isto por ncurses
 #ifdef _WIN32
@@ -105,13 +105,14 @@ int readFile(ESTADO *e, char *file_name, LEST *s);
 //void writeEstado(ESTADO *e);
 void saveState(ESTADO *e, char *filename, LEST s);
 
-int reverse(int l, int c, ESTADO *e, LEST *s);
+int doPlay(int l, int c, ESTADO *e, LEST *s);
+void reverse(int l, int c, ESTADO *e);
 
 void scoreUpdate(ESTADO *e, int l, int c);
 int surround(int l, int c, ESTADO *e);
 void helpUpdate(ESTADO *e, int *nVirarHelp);
 
-int doisEmUm(ESTADO *e, LEST *s);
+int doisEmUm(ESTADO *e);
 int stateUpdate(ESTADO *e);
 void update(ESTADO *e);
 int cerca(int i, int j, ESTADO* e);
@@ -139,7 +140,7 @@ void boardInicial(VALOR grelha[DIM][DIM]);
 int bot1(ESTADO *e, LEST *s);
 int bot2(ESTADO *e, LEST *s);
 int bot3(ESTADO *e, LEST *s);
-int miniMax(ESTADO *e, int depth, int max_depth, LEST *s);
+int miniMax(ESTADO e, int depth, int minmax, POSICAO *play);
 
 //linked_lists.c
 void freeStack(LEST *s);
