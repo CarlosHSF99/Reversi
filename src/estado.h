@@ -77,16 +77,20 @@ typedef struct history {
 
 #define SCORE(e, a)     a == VALOR_X ? e.scoreX : e.scoreO;
 
-typedef struct{
-    POSICAO grid;
+//
+typedef struct minimax {
     int score;
-} MINMAX;
+    POSICAO play;
+} MINIMAX;
 
 //interpreter.c
 void interpreter(ESTADO e, LEST s);
 int interpret(ESTADO *e, LEST *s, char *input);
 void updateCLI(char cli[DIM][MAX_STR]/*,int n_times*/);
 void errorHandling(int num, char cli[CLI][MAX_STR]);
+int botTurn(ESTADO *e, LEST *s);
+int playerTurn(char cli[DIM][MAX_STR], ESTADO *e, LEST *s);
+
 
 int new(int i, char *cmd, ESTADO *e, LEST *s);
 int automatic(int i, char *cmd[MAX_STR],ESTADO *e, LEST *s);
@@ -114,7 +118,7 @@ void scoreUpdate(ESTADO *e, int l, int c);
 int surround(int l, int c, ESTADO *e);
 void helpUpdate(ESTADO *e, int *nVirarHelp);
 
-int doisEmUm(ESTADO *e);
+int nextState(ESTADO *e);
 int stateUpdate(ESTADO *e);
 void update(ESTADO *e);
 int cerca(int i, int j, ESTADO* e);
@@ -142,7 +146,9 @@ void boardInicial(VALOR grelha[DIM][DIM]);
 int bot1(ESTADO *e, LEST *s);
 int bot2(ESTADO *e, LEST *s);
 int bot3(ESTADO *e, LEST *s);
-int miniMax(ESTADO e, int depth, int minmax, POSICAO *play);
+int miniMax(ESTADO father, int depth, int minmax, POSICAO *play);
+int negaMax(ESTADO father, int depth, int player, POSICAO *play);
+MINIMAX negaMax2(ESTADO father, int depth, int player);
 
 //linked_lists.c
 void freeStack(LEST *s);

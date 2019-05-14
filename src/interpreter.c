@@ -3,51 +3,60 @@
 // Interpretes
 void interpreter(ESTADO e, LEST s)
 {
-    int num = 0;
-    char input[INPUT], cli[DIM][MAX_STR];
+    int num;
+    char cli[DIM][MAX_STR];
 
-    for (int i = 0; i < DIM; i++)                   // iterates over CLI lines
-        strcpy(cli[i], "\n");                       // sets current CLI line to "\n" (blank)
+    for (int i = 0; i < DIM; i++)             // iterates over CLI lines
+        strcpy(cli[i], "\n");                 // sets current CLI line to "\n" (blank)
     
-    while (1)                                       // loops infinitely
+    while (1)                                 // loops infinitely
     {
-        printInterface(e, cli);                     // prints state and CLI
-        e.showValid = e.showHelp = 0;               // resets showValid and showHelp print modifiers to 0
+        printInterface(e, cli);               // prints state and CLI
+        e.showValid = e.showHelp = 0;         // resets showValid and showHelp print modifiers to 0
         
         if (e.modo == '1' && e.peca == e.botPiece && e.nValidas)
-        {
-            fflush(stdout);
-            sleep(1);
-            
-            switch (e.botLVL)
-            {
-                case '1':
-                    num = bot1(&e, &s);
-                    break;
-                case '2':
-                    num = bot2(&e, &s);
-                    break;
-                case '3':
-                    num = bot3(&e, &s);
-                    break;
-                
-                if (num)
-                    errorHandling(num, cli);
-            }
-        }
+            num = botTurn(&e, &s);            //
         else
-        {
-            updateCLI(cli);                             // updates CLI
-            
-            if (!fgets(input, MAX_STR, stdin))          // recieves input command
-                exit(0);                                // terminates program if there's an error getting input
-            
-            sprintf(cli[CLI], "reversi> %s", input);    // concatenates prompt with input
-            
-            if ((num = interpret(&e, &s, input)))       // interpretes command and checks if an error code is returne
-                errorHandling(num, cli);                // handles error codes
-        }
+            num = playerTurn(cli, &e, &s);    //
+
+        if (num)                              //
+            errorHandling(num, cli);          // handles error codes
     }
+}
+
+//
+int botTurn(ESTADO *e, LEST *s)
+{
+    fflush(stdout);               //
+    
+    switch (e->botLVL)            //
+    {
+        case '1':                 //
+            sleep(1);             //
+            return bot1(e, s);    //
+        case '2':                 //
+            sleep(1);             //
+            return bot2(e, s);    //
+        case '3':                 //
+            return bot3(e, s);    //
+        default:
+            return 1;
+    }
+}
+
+//
+int playerTurn(char cli[DIM][MAX_STR], ESTADO *e, LEST *s)
+{
+    char input[INPUT];
+    
+    updateCLI(cli);                             // updates CLI
+    
+    if (!fgets(input, MAX_STR, stdin))          // recieves input command
+        exit(0);                                // terminates program if there's an error getting input
+    
+    sprintf(cli[CLI], "reversi> %s", input);    // concatenates prompt with input
+    
+    return interpret(e, s, input);              // interpretes command and checks if an error code is returne
 }
 
 // Actually interpretes
@@ -193,14 +202,6 @@ int play(int i, char *cmd[MAX_STR], ESTADO *e, LEST *s)
     int c = cmd[2][0] - '0';                           //
     
     return doPlay(l, c, e, s);
-    /*
-    int num;
-    
-    if ((num = reverse(l, c, e)) <= 1)                 //
-        push(*e, s);                                   //
-    
-    return num;
-    */
 }
 
 //
@@ -237,9 +238,9 @@ int undo(int i, ESTADO *e, LEST *s)
     if (i > 1)              //
         return 1;           //
     
-    popundo(e, s);          //
+    popundo(e, s);          // <-----------
     
-    return 0;               //
+    return 0;               // <-----------
 }
 
 //

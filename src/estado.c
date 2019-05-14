@@ -9,7 +9,7 @@ int doPlay(int l, int c, ESTADO *e, LEST *s)
     
     reverse(l, c, e);
     
-    num = doisEmUm(e);
+    num = nextState(e);
     
     push(*e, s);
     
@@ -17,7 +17,7 @@ int doPlay(int l, int c, ESTADO *e, LEST *s)
 }
 
 // Executa uma jogada
-void reverse(int l, int c, ESTADO *e)
+void reverse(int l, int c, ESTADO *e) //receber pointer da valida atraves da isValid
 {
     e->grelha[l][c] = e->peca;                          // puts playing piece in the chosen position
     
@@ -35,7 +35,7 @@ void reverse(int l, int c, ESTADO *e)
 }
 
 //
-int doisEmUm(ESTADO *e)
+int nextState(ESTADO *e)
 {
     switchPiece(&e->peca);
     update(e);
@@ -105,7 +105,7 @@ int isValid(int l, int c, ESTADO e)
     VALIDAS *valids = e.validas;                                // initializes valids to point to valid positions array
     POSICAO *valid = &valids->valida;                           // initializes valid to point to first valid posiiton
     
-    while (e.nValidas-- && (valid->l != l || valid->c != c))    // iterates over valid positions
+    while (--e.nValidas && (valid->l != l || valid->c != c))    // iterates over valid positions
         valid = &(++valids)->valida;                            // increments valids pointer by one
     
     return valid->l == l && valid->c == c;                      // returns if (l,c) is a valid position
@@ -114,6 +114,8 @@ int isValid(int l, int c, ESTADO e)
 // Actually updates game state
 void update(ESTADO *e)
 {
+    //switchPiece(&e->peca);
+    
     int nVirarHelp = 0;                         // initializes nVirarHelp to 0
     
     e->nValidas = e->scoreX = e->scoreO = 0;    // resets number of valid positions and score
