@@ -4,16 +4,18 @@ int doPlay(int l, int c, ESTADO *e, LEST *s)
 {
     int num;
     
-    if (!isValid(l, c, *e))                             // cheks if play is valid
-        return 1;                                       // returns error
+    if (!e->nValidas)          //
+        return 13;             //
+    if (!isValid(l, c, *e))    // cheks if play is valid
+        return 8;              // returns error
     
-    reverse(l, c, e);
+    reverse(l, c, e);          //
     
-    num = nextState(e);
+    num = nextState(e);        //
     
-    push(*e, s);
+    push(*e, s);               //
     
-    return num;
+    return num;                //
 }
 
 // Executa uma jogada
@@ -48,14 +50,14 @@ int nextState(ESTADO *e)
         if (!e->nValidas)
         {
             if (e->scoreX == e->scoreO)        // checks if score is tied
-                return 1;                      // puts "Draw" message in CLI
+                return 10;                      // puts "Draw" message in CLI
             else if (e->scoreX > e->scoreO)    // checks if X has won
-                return 1;                      // puts "X Won" message in CLI
+                return 11;                      // puts "X Won" message in CLI
             else                               // else O has won
-                return 1;                      // puts "O Won" message in CLI
+                return 12;                      // puts "O Won" message in CLI
         }
         
-        return 1;
+        return 9;
     }
     
     return 0;
@@ -102,13 +104,14 @@ int isGameOver(ESTADO e)
 // Checks if the position (l,c) is a valid play
 int isValid(int l, int c, ESTADO e)
 {
-    VALIDAS *valids = e.validas;                                // initializes valids to point to valid positions array
-    POSICAO *valid = &valids->valida;                           // initializes valid to point to first valid posiiton
+    VALIDAS *valids = e.validas;                             // initializes valids to point to valid positions array
+    POSICAO *valid = &valids->valida;                        // initializes valid to point to first valid posiiton
+    int nValids = e.nValidas;                                //
     
-    while (--e.nValidas && (valid->l != l || valid->c != c))    // iterates over valid positions
-        valid = &(++valids)->valida;                            // increments valids pointer by one
+    while (--nValids && (valid->l != l || valid->c != c))    // iterates over valid positions
+        valid = &(++valids)->valida;                         // increments valids pointer by one
     
-    return valid->l == l && valid->c == c;                      // returns if (l,c) is a valid position
+    return valid->l == l && valid->c == c;                   // returns if (l,c) is a valid position
 }
 
 // Actually updates game state

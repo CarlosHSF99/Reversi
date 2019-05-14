@@ -32,14 +32,14 @@ int botTurn(ESTADO *e, LEST *s)
     switch (e->botLVL)            //
     {
         case '1':                 //
-            sleep(1);             //
+            //sleep(1);             //
             return bot1(e, s);    //
         case '2':                 //
             sleep(1);             //
             return bot2(e, s);    //
         case '3':                 //
             return bot3(e, s);    //
-        default:
+        default:                  //
             return 1;
     }
 }
@@ -108,16 +108,16 @@ int new(int i, char *cmd, ESTADO *e, LEST *s)
     VALOR value;
     
     if (i < 2)                     //
-        return -1;                 //
+        return 3;                  //
     if (i > 2)                     //
-        return 1;                  //
+        return 4;                  //
     
     if (!strcmp(cmd, "X"))         //
         value = VALOR_X;           //
     else if (!strcmp(cmd, "O"))    //
         value = VALOR_O;           //
     else                           //
-        return 1;                  //
+        return 5;                  //
     
     manual(e, value, s);           //
 
@@ -128,9 +128,9 @@ int new(int i, char *cmd, ESTADO *e, LEST *s)
 int automatic(int i, char *cmd[MAX_STR], ESTADO *e, LEST *s)
 {
     if (i < 3)                        //
-        return 1;                     //
+        return 3;                     //
     if (i > 3)                        //
-        return 1;                     //
+        return 4;                     //
     
     VALOR piece;
     
@@ -139,17 +139,17 @@ int automatic(int i, char *cmd[MAX_STR], ESTADO *e, LEST *s)
     else if (!strcmp(cmd[1], "O"))    //
         piece = VALOR_O;              //
     else                              //
-        return 1;                     //
+        return 5;                     //
     
     if (strlen(cmd[2]) > 1)           //
-        return 1;                     //
+        return 6;                     //
     if (!isdigit(cmd[2][0]))          //
-        return 1;                     //
+        return 6;                     //
     
     char lvl = cmd[2][0];             //
     
     if (!(lvl - '0') || lvl > '3')    //
-        return 1;                     //
+        return 6;                     //
     
     autoVSbot(piece, lvl, e, s);      //
     
@@ -160,9 +160,9 @@ int automatic(int i, char *cmd[MAX_STR], ESTADO *e, LEST *s)
 int load(int i, char *cmd, ESTADO *e, LEST *s)
 {
     if (i < 2)                     //
-        return 1;                  //
+        return 3;                  //
     if (i > 2)                     //
-        return 1;                  //
+        return 4;                  //
     
     return readFile(e, cmd, s);    //
 }
@@ -171,11 +171,11 @@ int load(int i, char *cmd, ESTADO *e, LEST *s)
 int save(int i, char *cmd, ESTADO *e, LEST *s)
 {
     if (e->modo == HELP)      //
-        return 1;             //
+        return 2;             //
     if (i < 2)                //
-        return 1;             //
+        return 3;             //
     if (i > 2)                //
-        return 1;             //
+        return 4;             //
     
     saveState(e, cmd, *s);    //
     
@@ -185,32 +185,38 @@ int save(int i, char *cmd, ESTADO *e, LEST *s)
 //
 int play(int i, char *cmd[MAX_STR], ESTADO *e, LEST *s)
 {
-    if (e->modo == HELP)                               //
-        return 1;                                      //
-    if (i < 3)                                         //
-        return 1;                                      //
-    if (i > 3)                                         //
-        return 1;                                      //
-    if (strlen(cmd[1]) > 1 || strlen(cmd[2]) > 1)      //
-        return 1;                                      //
-    if (!isdigit(cmd[1][0]) || !isdigit(cmd[2][0]))    //
-        return 1;                                      //
-    if (cmd[1][0] > '7' || cmd[1][1] > '7')            //
-        return 1;                                      //
+    if (e->modo == HELP)         //
+        return 2;                //
+    if (i < 3)                   //
+        return 3;                //
+    if (i > 3)                   //
+        return 4;                //
+    if (strlen(cmd[1]) > 1)      //
+        return 5;                //
+    if (strlen(cmd[2]) > 1)      //
+        return 6;                //
+    if (!isdigit(cmd[1][0]))     //
+        return 5;                //
+    if (!isdigit(cmd[2][0]))     //
+        return 6;                //
+    if (cmd[1][0] > '7')         //
+        return 5;                //
+    if (cmd[1][1] > '7')         //
+        return 6;                //
     
-    int l = cmd[1][0] - '0';                           //
-    int c = cmd[2][0] - '0';                           //
+    int l = cmd[1][0] - '0';     //
+    int c = cmd[2][0] - '0';     //
     
-    return doPlay(l, c, e, s);
+    return doPlay(l, c, e, s);   //
 }
 
 //
 int valid(int i, ESTADO *e)
 {
     if (e->modo == HELP)    //
-        return 1;           //
+        return 2;           //
     if (i > 1)              //
-        return 1;           //
+        return 4;           //
     
     e->showValid = 1;       //
     
@@ -221,9 +227,9 @@ int valid(int i, ESTADO *e)
 int help(int i, ESTADO *e)
 {
     if (e->modo == HELP)    //
-        return 1;           //
+        return 2;           //
     if (i > 1)              //
-        return 1;           //
+        return 4;           //
     
     e->showHelp = 1;        //
     
@@ -234,9 +240,9 @@ int help(int i, ESTADO *e)
 int undo(int i, ESTADO *e, LEST *s)
 {
     if (e->modo == HELP)    //
-        return 1;           //
+        return 2;           //
     if (i > 1)              //
-        return 1;           //
+        return 4;           //
     
     popundo(e, s);          // <-----------
     
@@ -247,7 +253,7 @@ int undo(int i, ESTADO *e, LEST *s)
 int quit(int i)
 {
     if (i > 1)       //
-        return 1;    //
+        return 4;    //
     
     CLEAR;           //
     exit(0);         //
@@ -257,9 +263,9 @@ int quit(int i)
 int championship(int i, char *cmd)
 {
     if (i < 2)              //
-        return 1;           //
+        return 3;           //
     if (i > 2)              //
-        return 1;           //
+        return 4;           //
     
     return playBot(cmd);    //
 }
@@ -268,21 +274,54 @@ int championship(int i, char *cmd)
 void errorHandling(int num, char cli[CLI][MAX_STR])
 {
     updateCLI(cli);
-    strcpy(cli[CLI], "reversi: error\n");
-    /*
-    if (num * num == 1)
+    
+    printf("\n%d\n", num);
+    
+    switch (num)
     {
-        sprintf(cli[CLI], "%s: Too %s arguments\n", error == 'N' ? "New" : "" , num > 0 ? "many" : "few");
-        updateCLI(cli);
-        
-        switch(error)
-        {
-            case 'N':
-                strcpy(cli[CLI], "New: N <piece>\n");
-                break;
-        }
+        case 1:
+            strcpy(cli[CLI], "reversi: Invalid Command\n");
+            break;
+        case 2:
+            strcpy(cli[CLI], "reversi: Not in a Game Mode\n");
+            break;
+        case 3:
+            strcpy(cli[CLI], "reversi: Too few arguments\n");
+            break;
+        case 4:
+            strcpy(cli[CLI], "reversi: Too many arguments\n");
+            break;
+        case 5:
+            strcpy(cli[CLI], "reversi: Invalid first argument\n");
+            break;
+        case 6:
+            strcpy(cli[CLI], "reversi: Invalid second argument\n");
+            break;
+        case 7:
+            strcpy(cli[CLI], "reversi: Invalid file name\n");
+            break;
+        case 8:
+            strcpy(cli[CLI], "reversi: Invalid position\n");
+            break;
+        case 9:
+            strcpy(cli[CLI], "reversi: State jumped\n");
+            break;
+        case 10:
+            strcpy(cli[CLI], "reversi: Draw\n");
+            break;
+        case 11:
+            strcpy(cli[CLI], "reversi: X Won\n");
+            break;
+        case 12:
+            strcpy(cli[CLI], "reversi: O Won\n");
+            break;
+        case 13:
+            strcpy(cli[CLI], "reversi: Game has ended\n");
+            break;
+        default:
+            strcpy(cli[CLI], "reversi: error\n");
+            break;
     }
-    */
 }
 
 // 
