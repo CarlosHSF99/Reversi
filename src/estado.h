@@ -44,7 +44,7 @@ typedef struct virar {
 typedef struct estado {
     char modo;                  // modo em que se está a jogar! 0-> manual, 1-> contra computador
     VALOR peca;                 // peça do jogador que vai jogar!
-    VALOR botPiece;             // peça do bot
+    VALOR bot;                  // peça do bot
     VALOR grelha[DIM][DIM];     // grelha
     VALIDAS validas[MAX_POS];   // posiçoes validas
     int nValidas;               // numero de posiçoes validas
@@ -95,7 +95,7 @@ int playerTurn(char cli[DIM][MAX_STR], ESTADO *e, LEST *s);
 int new(int i, char *cmd, ESTADO *e, LEST *s);
 int automatic(int i, char *cmd[MAX_STR],ESTADO *e, LEST *s);
 int load(int i, char *cmd, ESTADO *e, LEST *s);
-int save(int i, char *cmd, ESTADO *e, LEST *s);
+int save(int i, char *cmd, ESTADO e, LEST *s);
 int play(int i, char *cmd[MAX_STR], ESTADO *e, LEST *s);
 int valid(int i, ESTADO *e);
 int help(int i, ESTADO *e);
@@ -108,8 +108,8 @@ void manual(ESTADO *e, VALOR n, LEST *s);
 void autoVSbot(VALOR piece, char lvl, ESTADO *e, LEST *s);
 
 int readFile(ESTADO *e, char *file_name, LEST *s);
-//void writeEstado(ESTADO *e);
-void saveState(ESTADO *e, char *filename, LEST s);
+void saveState(char *filename, LEST s);
+void saveFirstLine(FILE **fp, LEST s);
 
 int doPlay(int l, int c, ESTADO *e, LEST *s);
 void reverse(int l, int c, ESTADO *e);
@@ -148,6 +148,7 @@ int bot2(ESTADO *e, LEST *s);
 int bot3(ESTADO *e, LEST *s);
 int miniMax(ESTADO father, int depth, int minmax, POSICAO *play);
 int negaMax(ESTADO father, int depth, int player, POSICAO *play);
+int miniMaxAB(ESTADO father, int depth, int A, int B, int minmax, POSICAO *play);
 MINIMAX negaMax2(ESTADO father, int depth, int player);
 
 //linked_lists.c

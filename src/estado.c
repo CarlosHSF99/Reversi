@@ -1,11 +1,10 @@
 #include "estado.h"
 
+//
 int doPlay(int l, int c, ESTADO *e, LEST *s)
 {
     int num;
     
-    if (!e->nValidas)          //
-        return 13;             //
     if (!isValid(l, c, *e))    // cheks if play is valid
         return 8;              // returns error
     
@@ -39,22 +38,22 @@ void reverse(int l, int c, ESTADO *e) //receber pointer da valida atraves da isV
 //
 int nextState(ESTADO *e)
 {
-    switchPiece(&e->peca);
-    update(e);
+    switchPiece(&e->peca);                     //
+    update(e);                                 //
     
-    if (!e->nValidas)
+    if (!e->nValidas)                          //
     {
-        switchPiece(&e->peca);
-        update(e);
+        switchPiece(&e->peca);                 //
+        update(e);                             //
         
-        if (!e->nValidas)
+        if (!e->nValidas)                      //
         {
             if (e->scoreX == e->scoreO)        // checks if score is tied
-                return 10;                      // puts "Draw" message in CLI
+                return 10;                     // puts "Draw" message in CLI
             else if (e->scoreX > e->scoreO)    // checks if X has won
-                return 11;                      // puts "X Won" message in CLI
+                return 11;                     // puts "X Won" message in CLI
             else                               // else O has won
-                return 12;                      // puts "O Won" message in CLI
+                return 12;                     // puts "O Won" message in CLI
         }
         
         return 9;
@@ -117,8 +116,6 @@ int isValid(int l, int c, ESTADO e)
 // Actually updates game state
 void update(ESTADO *e)
 {
-    //switchPiece(&e->peca);
-    
     int nVirarHelp = 0;                         // initializes nVirarHelp to 0
     
     e->nValidas = e->scoreX = e->scoreO = 0;    // resets number of valid positions and score
