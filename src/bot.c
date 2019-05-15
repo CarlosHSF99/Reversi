@@ -22,8 +22,8 @@ int bot3(ESTADO *e, LEST* s)
     play.l = 0;
     play.c = 0;
     
-    miniMax(*e, 7, 1, &play);
-    //negaMax(*e, 7, 1, &play);
+    //miniMax(*e, 7, 1, &play);
+    negaMax(*e, 7, 1, &play);
     //mm = negaMax2(*e, 3, 1);
     //miniMaxAB(*e, 7, (int)-INFINITY, (int)INFINITY, 1, &play);
     

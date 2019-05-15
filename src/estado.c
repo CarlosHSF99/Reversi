@@ -62,42 +62,17 @@ int nextState(ESTADO *e)
     return 0;
 }
 
-// Updates game state
-int stateUpdate(ESTADO *e)
-{
-    int i = -1;                   // initilizes i to -1
-    
-    do                            // checks if jump piece
-    {
-        switchPiece(&e->peca);    // switches current piece to oponent one
-        update(e);                // updates current state
-        
-        if (++i)                  // checks if has been incremented more than once
-            return 1;             // returns error code
-    }
-    while (!e->nValidas);         // loops while there's no valid play
-    
-    return 0;                     // return no errors
-}
-
-//se no O ou no X ou no Vazia ou nao ha jogadas possiveis para ambos os jogadores
+// se no O ou no X ou no Vazia ou nao ha jogadas possiveis para ambos os jogadores
 int isGameOver(ESTADO e)
 {
-    int nValids = e.nValidas;        // initializes nValids to number of valid plays
+    int nValids = e.nValidas;    // initializes nValids to number of valid plays
     
-    update(&e);                      // updates state
+    switchPiece(&e.peca);
+    update(&e);                  // updates state
     
-    nValids += e.nValidas;           // sums number of valid plays before and after update
+    nValids += e.nValidas;       // sums number of valid plays before and after update
     
-    if (nValids)                     // checks if there are valid plays for both pieces
-        return 0;                    // returns no errors
-
-    if (e.scoreX == e.scoreO)        // checks if score is tied
-        return 1;                    // puts "Draw" message in CLI
-    else if (e.scoreX > e.scoreO)    // checks if X has won
-        return 1;                    // puts "X Won" message in CLI
-    else                             // else O has won
-        return 1;                    // puts "O Won" message in CLI
+    return !nValids;             //
 }
 
 // Checks if the position (l,c) is a valid play
@@ -227,16 +202,14 @@ void switchPiece(VALOR *piece)
 }
 
 // Desfaz uma jogada
-void popundo(ESTADO *e, LEST* s)
+void popundo(ESTADO *e, LEST* s) // DEFINIR MELHOR QUANTAS VEZES SE FAZ UNDO
 {
-    pop(s);                //
-    *e = (*s)->e;          //
+    pop(s);                // pops last state (first in stack)
     
-    if (e->modo == '1')    //
-    {
-        pop(s);            //
-        *e = (*s)->e;      //
-    }
+    if (e->modo == '1')    // if the game is in automatic mode
+        pop(s);            // pops last state (first in stack) again
+
+    *e = (*s)->e;          // sets state e to now last state
 }
 
 // Championship function

@@ -14,6 +14,9 @@ void interpreter(ESTADO e, LEST s)
         printInterface(e, cli);                                // prints state and CLI
         e.showValid = e.showHelp = 0;                          // resets showValid and showHelp print modifiers to 0
         
+        //puts("CHECK\n");
+        //getchar();
+        
         if (e.modo == '1' && e.peca == e.bot && e.nValidas)    // checks if it's a bot turn
             num = botTurn(&e, &s);                             // bot playes and returns error code
         else                                                   // else it is a player turn

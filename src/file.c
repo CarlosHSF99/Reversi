@@ -13,7 +13,7 @@ int readFile(ESTADO *e, char *file_name, LEST* s)
     freeStack(s);
 
     if (file == NULL)
-        return 1;
+        return 7;
     
     fseek(file, 0, SEEK_END);
     
