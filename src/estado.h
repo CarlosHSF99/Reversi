@@ -113,6 +113,7 @@ void saveFirstLine(FILE **fp, LEST s);
 
 int doPlay(int l, int c, ESTADO *e, LEST *s);
 void reverse(int l, int c, ESTADO *e);
+void reversePtr(VALIDAS *valided, ESTADO *e);
 
 void scoreUpdate(ESTADO *e, int l, int c);
 int surround(int l, int c, ESTADO *e);
@@ -133,6 +134,7 @@ int playBot(char *file);
 void printInterface(ESTADO e, char lines[DIM][MAX_STR]);
 
 int isValid(int l, int c, ESTADO e);
+VALIDAS *isValidPtr(int l, int c, ESTADO e);
 
 int inBoard(int l, int c);
 void switchPiece(VALOR *piece);

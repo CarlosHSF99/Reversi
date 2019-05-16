@@ -4,29 +4,26 @@
 int doPlay(int l, int c, ESTADO *e, LEST *s)
 {
     int num;
+    VALIDAS *valided;
     
-    if (!isValid(l, c, *e))    // cheks if play is valid
-        return 8;              // returns error
+    if (!(valided = isValidPtr(l, c, *e)))    // cheks if play is valid and receives pointer to valid position
+        return 8;                             // returns error
     
-    reverse(l, c, e);          //
+    reversePtr(valided, e);                   // reverses reversable positions
     
-    num = nextState(e);        //
+    num = nextState(e);                       // updates state
     
-    push(*e, s);               //
+    push(*e, s);                              // pushes new state to history stack
     
-    return num;                //
+    return num;                               //
 }
 
 // Executa uma jogada
-void reverse(int l, int c, ESTADO *e) //receber pointer da valida atraves da isValid
+void reversePtr(VALIDAS *valids, ESTADO *e)
 {
-    e->grelha[l][c] = e->peca;                          // puts playing piece in the chosen position
-    
-    VALIDAS *valids = e->validas;                       // initializes valids to point to valid positions array
     POSICAO *valid = &valids->valida;                   // initializes valid to point to first valid position
     
-    while (valid->l != l || valid->c != c)              // iterates over valid positions until finding the current one
-        valid = &(++valids)->valida;                    // increments valids pointer by one
+    e->grelha[valid->l][valid->c] = e->peca;            // puts playing piece in the chosen position
     
     POSICAO *reverse = valids->virar;                   // initializes reverse to point to reversable positions array
     int nReverse = valids->nVirar;                      // initializes nReverse to number of reversable positions
@@ -35,18 +32,18 @@ void reverse(int l, int c, ESTADO *e) //receber pointer da valida atraves da isV
         e->grelha[reverse->l][reverse->c] = e->peca;    // reverses reversable positions
 }
 
-//
+// Updates game to the next state
 int nextState(ESTADO *e)
 {
-    switchPiece(&e->peca);                     //
-    update(e);                                 //
+    switchPiece(&e->peca);                     // Switches playing piece
+    update(e);                                 // Updates state
     
-    if (!e->nValidas)                          //
+    if (!e->nValidas)                          // Checks if current state doesn't have valid plays
     {
-        switchPiece(&e->peca);                 //
-        update(e);                             //
+        switchPiece(&e->peca);                 // Switches playing piece
+        update(e);                             // Updates state
         
-        if (!e->nValidas)                      //
+        if (!e->nValidas)                      // Checks if current state doesn't have vaid plays
         {
             if (e->scoreX == e->scoreO)        // checks if score is tied
                 return 10;                     // puts "Draw" message in CLI
@@ -67,7 +64,7 @@ int isGameOver(ESTADO e)
 {
     int nValids = e.nValidas;    // initializes nValids to number of valid plays
     
-    switchPiece(&e.peca);
+    switchPiece(&e.peca);        // switches current playing piece
     update(&e);                  // updates state
     
     nValids += e.nValidas;       // sums number of valid plays before and after update
@@ -76,16 +73,16 @@ int isGameOver(ESTADO e)
 }
 
 // Checks if the position (l,c) is a valid play
-int isValid(int l, int c, ESTADO e)
+VALIDAS *isValidPtr(int l, int c, ESTADO e)
 {
-    VALIDAS *valids = e.validas;                             // initializes valids to point to valid positions array
-    POSICAO *valid = &valids->valida;                        // initializes valid to point to first valid posiiton
-    int nValids = e.nValidas;                                //
+    VALIDAS *valids = e.validas;                              // initializes valids to point to valid positions array
+    POSICAO *valid = &valids->valida;                         // initializes valid to point to first valid posiiton
+    int nValids = e.nValidas;                                 // initializes nValids to number of valid plays
     
-    while (--nValids && (valid->l != l || valid->c != c))    // iterates over valid positions
-        valid = &(++valids)->valida;                         // increments valids pointer by one
+    while (--nValids && (valid->l != l || valid->c != c))     // iterates over valid positions
+        valid = &(++valids)->valida;                          // increments valids pointer by one
     
-    return valid->l == l && valid->c == c;                   // returns if (l,c) is a valid position
+    return valid->l == l && valid->c == c ? valids : NULL;    // returns if (l,c) is a valid position
 }
 
 // Actually updates game state
