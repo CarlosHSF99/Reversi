@@ -27,7 +27,7 @@ Definição do estado i.e. tabuleiro. Representação matricial do tabuleiro.
 */
 
 // definição de valores possiveis no tabuleiro
-typedef enum {VAZIA, VALOR_X, VALOR_O, VALIDA, HELP} VALOR;
+typedef enum {VAZIA, VALOR_X, VALOR_O, VALIDA, HELP,ERROR} VALOR;
 
 // posicao
 typedef struct posicao {
@@ -105,7 +105,7 @@ void autoVSbot(VALOR piece, char lvl, ESTADO *e, LEST *s);
 
 int readFile(ESTADO *e, char *file_name, LEST *s);
 //void writeEstado(ESTADO *e);
-void saveState(ESTADO *e, char *filename, LEST s);
+void saveState(char *filename, LEST s);
 
 int doPlay(int l, int c, ESTADO *e, LEST *s);
 void reverse(int l, int c, ESTADO *e);

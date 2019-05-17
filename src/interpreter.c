@@ -168,7 +168,7 @@ int save(int i, char *cmd, ESTADO *e, LEST *s)
     if (i > 2)                //
         return 1;             //
     
-    saveState(e, cmd, *s);    //
+    saveState(cmd, *s);    //
     
     return 0;                 //
 }
