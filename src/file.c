@@ -16,8 +16,8 @@ int readFile(ESTADO *e, char *file_name, LEST* s)
     
     //if(*s==NULL)
       //  printf("stackfreed");
-
-    while(fgetc(file)!=EOF)
+    
+    while(fgetc(file) != EOF)
     {
         fseek(file, -1, SEEK_CUR);
 
@@ -54,45 +54,51 @@ int readFile(ESTADO *e, char *file_name, LEST* s)
     return 0;
 }
 
-void saveState(char* file_name, LEST s)
+void saveState(char* file, LEST s)
 {
-    FILE *file;
+    FILE *fp;
     int l, c;
-    char file_pos_name[MAX_STR];
+    char file_path[MAX_STR];
     
-    sprintf(file_pos_name, "../saves/%s.txt", file_name);
+    sprintf(file_path, "../saves/%s.txt", file);    // adds path and ".txt" extension to file name
     
-    file = fopen(file_pos_name, "w");
+    fp = fopen(file_path, "w");                     // opens file on write mode
     
-    while(s!=NULL){
-        fprintf(file, "%c %c %c\n", s->e.modo == '0' ? 'M' : s->e.modo == '1' ? 'A' : '?', s->e.peca == VALOR_X ? 'X' : s->e.peca == VALOR_O ? 'O' : '?', s->e.modo== 'A' ? s->e.botLVL : ' ');
+    for (; s; s = s->next)                          // iterates over game history
+    {
+        saveFirstLine(&fp, s);                      // prints current first line (mode, piece and level) in file
         
-        for(l = 0; l < DIM; l++)
-            for(c = 0; c < DIM; c++)
+        for(l = 0; l < DIM; l++)                    // iterates over board lines
+            for(c = 0; c < DIM; c++)                // iterates over board columns
             {
-                switch(s->e.grelha[l][c])
+                switch(s->e.grelha[l][c])           // tests current board piece
                 {
-                    case VALOR_O:
-                        fputc('O', file);
+                    case VALOR_O:                   // in case it is a 'O' (VALOR_O)
+                        fputc('O', fp);             // prints 'O' in file
                         break;
-                    case VALOR_X:
-                        fputc('X', file);
+                    case VALOR_X:                   // in case it is a 'X' (VALOR_X)
+                        fputc('X', fp);             // prints 'X' in file
                         break;
-                    case VAZIA:
-                        fputc('-', file);
+                    case VAZIA:                     // in case it is a '-' (VAZIA)
+                        fputc('-', fp);             // prints '-' in file
                         break;
-                    default:
-                        fputc('E', file);
+                    default:                        // by default
+                        fputc('E', fp);             // prints 'E' in file signaling an error
                         break;
                 }
                 
-                fputc(c < DIM-1 ? ' ' : '\n', file);
+                fputc(c < CLI ? ' ' : '\n', fp);    // prints a blank space or a line break to separate columns and lines
             }
         
-        fputc('\n', file);
-        
-        s = s->next;
+        fputc('\n', fp);                            // prints a blank line in file to separate states
     }
-    fclose(file);
+    
+    fclose(fp);                                     // closes file
 }
 
+void saveFirstLine(FILE **fp, LEST s)
+{
+    fprintf(*fp, "%c ", s->e.modo == '0' ? 'M' : 'A');        // prints game mode in file
+    fprintf(*fp, "%c ", s->e.peca == VALOR_X ? 'X' : 'O');    // prints playing piece in file
+    fprintf(*fp, "%c\n", s->e.botLVL);                        // prints bot level in file
+}

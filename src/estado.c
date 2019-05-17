@@ -1,31 +1,42 @@
 #include "estado.h"
 
-int doPlay(int l, int c, ESTADO *e, LEST *s)
+//
+int doPlay(POSICAO play, ESTADO *e, LEST *s)
 {
     int num;
+    VALIDAS *valided;
     
-    if (!isValid(l, c, *e))                             // cheks if play is valid
-        return 1;                                       // returns error
+    if (!(valided = isValid(play, *e)))    // cheks if play is valid and receives pointer to valid position
+        return 8;                          // returns error
     
-    reverse(l, c, e);
+    reverse(valided, e);                   // reverses reversable positions
     
-    num = doisEmUm(e);
+    num = nextState(e);                    // updates state
     
-    push(*e, s);
+    push(*e, s);                           // pushes new state to history stack
     
     return num;
 }
 
-// Executa uma jogada
-void reverse(int l, int c, ESTADO *e)
+// Checks if the position (l,c) is a valid play
+VALIDAS *isValid(POSICAO play, ESTADO e)
 {
-    e->grelha[l][c] = e->peca;                          // puts playing piece in the chosen position
+    VALIDAS *valids = e.validas;                          // initializes valids to point to valid positions array
+    POSICAO *valid = &valids->valida;                     // initializes valid to point to first valid posiiton
+    int nValids = e.nValidas;                             // initializes nValids to number of valid plays
     
-    VALIDAS *valids = e->validas;                       // initializes valids to point to valid positions array
+    while (--nValids && !compPosition(play, *valid))      // iterates over valid positions
+        valid = &(++valids)->valida;                      // increments valids pointer by one
+    
+    return compPosition(play, *valid) ? valids : NULL;    // returns if (l,c) is a valid position
+}
+
+// Executa uma jogada
+void reverse(VALIDAS *valids, ESTADO *e)
+{
     POSICAO *valid = &valids->valida;                   // initializes valid to point to first valid position
     
-    while (valid->l != l || valid->c != c)              // iterates over valid positions until finding the current one
-        valid = &(++valids)->valida;                    // increments valids pointer by one
+    e->grelha[valid->l][valid->c] = e->peca;            // puts playing piece in the chosen position
     
     POSICAO *reverse = valids->virar;                   // initializes reverse to point to reversable positions array
     int nReverse = valids->nVirar;                      // initializes nReverse to number of reversable positions
@@ -34,81 +45,50 @@ void reverse(int l, int c, ESTADO *e)
         e->grelha[reverse->l][reverse->c] = e->peca;    // reverses reversable positions
 }
 
-//
-int doisEmUm(ESTADO *e)
+// Compares two positions
+int compPosition(POSICAO a, POSICAO b)
 {
-    switchPiece(&e->peca);
-    update(e);
+    return a.l == b.l && a.c == b.c;
+}
+
+// Updates game to the next state
+int nextState(ESTADO *e)
+{
+    switchPiece(&e->peca);                     // Switches playing piece
+    update(e);                                 // Updates state
     
-    if (!e->nValidas)
+    if (!e->nValidas)                          // Checks if current state doesn't have valid plays
     {
-        switchPiece(&e->peca);
-        update(e);
+        switchPiece(&e->peca);                 // Switches playing piece
+        update(e);                             // Updates state
         
-        if (!e->nValidas)
+        if (!e->nValidas)                      // Checks if current state doesn't have vaid plays
         {
             if (e->scoreX == e->scoreO)        // checks if score is tied
-                return 1;                      // puts "Draw" message in CLI
+                return 10;                     // puts "Draw" message in CLI
             else if (e->scoreX > e->scoreO)    // checks if X has won
-                return 1;                      // puts "X Won" message in CLI
+                return 11;                     // puts "X Won" message in CLI
             else                               // else O has won
-                return 1;                      // puts "O Won" message in CLI
+                return 12;                     // puts "O Won" message in CLI
         }
         
-        return 1;
+        return 9;
     }
     
     return 0;
 }
 
-// Updates game state
-int stateUpdate(ESTADO *e)
-{
-    int i = -1;                   // initilizes i to -1
-    
-    do                            // checks if jump piece
-    {
-        switchPiece(&e->peca);    // switches current piece to oponent one
-        update(e);                // updates current state
-        
-        if (++i)                  // checks if has been incremented more than once
-            return 1;             // returns error code
-    }
-    while (!e->nValidas);         // loops while there's no valid play
-    
-    return 0;                     // return no errors
-}
-
-//se no O ou no X ou no Vazia ou nao ha jogadas possiveis para ambos os jogadores
+// se no O ou no X ou no Vazia ou nao ha jogadas possiveis para ambos os jogadores
 int isGameOver(ESTADO e)
 {
-    int nValids = e.nValidas;        // initializes nValids to number of valid plays
+    int nValids = e.nValidas;    // initializes nValids to number of valid plays
     
-    update(&e);                      // updates state
+    switchPiece(&e.peca);        // switches current playing piece
+    update(&e);                  // updates state
     
-    nValids += e.nValidas;           // sums number of valid plays before and after update
+    nValids += e.nValidas;       // sums number of valid plays before and after update
     
-    if (nValids)                     // checks if there are valid plays for both pieces
-        return 0;                    // returns no errors
-
-    if (e.scoreX == e.scoreO)        // checks if score is tied
-        return 1;                    // puts "Draw" message in CLI
-    else if (e.scoreX > e.scoreO)    // checks if X has won
-        return 1;                    // puts "X Won" message in CLI
-    else                             // else O has won
-        return 1;                    // puts "O Won" message in CLI
-}
-
-// Checks if the position (l,c) is a valid play
-int isValid(int l, int c, ESTADO e)
-{
-    VALIDAS *valids = e.validas;                                // initializes valids to point to valid positions array
-    POSICAO *valid = &valids->valida;                           // initializes valid to point to first valid posiiton
-    
-    while (e.nValidas-- && (valid->l != l || valid->c != c))    // iterates over valid positions
-        valid = &(++valids)->valida;                            // increments valids pointer by one
-    
-    return valid->l == l && valid->c == c;                      // returns if (l,c) is a valid position
+    return !nValids;             //
 }
 
 // Actually updates game state
@@ -121,17 +101,17 @@ void update(ESTADO *e)
     for (int l = 0; l < DIM; l++)               // iterates over board lines
         for (int c = 0; c < DIM; c++)           // iterates over board columns
         {
-            scoreUpdate(e, l, c);               // updates the score
+            scoreUpdate(l, c, e);               // updates the score
             
             if (surround(l, c, e))              // checks if current position is a valid play
             {
-                helpUpdate(e, &nVirarHelp);     // updates suggested position
+                helpUpdate(&nVirarHelp, e);     // updates suggested position
                 e->nValidas++;                  // increments number of valid positions by one
             }
         }
 }
 
-//
+// Checks if a postion will surround enemy pieces
 int surround(int l, int c, ESTADO *e)
 {
     if (!cerca(l, c, e))                      // checks if current position is a valid play
@@ -192,7 +172,7 @@ int cercaDir (int l, int c, int i, int j, ESTADO *e)
 }
 
 // Updates the score
-void scoreUpdate(ESTADO *e, int l, int c)
+void scoreUpdate(int l, int c, ESTADO *e)
 {
     VALOR piece = e->grelha[l][c];    // initializes piece to current position value
 
@@ -201,7 +181,7 @@ void scoreUpdate(ESTADO *e, int l, int c)
 }
 
 // Updates the suggested position
-void helpUpdate(ESTADO *e, int *nVirarHelp)
+void helpUpdate(int *nVirarHelp, ESTADO *e)
 {
     VALIDAS *nReverse = &VALIDS(e, nVALID(e));    // initializes nReverse to number of reversable poriitons
     
@@ -225,16 +205,14 @@ void switchPiece(VALOR *piece)
 }
 
 // Desfaz uma jogada
-void popundo(ESTADO *e, LEST* s)
+void popundo(ESTADO *e, LEST* s) // DEFINIR MELHOR QUANTAS VEZES SE FAZ UNDO
 {
-    pop(s);                //
-    *e = (*s)->e;          //
+    pop(s);                // pops last state (first in stack)
     
-    if (e->modo == '1')    //
-    {
-        pop(s);            //
-        *e = (*s)->e;      //
-    }
+    if (e->modo == '1')    // if the game is in automatic mode
+        pop(s);            // pops last state (first in stack) again
+
+    *e = (*s)->e;          // sets state e to now last state
 }
 
 // Championship function
