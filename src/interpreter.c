@@ -1,6 +1,11 @@
 #include "estado.h"
 
-// Interpretes
+/**
+ * @brief 
+ *
+ * @param[in] e
+ * @param[in] s
+ */
 void interpreter(ESTADO e, LEST s)
 {
     int num;
@@ -24,7 +29,14 @@ void interpreter(ESTADO e, LEST s)
     }
 }
 
-// Bot's turn to play
+/**
+ * @brief Bot's turn to play
+ *
+ * @param[in,out] e
+ * @param[in,out] s
+ *
+ * @return 
+ */
 int botTurn(ESTADO *e, LEST *s)
 {
     fflush(stdout);               // flushes the output buffer before sleep() functions
@@ -44,7 +56,15 @@ int botTurn(ESTADO *e, LEST *s)
     }
 }
 
-// Player's turn to give command
+/**
+ * @brief Player's turn to give command
+ *
+ * @param[out] cli[DIM][MAX_STR]
+ * @param[in,out] e
+ * @param[in,out] s
+ *
+ * @return 
+ */
 int playerTurn(char cli[DIM][MAX_STR], ESTADO *e, LEST *s)
 {
     char input[INPUT];
@@ -59,7 +79,26 @@ int playerTurn(char cli[DIM][MAX_STR], ESTADO *e, LEST *s)
     return interpret(e, s, input);              // interpretes command and checks if an error code is returne
 }
 
-// Interpretes player command
+/**
+ * @brief Interpretes player command
+ *
+ * @param[in,out] e
+ * @param[int,out] s
+ * @param[in] input
+ *
+ * @return 
+ *
+ * @see new
+ * @see automatic
+ * @see load
+ * @see save
+ * @see play
+ * @see valid
+ * @see help
+ * @see undo
+ * @see championship
+ * @see quit
+ */
 int interpret(ESTADO *e, LEST *s, char *input)
 {
     char *cmd[MAX_STR];
@@ -102,30 +141,51 @@ int interpret(ESTADO *e, LEST *s, char *input)
     }
 }
 
-// Validates [N]ew commnad
+/**
+ * @brief Validates [N]ew commnad
+ *
+ * @param[in] i
+ * @param[in] cmd
+ * @param[in,out] e
+ * @param[in,out] s
+ *
+ * @return 
+ *
+ * @see start
+ */
 int new(int i, char *cmd, ESTADO *e, LEST *s)
 {
-    if (i < 2)                     // checks if there are too few arguments
-        return 3;                  // returns error code
-    if (i > 2)                     // checks if there are too many arguments
-        return 4;                  // returns error code
+    if (i < 2)                       // checks if there are too few arguments
+        return 3;                    // returns error code
+    if (i > 2)                       // checks if there are too many arguments
+        return 4;                    // returns error code
     
     VALOR piece;
     
-    if (!strcmp(cmd, "X"))         // checks if first argument is valid
-        piece = VALOR_X;           // initializes piece to X (VALOR_X)
-    else if (!strcmp(cmd, "O"))    // checks if second argument is valid
-        piece = VALOR_O;           // initializes piece to O (VALOR_O)
-    else                           // else (if first argument is invalid)
-        return 5;                  // returns error code
+    if (!strcmp(cmd, "X"))           // checks if first argument is valid
+        piece = VALOR_X;             // initializes piece to X (VALOR_X)
+    else if (!strcmp(cmd, "O"))      // checks if second argument is valid
+        piece = VALOR_O;             // initializes piece to O (VALOR_O)
+    else                             // else (if first argument is invalid)
+        return 5;                    // returns error code
     
-    start('0', piece, ' ', e, s);
-    //manual(piece, e, s);           //
+    start('0', piece, ' ', e, s);    //
 
-    return 0;                      // returns error code
+    return 0;                        // returns error code
 }
 
-// Validates [A]utomatic commnad
+/**
+ * @brief Validates [A]utomatic commnad
+ *
+ * @param[in] i
+ * @param[in] cmd[MAX_STR]
+ * @param[in,out] e
+ * @param[in,out] s
+ *
+ * @return 
+ *
+ * @see start
+ */
 int automatic(int i, char *cmd[MAX_STR], ESTADO *e, LEST *s)
 {
     if (i < 3)                        // checks if there are too few arguments
@@ -153,12 +213,22 @@ int automatic(int i, char *cmd[MAX_STR], ESTADO *e, LEST *s)
         return 6;                     // returns error code
     
     start('1', piece, lvl, e, s);
-    //autoVSbot(piece, lvl, e, s);      //
     
     return 0;                         //
 }
 
-// Validates [L]oad commnad
+/**
+ * @brief Validates [L]oad commnad
+ *
+ * @param[in] i
+ * @param[in] cmd
+ * @param[in,out] e
+ * @param[in,out] s
+ *
+ * @return 
+ *
+ * @see readFile
+ */
 int load(int i, char *cmd, ESTADO *e, LEST *s)
 {
     if (i < 2)                     // checks if there are too few arguments
@@ -169,7 +239,18 @@ int load(int i, char *cmd, ESTADO *e, LEST *s)
     return readFile(e, cmd, s);    //
 }
 
-// Validates [E]ngrave commnad
+/**
+ * @brief Validates [E]ngrave commnad
+ *
+ * @param[in] i
+ * @param[in] cmd
+ * @param[in,out] e
+ * @param[in,out] s
+ *
+ * @return 
+ *
+ * @see saveState
+ */
 int save(int i, char *cmd, ESTADO e, LEST *s)
 {
     if (e.modo == HELP)    // checks if the game has started
@@ -184,7 +265,18 @@ int save(int i, char *cmd, ESTADO e, LEST *s)
     return 0;              //
 }
 
-// Validates [J]est commnad
+/**
+ * @brief Validates [J]est commnad
+ *
+ * @param[in] i
+ * @param[in] cmd[MAX_STR]
+ * @param[in,out] e
+ * @param[in,out] s
+ *
+ * @return 
+ *
+ * @see doPlay
+ */
 int play(int i, char *cmd[MAX_STR], ESTADO *e, LEST *s)
 {
     if (e->modo == HELP)          // checks if the game has started
@@ -216,7 +308,14 @@ int play(int i, char *cmd[MAX_STR], ESTADO *e, LEST *s)
     return doPlay(play, e, s);    //
 }
 
-// Validates [S]how commnad
+/**
+ * @brief Validates [S]how commnad
+ *
+ * @param[in] i
+ * @param[in,out] e
+ *
+ * @return 
+ */
 int valid(int i, ESTADO *e)
 {
     if (e->modo == HELP)    // checks if the game has started
@@ -231,7 +330,14 @@ int valid(int i, ESTADO *e)
     return 0;               //
 }
 
-// Validates [H]elp commnad
+/**
+ * @brief Validates [H]elp commnad
+ *
+ * @param[in] i
+ * @param[in,out] e
+ *
+ * @return 
+ */
 int help(int i, ESTADO *e)
 {
     if (e->modo == HELP)    // checks if the game has started
@@ -246,7 +352,17 @@ int help(int i, ESTADO *e)
     return 0;               //
 }
 
-// Validates [U]ndo commnad
+/**
+ * @brief Validates [U]ndo commnad
+ *
+ * @param[in] i
+ * @param[in,out] e
+ * @param[in,out] s
+ *
+ * @return 
+ *
+ * @see popundo
+ */
 int undo(int i, ESTADO *e, LEST *s)
 {
     if (e->modo == HELP)    // checks if the game has started
@@ -261,7 +377,13 @@ int undo(int i, ESTADO *e, LEST *s)
     return 0;               //
 }
 
-// Validates [Q]uit commnad
+/**
+ * @brief Validates [Q]uit commnad
+ *
+ * @param[in] i
+ *
+ * @return 
+ */
 int quit(int i)
 {
     if (i > 1)       // checks if there are too many arguments
@@ -271,7 +393,16 @@ int quit(int i)
     exit(0);         //
 }
 
-// Validates [C]hampionship commnad
+/**
+ * @brief Validates [C]hampionship commnad
+ *
+ * @param[in] i
+ * @param[in] cmd
+ *
+ * @return 
+ *
+ * @see playBot
+ */
 int championship(int i, char *cmd)
 {
     if (i < 2)              // checks if there are too few arguments
@@ -282,7 +413,14 @@ int championship(int i, char *cmd)
     return playBot(cmd);    //
 }
 
-//
+/**
+ * @brief Handles erro codes
+ *
+ * @param num
+ * @param cli[CLI][MAX_STR]
+ *
+ * @see updateCLI
+ */
 void errorHandling(int num, char cli[CLI][MAX_STR])
 {
     updateCLI(cli);                                                    // updates CLI
@@ -334,7 +472,11 @@ void errorHandling(int num, char cli[CLI][MAX_STR])
     }
 }
 
-// 
+/**
+ * @brief Updates CLI
+ *
+ * @param cli[DIM][MAX_STR]
+ */
 void updateCLI(char cli[DIM][MAX_STR]/*, int n*/)
 {
     //for (; n_times > 0; n_times--)     // iterates over n times

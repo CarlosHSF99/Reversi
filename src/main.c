@@ -1,5 +1,10 @@
 #include "estado.h"
 
+/**
+ * @brief 
+ *
+ * @return 
+ */
 int main()
 {
     LEST* ss = NULL;                               //

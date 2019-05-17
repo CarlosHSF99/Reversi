@@ -1,6 +1,15 @@
 #include "estado.h"
 
-// Prints current state (mode, palyer, score, board and CLI)
+/**
+ * @brief Prints current state (mode, palyer, score, board and CLI)
+ *
+ * @param[in] e State beeing printed
+ * @param[in] cli[DIM][MAX_STR] CLI beeing printed
+ *
+ * @see printFirstLine
+ * @see showValid
+ * @see shoeHelp
+ */
 void printInterface(ESTADO e, char cli[DIM][MAX_STR])
 {
     CLEAR;                                      // clears screen
@@ -45,20 +54,25 @@ void printInterface(ESTADO e, char cli[DIM][MAX_STR])
     printf("  0 1 2 3 4 5 6 7 ┊ reversi> ");    // prints columns indexes and prompt line (last line)
 }
 
-// Prints first line
+/**
+ * @brief Prints first line
+ *
+ * @param[in] e State from where first line is beeing printed
+ */
 void printFirstLine (ESTADO e)
 {
-    printf("  ");                                                     // prints blanck spaces for alignment
-    putchar(e.modo == HELP ? '?' : e.modo == '0' ? 'M' : 'A');        // prints current game mode
-    putchar(' ');                                                     // prints blanck spaces for alignment
-    putchar(e.peca == HELP ? '?' : e.peca == VALOR_X ? 'X' : 'O');    // prints piece of current player
-    putchar(' ');
-    putchar(e.botLVL == '1' ? '1' : e.botLVL == '2' ? '2' : e.botLVL == '3' ? '3' : ' ');
-    printf(" X:%02d O:%02d", e.scoreX, e.scoreO);                   // prints game score
-    printf(" ┊ CLI\n");                                               // prints "CLI" title
+    printf("  %c ", e.modo == HELP ? '?' : e.modo == '0' ? 'M' : 'A');      // prints game mode
+    printf("%c ", e.peca == HELP ? '?' : e.peca == VALOR_X ? 'X' : 'O');    // prints piece of current player
+    printf("%c ", e.botLVL);                                                // prints bot level
+    printf("X:%02d O:%02d", e.scoreX, e.scoreO);                            // prints game score
+    printf(" ┊ CLI\n");                                                     // prints "CLI" title
 }
 
-// Cheks if valid positions are to be shown and adds them to the board
+/**
+ * @brief Cheks if valid positions are to be shown and adds them to the board
+ *
+ * @param[in] e State from where valid positions might be printed
+ */
 void showValid(ESTADO *e)
 {
     POSICAO valida;
@@ -69,25 +83,19 @@ void showValid(ESTADO *e)
             valida = e->validas[i].valida;             // sets valida to current valid position
             e->grelha[valida.l][valida.c] = VALIDA;    // changes current position do VALID (.)
         }
+    
+    e->showValid = 0;                                  // resets showValid print modifier to 0
 }
 
-// Cheks if "help" position is to be shown and adds it to the board
+/**
+ * @brief Cheks if "help" position is to be shown and adds it to the board
+ *
+ * @param[in] e State from where help position might be printed
+ */
 void showHelp(ESTADO *e)
 {
     if (e->showHelp)                               // checks if the "help" position is to be shown
         e->grelha[e->help.l][e->help.c] = HELP;    // changes "help" position to HELP (?)
-}
-
-    /*
-    puts("");
     
-    for (int i = 0; i < e.nValidas; i++)
-    {
-        printf("Valida: (%d , %d)\n", e.validas[i].valida.l, e.validas[i].valida.c);
-        
-        for (int j = 0; j < e.validas[i].nVirar; j++)
-            printf("\t(%d , %d)\n", e.validas[i].virar[j].l, e.validas[i].virar->c);
-        
-        puts("");
-    }
-    */
+    e->showHelp = 0;                               // resets showHelp print modifier to 0
+}

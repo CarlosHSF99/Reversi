@@ -1,6 +1,11 @@
 #include "estado.h"
 
 //
+/**
+ * @brief 
+ *
+ * @param s
+ */
 void freeStack(LEST *s)
 {
     LEST temp = *s;         //
@@ -14,6 +19,11 @@ void freeStack(LEST *s)
 }
 
 //
+/**
+ * @brief 
+ *
+ * @param s
+ */
 void newGame(LEST *s)
 {
     LEST temp = (*s);       //
@@ -27,6 +37,12 @@ void newGame(LEST *s)
 }
 
 //
+/**
+ * @brief 
+ *
+ * @param e
+ * @param s
+ */
 void push(ESTADO e, LEST *s)
 {
     LEST new_s = malloc(sizeof(struct history));    //
@@ -36,6 +52,11 @@ void push(ESTADO e, LEST *s)
 }
 
 //
+/**
+ * @brief 
+ *
+ * @param s
+ */
 void pop(LEST *s)
 {
     LEST temp = (*s);                 //
@@ -49,7 +70,13 @@ void pop(LEST *s)
     }
 }
 
-void altPush(ESTADO e,LEST* s)  
+/**
+ * @brief 
+ *
+ * @param e
+ * @param s
+ */
+void altPush(ESTADO e,LEST* s)
 {  
     if(!s)
         s = malloc(sizeof(struct history));

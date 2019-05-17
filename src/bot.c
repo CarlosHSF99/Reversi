@@ -22,6 +22,8 @@ int bot3(ESTADO *e, LEST* s)
     play.l = 0;
     play.c = 0;
     
+    puts("");
+    
     //miniMax(*e, 7, 1, &play);
     negaMax(*e, 7, 1, &play);
     //mm = negaMax2(*e, 3, 1);
@@ -62,10 +64,7 @@ int miniMax(ESTADO father, int depth, int minmax, POSICAO *play)
                 maxEval = eval;
                 
                 if (depth == 7)
-                {
-                    play->l = valid->l;
-                    play->c = valid->c;
-                }
+                    *play = *valid;
             }
         }
         
@@ -88,10 +87,7 @@ int miniMax(ESTADO father, int depth, int minmax, POSICAO *play)
                 minEval = eval;
                 
                 if (depth == 7)
-                {
-                    play->l = valid->l;
-                    play->c = valid->c;
-                }
+                    *play = *valid;
             }
         }
         
@@ -134,10 +130,49 @@ int negaMax(ESTADO father, int depth, int player, POSICAO *play)
             value = newValue;
             
             if (depth == 7)
-            {
-                play->l = valid->l;
-                play->c = valid->c;
-            }
+                *play = *valid;
+        }
+    }
+    
+    return value;
+}
+
+int negaScout(ESTADO father, int depth, int A, int B, int player, POSICAO *play)
+{
+    if (!depth || isGameOver(father))
+    {
+        if (isGameOver(father))
+        {
+            if (father.bot == VALOR_X ? father.scoreX > father.scoreO : father.scoreX < father.scoreO)
+                return (int)INFINITY;
+            else if (father.bot == VALOR_X ? father.scoreX < father.scoreO : father.scoreX > father.scoreO)
+                return (int)-INFINITY;
+            else
+                return 0;
+        }
+        
+        return player * (father.bot == VALOR_X ? father.scoreX - father.scoreO : father.scoreO - father.scoreX);
+    }
+    
+    VALIDAS *valids = father.validas;
+    POSICAO *valid = &valids->valida;
+    int nValids = father.nValidas;
+    double value = -INFINITY;
+    
+    for (; nValids--; valid = &(++valids)->valida)
+    {
+        ESTADO child = father;
+        reverse(valids, &child);
+        switchPiece(&child.peca);
+        update(&child);
+        int newValue = -negaMax(child, depth - 1, -player, play);
+        
+        if (newValue > value)
+        {
+            value = newValue;
+            
+            if (depth == 7)
+                *play = *valid;
         }
     }
     
@@ -171,10 +206,7 @@ int miniMaxAB(ESTADO father, int depth, int A, int B, int minmax, POSICAO *play)
                 maxEval = eval;
                 
                 if (depth == 7)
-                {
-                    play->l = valid->l;
-                    play->c = valid->c;
-                }
+                    *play = *valid;
             }
             
             A = A > maxEval ? A : maxEval;
@@ -202,10 +234,7 @@ int miniMaxAB(ESTADO father, int depth, int A, int B, int minmax, POSICAO *play)
                 minEval = eval;
                 
                 if (depth == 7)
-                {
-                    play->l = valid->l;
-                    play->c = valid->c;
-                }
+                    *play = *valid;
             }
             
             B = B > minEval ? B : minEval;

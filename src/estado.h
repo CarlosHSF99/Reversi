@@ -105,8 +105,6 @@ int quit(int i);
 
 //estado.c
 void start(char mode, VALOR piece, char lvl, ESTADO *e, LEST *s);
-void manual(VALOR piece, ESTADO *e, LEST *s);
-void autoVSbot(VALOR piece, char lvl, ESTADO *e, LEST *s);
 
 int readFile(ESTADO *e, char *file_name, LEST *s);
 void saveState(char *filename, LEST s);
@@ -149,6 +147,7 @@ int bot1(ESTADO *e, LEST *s);
 int bot2(ESTADO *e, LEST *s);
 int bot3(ESTADO *e, LEST *s);
 int miniMax(ESTADO father, int depth, int minmax, POSICAO *play);
+int negaScout(ESTADO father, int depth, int A, int B, int player, POSICAO *play);
 int negaMax(ESTADO father, int depth, int player, POSICAO *play);
 int miniMaxAB(ESTADO father, int depth, int A, int B, int minmax, POSICAO *play);
 MINIMAX negaMax2(ESTADO father, int depth, int player);

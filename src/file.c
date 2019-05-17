@@ -1,5 +1,14 @@
 #include "estado.h"
 
+/**
+ * @brief 
+ *
+ * @param e
+ * @param file_name
+ * @param s
+ *
+ * @return 
+ */
 int readFile(ESTADO *e, char *file_name, LEST* s)
 {
     FILE *file;
@@ -44,6 +53,12 @@ int readFile(ESTADO *e, char *file_name, LEST* s)
 }
 
 //
+/**
+ * @brief 
+ *
+ * @param file
+ * @param s
+ */
 void saveState(char* file, LEST s)
 {
     FILE *fp;
@@ -86,6 +101,12 @@ void saveState(char* file, LEST s)
     fclose(fp);                                     // closes file
 }
 
+/**
+ * @brief 
+ *
+ * @param fp
+ * @param s
+ */
 void saveFirstLine(FILE **fp, LEST s)
 {
     fprintf(*fp, "%c ", s->e.modo == '0' ? 'M' : 'A');        // prints game mode in file
