@@ -27,7 +27,7 @@ Definição do estado i.e. tabuleiro. Representação matricial do tabuleiro.
 */
 
 // definição de valores possiveis no tabuleiro
-typedef enum {VAZIA, VALOR_X, VALOR_O, VALIDA, HELP} VALOR;
+typedef enum {VAZIA, VALOR_X, VALOR_O, VALIDA, HELP,ERROR} VALOR;
 
 // posicao
 typedef struct posicao {

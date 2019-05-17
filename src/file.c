@@ -12,43 +12,54 @@
 int readFile(ESTADO *e, char *file_name, LEST* s)
 {
     FILE *file;
-    char file_txt[MAX_STR], ch;
-    int peca;
-    
+    char file_txt[MAX_STR], ch;//*teste="teste";
+
     sprintf(file_txt, "../saves/%s.txt", file_name);
     
     file = fopen(file_txt, "r");
     
-    freeStack(s);
-
     if (file == NULL)
         return 7;
+
+    freeStack(s);
     
-    fseek(file, 0, SEEK_END);
+    //if(*s==NULL)
+      //  printf("stackfreed");
     
     while(fgetc(file) != EOF)
     {
-        ch = fgetc(file);
-        e->modo = (ch == 'M' ? '0' : ch == 'A' ? '1' : HELP);
         fseek(file, -1, SEEK_CUR);
+
+        ch = fgetc(file);
+        //printf("%c",ch);
+        e->modo = (ch == 'M' ? '0' : ch == 'A' ? '1' : ch == '?' ? HELP: ERROR);
+        fseek(file, 1, SEEK_CUR);
+        
+        ch = fgetc(file);
+        //printf("%c",ch);
+        e->peca= (ch == 'X' ? VALOR_X : ch == 'O'? VALOR_O: ch == '?' ? HELP: ERROR);
+        fseek(file, 1, SEEK_CUR);
         
         ch=fgetc(file);
-        e->peca= (ch == 'X' ? VALOR_X : ch == 'O'? VALOR_O: HELP);
-        fseek(file, -1, SEEK_CUR);
+        e->botLVL = (ch == ' ' ? 1 : ch);
+        fseek(file, 1, SEEK_CUR);
         
         for(int l = 0; l < DIM; l++)
             for(int c = 0; c < DIM; c++)
             {
-                e->grelha[l][c] = (peca = fgetc(file)) == '-' ? VAZIA : peca == 'X' ? VALOR_X : VALOR_O;
-                fseek(file, -1, SEEK_CUR);
+                ch=fgetc(file);
+                e->grelha[l][c] = ch == '-' ? VAZIA : ch == 'X' ? VALOR_X : ch == 'O' ? VALOR_O : ERROR;
+                fseek(file, 1, SEEK_CUR);
             }
+        fseek(file, 1, SEEK_CUR);
         
         update(e);
         altPush(*e, s);
+       // saveState(teste,*s);
+        *e=(*s)->e;
     }
     
     fclose(file);
-    
     return 0;
 }
 

@@ -8,13 +8,14 @@
  */
 void freeStack(LEST *s)
 {
-    LEST temp = *s;         //
+    LEST* temp = s;         //
     
     while (*s)              //
     {
-        temp = (*s);        //
+        *temp = (*s);        //
         *s = (*s)->next;    //
-        free(temp);         //
+        free(*temp);         //
+        *temp=NULL;
     }
 }
 
@@ -78,14 +79,19 @@ void pop(LEST *s)
  */
 void altPush(ESTADO e,LEST* s)
 {  
-    if(!s)
-        s = malloc(sizeof(struct history));
-    /*
-    else
-    LEST new_s = malloc(sizeof(struct history));
-    new_s->e = e;
-    new_s->next = NULL;
-    (*s)->next = new_s;
-    *s = new_s;
-    */
+    if((*s)==NULL){
+        *s = malloc(sizeof(struct history));
+        (*s)->e=e;
+        (*s)->next=NULL;
+    }
+    else{
+        LEST new_s = malloc(sizeof(struct history));
+        new_s->e = e;
+        new_s->next = NULL;
+        
+        while((*s)->next!=NULL)
+            s=&((*s)->next);
+
+        (*s)->next = new_s;
+    }
 }
