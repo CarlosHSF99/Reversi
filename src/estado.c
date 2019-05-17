@@ -1,25 +1,38 @@
 #include "estado.h"
 
 //
-int doPlay(int l, int c, ESTADO *e, LEST *s)
+int doPlay(POSICAO play, ESTADO *e, LEST *s)
 {
     int num;
     VALIDAS *valided;
     
-    if (!(valided = isValidPtr(l, c, *e)))    // cheks if play is valid and receives pointer to valid position
-        return 8;                             // returns error
+    if (!(valided = isValid(play, *e)))    // cheks if play is valid and receives pointer to valid position
+        return 8;                          // returns error
     
-    reversePtr(valided, e);                   // reverses reversable positions
+    reverse(valided, e);                   // reverses reversable positions
     
-    num = nextState(e);                       // updates state
+    num = nextState(e);                    // updates state
     
-    push(*e, s);                              // pushes new state to history stack
+    push(*e, s);                           // pushes new state to history stack
     
-    return num;                               //
+    return num;
+}
+
+// Checks if the position (l,c) is a valid play
+VALIDAS *isValid(POSICAO play, ESTADO e)
+{
+    VALIDAS *valids = e.validas;                             // initializes valids to point to valid positions array
+    POSICAO *valid = &valids->valida;                        // initializes valid to point to first valid posiiton
+    int nValids = e.nValidas;                                // initializes nValids to number of valid plays
+    
+    while (--nValids && !compPosition(play, *valid))//(valid->l != l || valid->c != c))    // iterates over valid positions
+        valid = &(++valids)->valida;                         // increments valids pointer by one
+    
+    return compPosition(play, *valid) ? valids : NULL;       // returns if (l,c) is a valid position
 }
 
 // Executa uma jogada
-void reversePtr(VALIDAS *valids, ESTADO *e)
+void reverse(VALIDAS *valids, ESTADO *e)
 {
     POSICAO *valid = &valids->valida;                   // initializes valid to point to first valid position
     
@@ -30,6 +43,12 @@ void reversePtr(VALIDAS *valids, ESTADO *e)
     
     for (; nReverse--; ++reverse)                       // iterates over reversable positions
         e->grelha[reverse->l][reverse->c] = e->peca;    // reverses reversable positions
+}
+
+// Compares two positions
+int compPosition(POSICAO a, POSICAO b)
+{
+    return a.l == b.l && a.c == b.c;
 }
 
 // Updates game to the next state
@@ -72,19 +91,6 @@ int isGameOver(ESTADO e)
     return !nValids;             //
 }
 
-// Checks if the position (l,c) is a valid play
-VALIDAS *isValidPtr(int l, int c, ESTADO e)
-{
-    VALIDAS *valids = e.validas;                              // initializes valids to point to valid positions array
-    POSICAO *valid = &valids->valida;                         // initializes valid to point to first valid posiiton
-    int nValids = e.nValidas;                                 // initializes nValids to number of valid plays
-    
-    while (--nValids && (valid->l != l || valid->c != c))     // iterates over valid positions
-        valid = &(++valids)->valida;                          // increments valids pointer by one
-    
-    return valid->l == l && valid->c == c ? valids : NULL;    // returns if (l,c) is a valid position
-}
-
 // Actually updates game state
 void update(ESTADO *e)
 {
@@ -95,17 +101,17 @@ void update(ESTADO *e)
     for (int l = 0; l < DIM; l++)               // iterates over board lines
         for (int c = 0; c < DIM; c++)           // iterates over board columns
         {
-            scoreUpdate(e, l, c);               // updates the score
+            scoreUpdate(l, c, e);               // updates the score
             
             if (surround(l, c, e))              // checks if current position is a valid play
             {
-                helpUpdate(e, &nVirarHelp);     // updates suggested position
+                helpUpdate(&nVirarHelp, e);     // updates suggested position
                 e->nValidas++;                  // increments number of valid positions by one
             }
         }
 }
 
-//
+// Checks if a postion will surround enemy pieces
 int surround(int l, int c, ESTADO *e)
 {
     if (!cerca(l, c, e))                      // checks if current position is a valid play
@@ -166,7 +172,7 @@ int cercaDir (int l, int c, int i, int j, ESTADO *e)
 }
 
 // Updates the score
-void scoreUpdate(ESTADO *e, int l, int c)
+void scoreUpdate(int l, int c, ESTADO *e)
 {
     VALOR piece = e->grelha[l][c];    // initializes piece to current position value
 
@@ -175,7 +181,7 @@ void scoreUpdate(ESTADO *e, int l, int c)
 }
 
 // Updates the suggested position
-void helpUpdate(ESTADO *e, int *nVirarHelp)
+void helpUpdate(int *nVirarHelp, ESTADO *e)
 {
     VALIDAS *nReverse = &VALIDS(e, nVALID(e));    // initializes nReverse to number of reversable poriitons
     

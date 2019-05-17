@@ -14,9 +14,6 @@ void interpreter(ESTADO e, LEST s)
         printInterface(e, cli);                                // prints state and CLI
         e.showValid = e.showHelp = 0;                          // resets showValid and showHelp print modifiers to 0
         
-        //puts("CHECK\n");
-        //getchar();
-        
         if (e.modo == '1' && e.peca == e.bot && e.nValidas)    // checks if it's a bot turn
             num = botTurn(&e, &s);                             // bot playes and returns error code
         else                                                   // else it is a player turn
@@ -188,31 +185,33 @@ int save(int i, char *cmd, ESTADO e, LEST *s)
 // Validates [J]est commnad
 int play(int i, char *cmd[MAX_STR], ESTADO *e, LEST *s)
 {
-    if (e->modo == HELP)         // checks if the game has started
-        return 2;                // returns error code
-    if (!e->nValidas)            // checks if the game has ended
-        return 13;               // returns error code
-    if (i < 3)                   // checks if there are too few arguments
-        return 3;                // returns error code
-    if (i > 3)                   // checks if there are too many arguments
-        return 4;                // returns error code
-    if (strlen(cmd[1]) > 1)      // checks if first argument is too long
-        return 5;                // returns error code
-    if (strlen(cmd[2]) > 1)      // checks if second argument is too long
-        return 6;                // returns error code
-    if (!isdigit(cmd[1][0]))     // checks if first argument isn't a digit
-        return 5;                // returns error code
-    if (!isdigit(cmd[2][0]))     // checks if second argument isn't a digit
-        return 6;                // returns error code
-    if (cmd[1][0] > '7')         // checks if fisrt argument is bigger than 7
-        return 5;                // returns error code
-    if (cmd[1][1] > '7')         // checks if second argument is bigger than 7
-        return 6;                // returns error code
+    if (e->modo == HELP)          // checks if the game has started
+        return 2;                 // returns error code
+    if (!e->nValidas)             // checks if the game has ended
+        return 13;                // returns error code
+    if (i < 3)                    // checks if there are too few arguments
+        return 3;                 // returns error code
+    if (i > 3)                    // checks if there are too many arguments
+        return 4;                 // returns error code
+    if (strlen(cmd[1]) > 1)       // checks if first argument is too long
+        return 5;                 // returns error code
+    if (strlen(cmd[2]) > 1)       // checks if second argument is too long
+        return 6;                 // returns error code
+    if (!isdigit(cmd[1][0]))      // checks if first argument isn't a digit
+        return 5;                 // returns error code
+    if (!isdigit(cmd[2][0]))      // checks if second argument isn't a digit
+        return 6;                 // returns error code
+    if (cmd[1][0] > '7')          // checks if fisrt argument is bigger than 7
+        return 5;                 // returns error code
+    if (cmd[1][1] > '7')          // checks if second argument is bigger than 7
+        return 6;                 // returns error code
     
-    int l = cmd[1][0] - '0';     // initializes l to the first argument
-    int c = cmd[2][0] - '0';     // initializes c to the second argument
+    POSICAO play;
     
-    return doPlay(l, c, e, s);   //
+    play.l = cmd[1][0] - '0';     // initializes l to the first argument
+    play.c = cmd[2][0] - '0';     // initializes c to the second argument
+    
+    return doPlay(play, e, s);    //
 }
 
 // Validates [S]how commnad

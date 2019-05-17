@@ -111,13 +111,12 @@ int readFile(ESTADO *e, char *file_name, LEST *s);
 void saveState(char *filename, LEST s);
 void saveFirstLine(FILE **fp, LEST s);
 
-int doPlay(int l, int c, ESTADO *e, LEST *s);
-void reverse(int l, int c, ESTADO *e);
-void reversePtr(VALIDAS *valided, ESTADO *e);
+int doPlay(POSICAO play, ESTADO *e, LEST *s);
+void reverse(VALIDAS *valided, ESTADO *e);
 
-void scoreUpdate(ESTADO *e, int l, int c);
+void scoreUpdate(int l, int c, ESTADO *e);
 int surround(int l, int c, ESTADO *e);
-void helpUpdate(ESTADO *e, int *nVirarHelp);
+void helpUpdate(int *nVirarHelp, ESTADO *e);
 
 int nextState(ESTADO *e);
 int stateUpdate(ESTADO *e);
@@ -133,8 +132,8 @@ int playBot(char *file);
 
 void printInterface(ESTADO e, char lines[DIM][MAX_STR]);
 
-int isValid(int l, int c, ESTADO e);
-VALIDAS *isValidPtr(int l, int c, ESTADO e);
+VALIDAS *isValid(POSICAO play, ESTADO e);
+int compPosition(POSICAO a, POSICAO b);
 
 int inBoard(int l, int c);
 void switchPiece(VALOR *piece);

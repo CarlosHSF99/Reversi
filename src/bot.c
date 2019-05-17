@@ -2,16 +2,20 @@
 
 int bot1(ESTADO *e, LEST *s)
 {
-    int randomi = rand() % e->nValidas;
-    int l = e->validas[randomi].valida.l;
-    int c = e->validas[randomi].valida.c;
+    int random = rand() % e->nValidas;
     
-    return doPlay(l, c, e, s);
+    POSICAO play = e->validas[random].valida;
+    
+    //int l = e->validas[randomi].valida.l;
+    //int c = e->validas[randomi].valida.c;
+    
+    return doPlay(play, e, s);
 }
 
 int bot2(ESTADO *e, LEST* s)
 {
-    return doPlay(e->help.l, e->help.c, e, s);
+    //return doPlay(e->help.l, e->help.c, e, s);
+    return doPlay(e->help, e, s);
 }
 
 int bot3(ESTADO *e, LEST* s)
@@ -30,7 +34,8 @@ int bot3(ESTADO *e, LEST* s)
     //printf("(%d,%d)\n", play.l, play.c);
     //printf("(%d,%d)\n", mm.play.l, mm.play.c);
     
-    return doPlay(play.l, play.c, e, s);
+    //return doPlay(play.l, play.c, e, s);
+    return doPlay(play, e, s);
     //return doPlay(mm.play.l, mm.play.c, e, s);
 }
 
@@ -52,7 +57,7 @@ int miniMax(ESTADO father, int depth, int minmax, POSICAO *play)
         for (; nValids--; valid = &(++valids)->valida)
         {
             ESTADO child = father;
-            reversePtr(valids, &child);
+            reverse(valids, &child);
             switchPiece(&child.peca);
             update(&child);
             int eval = miniMax(child, depth - 1, 1/*!minmax*/, play);
@@ -78,7 +83,7 @@ int miniMax(ESTADO father, int depth, int minmax, POSICAO *play)
         for (; nValids--; valid = &(++valids)->valida)
         {
             ESTADO child = father;
-            reversePtr(valids, &child);
+            reverse(valids, &child);
             switchPiece(&child.peca);
             update(&child);
             int eval = miniMax(child, depth - 1, 0/*!minmax*/, play);
@@ -124,7 +129,7 @@ int negaMax(ESTADO father, int depth, int player, POSICAO *play)
     for (; nValids--; valid = &(++valids)->valida)
     {
         ESTADO child = father;
-        reversePtr(valids, &child);
+        reverse(valids, &child);
         switchPiece(&child.peca);
         update(&child);
         int newValue = -negaMax(child, depth - 1, -player, play);
@@ -161,7 +166,7 @@ int miniMaxAB(ESTADO father, int depth, int A, int B, int minmax, POSICAO *play)
         for (; nValids--; valid = &(++valids)->valida)
         {
             ESTADO child = father;
-            reversePtr(valids, &child);
+            reverse(valids, &child);
             switchPiece(&child.peca);
             update(&child);
             int eval = miniMax(child, depth - 1, 1, play);
@@ -192,7 +197,7 @@ int miniMaxAB(ESTADO father, int depth, int A, int B, int minmax, POSICAO *play)
         for (; nValids--; valid = &(++valids)->valida)
         {
             ESTADO child = father;
-            reversePtr(valids, &child);
+            reverse(valids, &child);
             switchPiece(&child.peca);
             update(&child);
             int eval = miniMax(child, depth - 1, 0, play);
@@ -256,7 +261,7 @@ MINIMAX negaMax2(ESTADO father, int depth, int player)
     for (; nValids--; valid = &(++valids)->valida)
     {
         ESTADO child = father;
-        reversePtr(valids, &child);
+        reverse(valids, &child);
         switchPiece(&child.peca);
         update(&child);
         int newValue = -negaMax2(child, depth - 1, -player).score;
