@@ -64,7 +64,7 @@ typedef struct history {
 #define MODO(e)         e->modo         //
 #define PIECE(e)        e->peca         //
 #define BOARD(l,c)      e->grelha[l][c] //
-#define VALIDS(e, i)    e->validas[i]      //
+#define VALIDS(e, i)    e->validas[i]   //
 #define nVALID(e)       e->nValidas     //
 #define HELPP(e)        e->help         //
 #define SCOREX(e)       e->NX           //
@@ -104,7 +104,8 @@ int championship(int i, char *cmd);
 int quit(int i);
 
 //estado.c
-void manual(ESTADO *e, VALOR n, LEST *s);
+void start(char mode, VALOR piece, char lvl, ESTADO *e, LEST *s);
+void manual(VALOR piece, ESTADO *e, LEST *s);
 void autoVSbot(VALOR piece, char lvl, ESTADO *e, LEST *s);
 
 int readFile(ESTADO *e, char *file_name, LEST *s);

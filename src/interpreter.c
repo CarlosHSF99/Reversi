@@ -119,7 +119,8 @@ int new(int i, char *cmd, ESTADO *e, LEST *s)
     else                           // else (if first argument is invalid)
         return 5;                  // returns error code
     
-    manual(e, piece, s);           //
+    start('0', piece, ' ', e, s);
+    //manual(piece, e, s);           //
 
     return 0;                      // returns error code
 }
@@ -151,7 +152,8 @@ int automatic(int i, char *cmd[MAX_STR], ESTADO *e, LEST *s)
     if (!(lvl - '0') || lvl > '3')    // checks if lvl is between 1 and 3 inclusive
         return 6;                     // returns error code
     
-    autoVSbot(piece, lvl, e, s);      //
+    start('1', piece, lvl, e, s);
+    //autoVSbot(piece, lvl, e, s);      //
     
     return 0;                         //
 }

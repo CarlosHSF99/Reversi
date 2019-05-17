@@ -6,15 +6,11 @@ int bot1(ESTADO *e, LEST *s)
     
     POSICAO play = e->validas[random].valida;
     
-    //int l = e->validas[randomi].valida.l;
-    //int c = e->validas[randomi].valida.c;
-    
     return doPlay(play, e, s);
 }
 
 int bot2(ESTADO *e, LEST* s)
 {
-    //return doPlay(e->help.l, e->help.c, e, s);
     return doPlay(e->help, e, s);
 }
 
@@ -34,7 +30,6 @@ int bot3(ESTADO *e, LEST* s)
     //printf("(%d,%d)\n", play.l, play.c);
     //printf("(%d,%d)\n", mm.play.l, mm.play.c);
     
-    //return doPlay(play.l, play.c, e, s);
     return doPlay(play, e, s);
     //return doPlay(mm.play.l, mm.play.c, e, s);
 }

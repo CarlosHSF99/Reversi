@@ -21,14 +21,14 @@ int doPlay(POSICAO play, ESTADO *e, LEST *s)
 // Checks if the position (l,c) is a valid play
 VALIDAS *isValid(POSICAO play, ESTADO e)
 {
-    VALIDAS *valids = e.validas;                             // initializes valids to point to valid positions array
-    POSICAO *valid = &valids->valida;                        // initializes valid to point to first valid posiiton
-    int nValids = e.nValidas;                                // initializes nValids to number of valid plays
+    VALIDAS *valids = e.validas;                          // initializes valids to point to valid positions array
+    POSICAO *valid = &valids->valida;                     // initializes valid to point to first valid posiiton
+    int nValids = e.nValidas;                             // initializes nValids to number of valid plays
     
-    while (--nValids && !compPosition(play, *valid))//(valid->l != l || valid->c != c))    // iterates over valid positions
-        valid = &(++valids)->valida;                         // increments valids pointer by one
+    while (--nValids && !compPosition(play, *valid))      // iterates over valid positions
+        valid = &(++valids)->valida;                      // increments valids pointer by one
     
-    return compPosition(play, *valid) ? valids : NULL;       // returns if (l,c) is a valid position
+    return compPosition(play, *valid) ? valids : NULL;    // returns if (l,c) is a valid position
 }
 
 // Executa uma jogada
