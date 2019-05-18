@@ -9,61 +9,51 @@
  *
  * @return 
  */
-int readFile(ESTADO *e, char *file_name, LEST* s)
+int readFile(char *file, int type, ESTADO *e, LEST* s)
 {
-    FILE *file;
-    char file_txt[MAX_STR], ch;//*teste="teste";
-
-    sprintf(file_txt, "../saves/%s.txt", file_name);
+    FILE *fp;
+    char ch, file_path[MAX_STR];
     
-    file = fopen(file_txt, "r");
+    if (type)
+        sprintf(file_path, "../saves/%s.txt", file);
+    else
+        sprintf(file_path, "../../../../../../mnt/dav/%s.txt", file);
     
-    if (file == NULL)
+    if (!(fp = fopen(file_path, "r")))
         return 7;
-
+    
     freeStack(s);
     
-    //if(*s==NULL)
-      //  printf("stackfreed");
-    
-    while(fgetc(file) != EOF)
+    do
     {
-        fseek(file, -1, SEEK_CUR);
-
-        ch = fgetc(file);
-        //printf("%c",ch);
-        e->modo = (ch == 'M' ? '0' : ch == 'A' ? '1' : ch == '?' ? HELP: ERROR);
-        fseek(file, 1, SEEK_CUR);
+        e->modo = fgetc(fp) == 'M' ? '0' : '1';
+        fseek(fp, 1, SEEK_CUR);
         
-        ch = fgetc(file);
-        //printf("%c",ch);
-        e->peca= (ch == 'X' ? VALOR_X : ch == 'O'? VALOR_O: ch == '?' ? HELP: ERROR);
-        fseek(file, 1, SEEK_CUR);
+        e->peca = fgetc(fp) == 'X' ? VALOR_X : VALOR_O;
+        fseek(fp, 1, SEEK_CUR);
         
-        ch=fgetc(file);
-        e->botLVL = (ch == ' ' ? 1 : ch);
-        fseek(file, 1, SEEK_CUR);
+        e->botLVL = fgetc(fp);
+        fseek(fp, 1, SEEK_CUR);
         
-        for(int l = 0; l < DIM; l++)
-            for(int c = 0; c < DIM; c++)
+        for (int l = 0; l < DIM; l++)
+            for (int c = 0; c < DIM; c++)
             {
-                ch=fgetc(file);
+                ch = fgetc(fp);
                 e->grelha[l][c] = ch == '-' ? VAZIA : ch == 'X' ? VALOR_X : ch == 'O' ? VALOR_O : ERROR;
-                fseek(file, 1, SEEK_CUR);
+                fseek(fp, 1, SEEK_CUR);
             }
-        fseek(file, 1, SEEK_CUR);
         
         update(e);
         altPush(*e, s);
-       // saveState(teste,*s);
-        *e=(*s)->e;
+        *e = (*s)->e;
     }
+    while (fgetc(fp) != EOF);
     
-    fclose(file);
+    fclose(fp);
+    
     return 0;
 }
 
-//
 /**
  * @brief 
  *
@@ -106,7 +96,8 @@ void saveState(char* file, LEST s)
                 fputc(c < CLI ? ' ' : '\n', fp);    // prints a blank space or a line break to separate columns and lines
             }
         
-        fputc('\n', fp);                            // prints a blank line in file to separate states
+        if (s->next)
+            fputc('\n', fp);                        // prints a blank line in file to separate states
     }
     
     fclose(fp);                                     // closes file

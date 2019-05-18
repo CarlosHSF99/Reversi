@@ -133,7 +133,7 @@ int interpret(ESTADO *e, LEST *s, char *input)
         case 'u': case 'U':                    // in case it is [U]ndo
             return undo(i, e, s);              // validates command and returns error code
         case 'c': case 'C':                    // in case it is [C]hampionship
-            return championship(i, cmd[1]);    // validates command and returns error code
+            return championship(i, cmd[1], e, s);    // validates command and returns error code
         case 'q': case 'Q':                    // in case it is [Q]uit
             return quit(i);                    // validates command and returns error code
         default:                               // by default
@@ -231,12 +231,12 @@ int automatic(int i, char *cmd[MAX_STR], ESTADO *e, LEST *s)
  */
 int load(int i, char *cmd, ESTADO *e, LEST *s)
 {
-    if (i < 2)                     // checks if there are too few arguments
-        return 3;                  // returns error code
-    if (i > 2)                     // checks if there are too many arguments
-        return 4;                  // returns error code
+    if (i < 2)                        // checks if there are too few arguments
+        return 3;                     // returns error code
+    if (i > 2)                        // checks if there are too many arguments
+        return 4;                     // returns error code
     
-    return readFile(e, cmd, s);    //
+    return readFile(cmd, 1, e, s);    //
 }
 
 /**
@@ -367,6 +367,8 @@ int undo(int i, ESTADO *e, LEST *s)
 {
     if (e->modo == HELP)    // checks if the game has started
         return 2;           // returns error code
+    if (!(*s)->next)        // 
+        return -1;          // 
     if (!e->nValidas)       // checks if the game has ended
         return 13;          // returns error code
     if (i > 1)              // checks if there are too many arguments
@@ -403,14 +405,17 @@ int quit(int i)
  *
  * @see playBot
  */
-int championship(int i, char *cmd)
+int championship(int i, char *cmd, ESTADO *e, LEST *s)
 {
-    if (i < 2)              // checks if there are too few arguments
+    if (i < 1)              // checks if there are too few arguments
         return 3;           // returns error code
     if (i > 2)              // checks if there are too many arguments
         return 4;           // returns error code
     
-    return playBot(cmd);    //
+    if (i == 1)
+        cmd = NULL;
+    
+    return playChamp(cmd, e, s);
 }
 
 /**
@@ -423,51 +428,51 @@ int championship(int i, char *cmd)
  */
 void errorHandling(int num, char cli[CLI][MAX_STR])
 {
-    updateCLI(cli);                                                    // updates CLI
+    updateCLI(cli);
     
-    switch (num)                                                       // tests error code
+    switch (num)
     {
-        case 1:                                                        // in case it is 1
-            strcpy(cli[CLI], "reversi: Invalid Command\n");            //
+        case 1:
+            strcpy(cli[CLI], "reversi: Invalid Command\n");
             break;
-        case 2:                                                        // in case it is 2
-            strcpy(cli[CLI], "reversi: Not in a Game Mode\n");         //
+        case 2:
+            strcpy(cli[CLI], "reversi: Not in a Game Mode\n");
             break;
-        case 3:                                                        // in case it is 3
-            strcpy(cli[CLI], "reversi: Too few arguments\n");          //
+        case 3:
+            strcpy(cli[CLI], "reversi: Too few arguments\n");
             break;
-        case 4:                                                        // in case it is 4
-            strcpy(cli[CLI], "reversi: Too many arguments\n");         //
+        case 4:
+            strcpy(cli[CLI], "reversi: Too many arguments\n");
             break;
-        case 5:                                                        // in case it is 5
-            strcpy(cli[CLI], "reversi: Invalid first argument\n");     //
+        case 5:
+            strcpy(cli[CLI], "reversi: Invalid first argument\n");
             break;
-        case 6:                                                        // in case it is 6
-            strcpy(cli[CLI], "reversi: Invalid second argument\n");    //
+        case 6:
+            strcpy(cli[CLI], "reversi: Invalid second argument\n");
             break;
-        case 7:                                                        // in case it is 7
-            strcpy(cli[CLI], "reversi: Invalid file name\n");          //
+        case 7:
+            strcpy(cli[CLI], "reversi: Invalid file name\n");
             break;
-        case 8:                                                        // in case it is 8
-            strcpy(cli[CLI], "reversi: Invalid position\n");           //
+        case 8:
+            strcpy(cli[CLI], "reversi: Invalid position\n");
             break;
-        case 9:                                                        // in case it is 9
-            strcpy(cli[CLI], "reversi: State jumped\n");               //
+        case 9:
+            strcpy(cli[CLI], "reversi: State jumped\n");
             break;
-        case 10:                                                       // in case it is 10
-            strcpy(cli[CLI], "reversi: Draw\n");                       //
+        case 10:
+            strcpy(cli[CLI], "reversi: Draw\n");
             break;
-        case 11:                                                       // in case it is 11
-            strcpy(cli[CLI], "reversi: X Won\n");                      //
+        case 11:
+            strcpy(cli[CLI], "reversi: X Won\n");
             break;
-        case 12:                                                       // in case it is 12
-            strcpy(cli[CLI], "reversi: O Won\n");                      //
+        case 12:
+            strcpy(cli[CLI], "reversi: O Won\n");
             break;
-        case 13:                                                       // in case it is 13
-            strcpy(cli[CLI], "reversi: Game has ended\n");             //
+        case 13:
+            strcpy(cli[CLI], "reversi: Game has ended\n");
             break;
-        default:                                                       //
-            strcpy(cli[CLI], "reversi: error\n");                      //
+        default:
+            strcpy(cli[CLI], "reversi: error\n");
             break;
     }
 }

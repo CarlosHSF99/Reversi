@@ -334,23 +334,39 @@ void popundo(ESTADO *e, LEST* s) // DEFINIR MELHOR QUANTAS VEZES SE FAZ UNDO
     *e = (*s)->e;          // sets state e to now last state
 }
 
-// Championship function
 /**
- * @brief 
+ * @brief Championship
  *
  * @param file
  *
  * @return 
  */
-int playBot(char *file)
+int playChamp(char *file, ESTADO *e, LEST *s)
 {
-    FILE *fp;
-    char file_txt[MAX_STR];
+    int num;
+    static char saved[MAX_STR];
     
-    sprintf(file_txt, "../../../../../../mnt/dav/%s.txt", file);    // 
+    if (file)
+        strcpy(saved, file);
     
-    if (!(fp = fopen(file_txt, "r")))                               //
-        return 1;                                                   //
+    if (readFile(saved, 1, e, s))
+        start('1', VALOR_X, '3', e, s);
+    else    
+        num = bot3(e, s);
     
-    return 0;                                                       //
+    if (isGameOver(*e))
+    {
+        if (e->scoreX > e->scoreO)
+            strcat(saved, ".gX");
+        else if (e->scoreO < e->scoreX)
+            strcat(saved, ".gO");
+        else
+            strcat(saved, ".g-");
+    }
+    
+    saveState(saved, *s);
+    
+    e->modo = '0';
+
+    return num;
 }

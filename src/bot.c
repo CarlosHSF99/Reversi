@@ -25,7 +25,7 @@ int bot3(ESTADO *e, LEST* s)
     puts("");
     
     //miniMax(*e, 7, 1, &play);
-    negaMax(*e, 7, 1, &play);
+    negaMax(*e, 5, 1, &play);
     //mm = negaMax2(*e, 3, 1);
     //miniMaxAB(*e, 7, (int)-INFINITY, (int)INFINITY, 1, &play);
     
@@ -129,7 +129,7 @@ int negaMax(ESTADO father, int depth, int player, POSICAO *play)
         {
             value = newValue;
             
-            if (depth == 7)
+            if (depth == 5)
                 *play = *valid;
         }
     }

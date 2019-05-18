@@ -26,21 +26,30 @@ estado.h
 Definição do estado i.e. tabuleiro. Representação matricial do tabuleiro.
 */
 
-// definição de valores possiveis no tabuleiro
+/**
+ * @brief definição de valores possiveis no tabuleiro
+ */
 typedef enum {VAZIA, VALOR_X, VALOR_O, VALIDA, HELP,ERROR} VALOR;
 
-// posicao
+/**
+ * @brief 
+ */
 typedef struct posicao {
     int l, c;
 } POSICAO;
 
+/**
+ * @brief 
+ */
 typedef struct virar {
     POSICAO valida;
     POSICAO virar[MAX_POS];
     int nVirar;
 } VALIDAS;
 
-// Estrutura que armazena o estado do jogo
+/**
+ * @brief Estrutura que armazena o estado do jogo
+ */
 typedef struct estado {
     char modo;                  // modo em que se está a jogar! 0-> manual, 1-> contra computador
     VALOR peca;                 // peça do jogador que vai jogar!
@@ -56,6 +65,9 @@ typedef struct estado {
     int showHelp;               // mostra posicao ajuda
 } ESTADO;
 
+/**
+ * @brief 
+ */
 typedef struct history {
     ESTADO e;
     struct history *next;       // proximo estado
@@ -100,13 +112,13 @@ int play(int i, char *cmd[MAX_STR], ESTADO *e, LEST *s);
 int valid(int i, ESTADO *e);
 int help(int i, ESTADO *e);
 int undo(int i, ESTADO *e, LEST *s);
-int championship(int i, char *cmd);
+int championship(int i, char *cmd, ESTADO *e, LEST *s);
 int quit(int i);
 
 //estado.c
 void start(char mode, VALOR piece, char lvl, ESTADO *e, LEST *s);
 
-int readFile(ESTADO *e, char *file_name, LEST *s);
+int readFile(char *file, int type, ESTADO *e, LEST *s);
 void saveState(char *filename, LEST s);
 void saveFirstLine(FILE **fp, LEST s);
 
@@ -127,7 +139,7 @@ void popundo(ESTADO* e, LEST *s);
 
 int isGameOver(ESTADO e);
 
-int playBot(char *file);
+int playChamp(char *file, ESTADO *e, LEST *s);
 
 void printInterface(ESTADO e, char lines[DIM][MAX_STR]);
 
@@ -146,6 +158,7 @@ void boardInicial(VALOR grelha[DIM][DIM]);
 int bot1(ESTADO *e, LEST *s);
 int bot2(ESTADO *e, LEST *s);
 int bot3(ESTADO *e, LEST *s);
+
 int miniMax(ESTADO father, int depth, int minmax, POSICAO *play);
 int negaScout(ESTADO father, int depth, int A, int B, int player, POSICAO *play);
 int negaMax(ESTADO father, int depth, int player, POSICAO *play);

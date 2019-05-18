@@ -18,7 +18,7 @@ void start(char mode, VALOR piece, char lvl, ESTADO *e, LEST *s)
     
     new_s = malloc(sizeof(struct history));    // allocates new memory 
     
-    new_s->next = (*s);                        // 
+    new_s = *s;                                // 
     *s = new_s;                                // 
     
     e->modo = mode;                            // sets game mode to manual mode ('0' or '1')
@@ -33,9 +33,8 @@ void start(char mode, VALOR piece, char lvl, ESTADO *e, LEST *s)
     (*s)->e = *e;                              // adds state to history
 }
 
-// Sets board to inicial board
 /**
- * @brief 
+ * @brief Sets board to inicial board
  *
  * @param grelha[DIM][DIM]
  */

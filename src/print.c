@@ -83,8 +83,6 @@ void showValid(ESTADO *e)
             valida = e->validas[i].valida;             // sets valida to current valid position
             e->grelha[valida.l][valida.c] = VALIDA;    // changes current position do VALID (.)
         }
-    
-    e->showValid = 0;                                  // resets showValid print modifier to 0
 }
 
 /**
@@ -96,6 +94,4 @@ void showHelp(ESTADO *e)
 {
     if (e->showHelp)                               // checks if the "help" position is to be shown
         e->grelha[e->help.l][e->help.c] = HELP;    // changes "help" position to HELP (?)
-    
-    e->showHelp = 0;                               // resets showHelp print modifier to 0
 }
