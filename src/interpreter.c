@@ -135,7 +135,7 @@ int interpret(ESTADO *e, LEST *s, char *input)
         case 'c': case 'C':                    // in case it is [C]hampionship
             return championship(i, cmd[1], e, s);    // validates command and returns error code
         case 'q': case 'Q':                    // in case it is [Q]uit
-            return quit(i);                    // validates command and returns error code
+            return quit(i, s);                 // validates command and returns error code
         default:                               // by default
             return 1;                          // returns Invalid Command error code
     }
@@ -380,22 +380,6 @@ int undo(int i, ESTADO *e, LEST *s)
 }
 
 /**
- * @brief Validates [Q]uit commnad
- *
- * @param[in] i
- *
- * @return 
- */
-int quit(int i)
-{
-    if (i > 1)       // checks if there are too many arguments
-        return 4;    // returns error code
-    
-    CLEAR;           //
-    exit(0);         //
-}
-
-/**
  * @brief Validates [C]hampionship commnad
  *
  * @param[in] i
@@ -416,6 +400,23 @@ int championship(int i, char *cmd, ESTADO *e, LEST *s)
         cmd = NULL;
     
     return playChamp(cmd, e, s);
+}
+
+/**
+ * @brief Validates [Q]uit commnad
+ *
+ * @param[in] i
+ *
+ * @return 
+ */
+int quit(int i, LEST *s)
+{
+    if (i > 1)       // checks if there are too many arguments
+        return 4;    // returns error code
+    
+    freeStack(s);    //
+    CLEAR;           //
+    exit(0);         //
 }
 
 /**

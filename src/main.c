@@ -29,8 +29,7 @@ int main()
     
     interpreter(e, s);                             //
     
-    ss = &s;                                       //
-    freeStack(ss);                                 //
+    freeStack(&s);                                 //
     
     return 0;                                      //
 }

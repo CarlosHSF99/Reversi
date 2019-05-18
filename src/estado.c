@@ -349,7 +349,7 @@ int playChamp(char *file, ESTADO *e, LEST *s)
     if (file)
         strcpy(saved, file);
     
-    if (readFile(saved, 1, e, s))
+    if ((num = readFile(saved, 1, e, s)))
         start('1', VALOR_X, '3', e, s);
     else    
         num = bot3(e, s);

@@ -113,7 +113,7 @@ int valid(int i, ESTADO *e);
 int help(int i, ESTADO *e);
 int undo(int i, ESTADO *e, LEST *s);
 int championship(int i, char *cmd, ESTADO *e, LEST *s);
-int quit(int i);
+int quit(int i, LEST *s);
 
 //estado.c
 void start(char mode, VALOR piece, char lvl, ESTADO *e, LEST *s);
