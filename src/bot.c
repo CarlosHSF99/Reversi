@@ -24,19 +24,19 @@ int bot3(ESTADO *e, LEST* s)
     //play.l = 0;
     //play.c = 0;
     
-    mm = negaMax2(*e, 5, 1);
+    mm = negaMax(*e, 5, 1);
     //miniMax(*e, 5, 1, &play);
     //negaMax(*e, 5, 1, &play);
     //miniMaxAB(*e, 7, (int)-INFINITY, (int)INFINITY, 1, &play);
     
-    //printf("(%d,%d)\n", play.l, play.c);
-    //printf("(%d,%d)\n", mm.play.l, mm.play.c);
+    printf("\n(%d,%d)\n", mm.play.l, mm.play.c);
+    //printf("\n(%d,%d)\n", play.l, play.c);
     
     return doPlay(mm.play, e, s);
     //return doPlay(play, e, s);
 }
 
-MINIMAX negaMax2(ESTADO father, int depth, int player)
+MINIMAX negaMax(ESTADO father, int depth, int player)
 {
     MINIMAX mm;
     
@@ -61,7 +61,7 @@ MINIMAX negaMax2(ESTADO father, int depth, int player)
             }
         }
         
-        mm.score = evalFunc(father);//player * (father.bot == VALOR_X ? father.scoreX - father.scoreO : father.scoreO - father.scoreX);
+        mm.score = player * evalFunc(father);
         
         return mm;
     }
@@ -77,13 +77,12 @@ MINIMAX negaMax2(ESTADO father, int depth, int player)
         reverse(valids, &child);
         switchPiece(&child.peca);
         update(&child);
-        double newValue = -negaMax2(child, depth - 1, -player).score;
+        double newValue = -negaMax(child, depth - 1, -player).score;
         
-        if (newValue > mm.score)
+        if (newValue >= mm.score)
         {
             mm.score = newValue;
-            if (depth == 5)
-                mm.play = *valid;
+            mm.play = *valid;
         }
     }
     
@@ -264,6 +263,25 @@ int evalFunc(ESTADO e)
     return score;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 void print(ESTADO e);
 
 int miniMax(ESTADO father, int depth, int minmax, POSICAO *play)
@@ -287,7 +305,7 @@ int miniMax(ESTADO father, int depth, int minmax, POSICAO *play)
             update(&child);
             int eval = miniMax(child, depth - 1, 1/*!minmax*/, play);
             
-            if (eval > maxEval)
+            if (eval >= maxEval)
             {
                 maxEval = eval;
                 
@@ -310,7 +328,7 @@ int miniMax(ESTADO father, int depth, int minmax, POSICAO *play)
             update(&child);
             int eval = miniMax(child, depth - 1, 0/*!minmax*/, play);
             
-            if (eval < minEval)
+            if (eval <= minEval)
             {
                 minEval = eval;
                 
@@ -323,7 +341,7 @@ int miniMax(ESTADO father, int depth, int minmax, POSICAO *play)
     }
 }
 
-int negaMax(ESTADO father, int depth, int player, POSICAO *play)
+int negaMax2(ESTADO father, int depth, int player, POSICAO *play)
 {
     if (!depth || isGameOver(father))
     {
@@ -352,9 +370,9 @@ int negaMax(ESTADO father, int depth, int player, POSICAO *play)
         reverse(valids, &child);
         switchPiece(&child.peca);
         update(&child);
-        int newValue = -negaMax(child, depth - 1, -player, play);
+        int newValue = -negaMax2(child, depth - 1, -player, play);
         
-        if (newValue > value)
+        if (newValue >= value)
         {
             value = newValue;
             
@@ -394,9 +412,9 @@ int negaScout(ESTADO father, int depth, int A, int B, int player, POSICAO *play)
         reverse(valids, &child);
         switchPiece(&child.peca);
         update(&child);
-        int newValue = -negaMax(child, depth - 1, -player, play);
+        int newValue = -negaMax2(child, depth - 1, -player, play);
         
-        if (newValue > value)
+        if (newValue >= value)
         {
             value = newValue;
             
@@ -430,7 +448,7 @@ int miniMaxAB(ESTADO father, int depth, int A, int B, int minmax, POSICAO *play)
             update(&child);
             int eval = miniMax(child, depth - 1, 1, play);
             
-            if (eval > maxEval)
+            if (eval >= maxEval)
             {
                 maxEval = eval;
                 
@@ -458,7 +476,7 @@ int miniMaxAB(ESTADO father, int depth, int A, int B, int minmax, POSICAO *play)
             update(&child);
             int eval = miniMax(child, depth - 1, 0, play);
             
-            if (eval < minEval)
+            if (eval <= minEval)
             {
                 minEval = eval;
                 
