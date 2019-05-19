@@ -7,7 +7,6 @@
  */
 int main()
 {
-    LEST* ss = NULL;                               //
     LEST s = calloc(1, sizeof(struct history));    // allocs memory to the stack setting every bit to zero
     ESTADO e = {0};                                // declares a state "e" inicializing all its bits to zero
 

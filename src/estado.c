@@ -157,7 +157,6 @@ void update(ESTADO *e)
     int nVirarHelp = 0;                         // initializes nVirarHelp to 0
     
     e->nValidas = e->scoreX = e->scoreO = 0;    // resets number of valid positions and score
-    
     for (int l = 0; l < DIM; l++)               // iterates over board lines
         for (int c = 0; c < DIM; c++)           // iterates over board columns
         {

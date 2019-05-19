@@ -3,8 +3,9 @@
 /**
  * @brief 
  *
+ * @param file
+ * @param type
  * @param e
- * @param file_name
  * @param s
  *
  * @return 
@@ -30,6 +31,7 @@ int readFile(char *file, int type, ESTADO *e, LEST* s)
         fseek(fp, 1, SEEK_CUR);
         
         e->peca = fgetc(fp) == 'X' ? VALOR_X : VALOR_O;
+        e->bot = e->peca;
         fseek(fp, 1, SEEK_CUR);
         
         e->botLVL = fgetc(fp);

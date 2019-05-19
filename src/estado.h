@@ -159,11 +159,13 @@ int bot1(ESTADO *e, LEST *s);
 int bot2(ESTADO *e, LEST *s);
 int bot3(ESTADO *e, LEST *s);
 
+MINIMAX negaMax2(ESTADO father, int depth, int player);
+int evalFunc(ESTADO *e);
+
 int miniMax(ESTADO father, int depth, int minmax, POSICAO *play);
 int negaScout(ESTADO father, int depth, int A, int B, int player, POSICAO *play);
 int negaMax(ESTADO father, int depth, int player, POSICAO *play);
 int miniMaxAB(ESTADO father, int depth, int A, int B, int minmax, POSICAO *play);
-MINIMAX negaMax2(ESTADO father, int depth, int player);
 
 //linked_lists.c
 void freeStack(LEST *s);

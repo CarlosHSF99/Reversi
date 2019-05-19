@@ -16,24 +16,78 @@ int bot2(ESTADO *e, LEST* s)
 
 int bot3(ESTADO *e, LEST* s)
 {
-    POSICAO play;
-    //MINIMAX mm;
+    MINIMAX mm;
+    //POSICAO play;
     
-    play.l = 0;
-    play.c = 0;
+    //puts("");
     
-    puts("");
+    //play.l = 0;
+    //play.c = 0;
     
-    //miniMax(*e, 7, 1, &play);
-    negaMax(*e, 5, 1, &play);
-    //mm = negaMax2(*e, 3, 1);
+    mm = negaMax2(*e, 6, 1);
+    //miniMax(*e, 5, 1, &play);
+    //negaMax(*e, 5, 1, &play);
     //miniMaxAB(*e, 7, (int)-INFINITY, (int)INFINITY, 1, &play);
     
     //printf("(%d,%d)\n", play.l, play.c);
     //printf("(%d,%d)\n", mm.play.l, mm.play.c);
     
-    return doPlay(play, e, s);
-    //return doPlay(mm.play.l, mm.play.c, e, s);
+    return doPlay(mm.play, e, s);
+    //return doPlay(play, e, s);
+}
+
+MINIMAX negaMax2(ESTADO father, int depth, int player)
+{
+    MINIMAX mm;
+    
+    if (!depth || isGameOver(father))
+    {
+        if (isGameOver(father))
+        {
+            if (father.bot == VALOR_X ? father.scoreX > father.scoreO : father.scoreX < father.scoreO)
+            {
+                mm.score = (int)INFINITY;
+                return mm;
+            }
+            else if (father.bot == VALOR_O ? father.scoreX < father.scoreO : father.scoreX > father.scoreO)
+            {
+                mm.score = (int)-INFINITY;
+                return mm;
+            }
+            else
+            {
+                mm.score = 0;
+                return mm;
+            }
+        }
+        
+        mm.score = player * (father.bot == VALOR_X ? father.scoreX - father.scoreO : father.scoreO - father.scoreX);
+        
+        return mm;
+    }
+    
+    VALIDAS *valids = father.validas;
+    POSICAO *valid = &valids->valida;
+    int nValids = father.nValidas;
+    mm.score = (int)-INFINITY;
+    
+    for (; nValids--; valid = &(++valids)->valida)
+    {
+        ESTADO child = father;
+        reverse(valids, &child);
+        switchPiece(&child.peca);
+        update(&child);
+        int newValue = -negaMax2(child, depth - 1, -player).score;
+        
+        if (newValue > mm.score)
+        {
+            mm.score = newValue;
+            //if (depth == 5)
+                mm.play = *valid;
+        }
+    }
+    
+    return mm;
 }
 
 void print(ESTADO e);
@@ -63,7 +117,7 @@ int miniMax(ESTADO father, int depth, int minmax, POSICAO *play)
             {
                 maxEval = eval;
                 
-                if (depth == 7)
+                if (depth == 5)
                     *play = *valid;
             }
         }
@@ -86,7 +140,7 @@ int miniMax(ESTADO father, int depth, int minmax, POSICAO *play)
             {
                 minEval = eval;
                 
-                if (depth == 7)
+                if (depth == 5)
                     *play = *valid;
             }
         }
@@ -109,7 +163,8 @@ int negaMax(ESTADO father, int depth, int player, POSICAO *play)
                 return 0;
         }
         
-        return player * (father.bot == VALOR_X ? father.scoreX - father.scoreO : father.scoreO - father.scoreX);
+        //return player * (father.bot == VALOR_X ? father.scoreX - father.scoreO : father.scoreO - father.scoreX);
+        return player * (father.bot == VALOR_X ? father.scoreX : father.scoreO);
     }
     
     VALIDAS *valids = father.validas;
@@ -245,60 +300,6 @@ int miniMaxAB(ESTADO father, int depth, int A, int B, int minmax, POSICAO *play)
         
         return minEval;
     }
-}
-
-MINIMAX negaMax2(ESTADO father, int depth, int player)
-{
-    MINIMAX mm;
-    
-    if (!depth || isGameOver(father))
-    {
-        if (isGameOver(father))
-        {
-            if (father.scoreX > father.scoreO)
-            {
-                mm.score = (int)INFINITY;
-                return mm;
-            }
-            else if (father.scoreX < father.scoreO)
-            {
-                mm.score = (int)-INFINITY;
-                return mm;
-            }
-            else
-            {
-                mm.score = 0;
-                return mm;
-            }
-        }
-        
-        mm.score = player * (father.bot == VALOR_X ? father.scoreX - father.scoreO : father.scoreO - father.scoreX);
-        
-        return mm;
-    }
-    
-    VALIDAS *valids = father.validas;
-    POSICAO *valid = &valids->valida;
-    int nValids = father.nValidas;
-    mm.score = (int)-INFINITY;
-    
-    for (; nValids--; valid = &(++valids)->valida)
-    {
-        ESTADO child = father;
-        reverse(valids, &child);
-        switchPiece(&child.peca);
-        update(&child);
-        int newValue = -negaMax2(child, depth - 1, -player).score;
-        
-        if (newValue > mm.score)
-        {
-            mm.score = newValue;
-            mm.play.l = valid->l;
-            mm.play.c = valid->c;
-        }
-    }
-    
-    return mm;
 }
 
 void print(ESTADO e)
