@@ -91,7 +91,7 @@ typedef struct history {
 
 //
 typedef struct minimax {
-    int score;
+    double score;
     POSICAO play;
 } MINIMAX;
 
@@ -160,7 +160,7 @@ int bot2(ESTADO *e, LEST *s);
 int bot3(ESTADO *e, LEST *s);
 
 MINIMAX negaMax2(ESTADO father, int depth, int player);
-int evalFunc(ESTADO *e);
+int evalFunc(ESTADO e);
 
 int miniMax(ESTADO father, int depth, int minmax, POSICAO *play);
 int negaScout(ESTADO father, int depth, int A, int B, int player, POSICAO *play);
