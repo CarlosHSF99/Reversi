@@ -1,4 +1,4 @@
-#include "estado.h"
+#include "reversi.h"
 
 /**
  * @brief Loops game turns infinitely
@@ -13,7 +13,7 @@
  * @see playerTurn
  * @see errorHandling
  */
-void gameCycle(ESTADO e, LState s)
+void gameCycle(ESTADO e, LState *s)
 {
     int num;
     char cli[DIM][MAX_STR];
@@ -27,9 +27,9 @@ void gameCycle(ESTADO e, LState s)
         e.showValid = e.showHelp = 0;                         // resets showValid and showHelp print modifiers to 0
         
         if (e.modo == '1' && e.peca == e.bot && e.nValids)    // checks if it's a bot turn
-            num = botTurn(&e, &s);                            // bot playes and returns error code
+            num = botTurn(&e, s);                             // bot playes and returns error code
         else                                                  // else it is a player turn
-            num = playerTurn(cli, &e, &s);                    // lets player input command and returns error code
+            num = playerTurn(cli, &e, s);                     // lets player input command and returns error code
 
         if (num)                                              // if there's an error
             errorHandling(num, cli);                          // handles error code

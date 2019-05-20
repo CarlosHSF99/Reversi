@@ -1,4 +1,4 @@
-#include "estado.h"
+#include "reversi.h"
 
 /**
  * @brief Prints current state (mode, palyer, score, board) and CLI

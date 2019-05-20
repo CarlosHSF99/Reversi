@@ -1,4 +1,4 @@
-#include "estado.h"
+#include "reversi.h"
 
 /**
  * @brief 
@@ -26,9 +26,7 @@ int main()
     s->e = e;                                      //
     s->next = NULL;                                //
     
-    gameCycle(e, s);                             //
-    
-    freeStack(&s);                                 //
+    gameCycle(e, &s);                              //
     
     return 0;                                      //
 }

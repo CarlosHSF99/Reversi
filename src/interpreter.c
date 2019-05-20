@@ -1,4 +1,4 @@
-#include "estado.h"
+#include "reversi.h"
 
 /**
  * @brief Interprets player command
@@ -74,11 +74,11 @@ int interpreter(ESTADO *e, LState *s, char *input)
  *
  * @see start
  */
-int newMode(int i, char *cmd, ESTADO *e, LState *s)
+int newMode(int nCmd, char *cmd, ESTADO *e, LState *s)
 {
-    if (i < 2)                       // checks if there are too few arguments
+    if (nCmd < 2)                    // checks if there are too few arguments
         return 3;                    // returns error code
-    if (i > 2)                       // checks if there are too many arguments
+    if (nCmd > 2)                    // checks if there are too many arguments
         return 4;                    // returns error code
     
     VALOR piece;
@@ -98,7 +98,7 @@ int newMode(int i, char *cmd, ESTADO *e, LState *s)
 /**
  * @brief Validates [A]utomatic command
  *
- * @param[in] i Number of command arguments plus the command itself
+ * @param[in] nCmd Number of command arguments plus the command itself
  * @param[in] cmd[MAX_STR] Command beeing validated
  * @param[in,out] e State being played
  * @param[in,out] s Hostory stack
@@ -107,11 +107,11 @@ int newMode(int i, char *cmd, ESTADO *e, LState *s)
  *
  * @see start
  */
-int autoMode(int i, char *cmd[MAX_STR], ESTADO *e, LState *s)
+int autoMode(int nCmd, char *cmd[MAX_STR], ESTADO *e, LState *s)
 {
-    if (i < 3)                        // checks if there are too few arguments
+    if (nCmd < 3)                     // checks if there are too few arguments
         return 3;                     // returns error code
-    if (i > 3)                        // checks if there are too many arguments
+    if (nCmd > 3)                     // checks if there are too many arguments
         return 4;                     // returns error code
     
     VALOR piece;
@@ -141,7 +141,7 @@ int autoMode(int i, char *cmd[MAX_STR], ESTADO *e, LState *s)
 /**
  * @brief Validates [L]oad command
  *
- * @param[in] i Number of command arguments plus the command itself
+ * @param[in] nCmd Number of command arguments plus the command itself
  * @param[in] cmd Command beeing validated
  * @param[in,out] e State being played
  * @param[in,out] s Hostory stack
@@ -150,11 +150,11 @@ int autoMode(int i, char *cmd[MAX_STR], ESTADO *e, LState *s)
  *
  * @see readFile
  */
-int load(int i, char *cmd, ESTADO *e, LState *s)
+int load(int nCmd, char *cmd, ESTADO *e, LState *s)
 {
-    if (i < 2)                     // checks if there are too few arguments
+    if (nCmd < 2)                  // checks if there are too few arguments
         return 3;                  // returns error code
-    if (i > 2)                     // checks if there are too many arguments
+    if (nCmd > 2)                  // checks if there are too many arguments
         return 4;                  // returns error code
     
     return readFile(cmd, e, s);    //
@@ -163,7 +163,7 @@ int load(int i, char *cmd, ESTADO *e, LState *s)
 /**
  * @brief Validates [E]ngrave command
  *
- * @param[in] i Number of command arguments plus the command itself
+ * @param[in] nCmd Number of command arguments plus the command itself
  * @param[in] cmd Command beeing validated
  * @param[in,out] e State being played
  * @param[in,out] s Hostory stack
@@ -172,13 +172,13 @@ int load(int i, char *cmd, ESTADO *e, LState *s)
  *
  * @see saveState
  */
-int save(int i, char *cmd, ESTADO e, LState *s)
+int save(int nCmd, char *cmd, ESTADO e, LState *s)
 {
     if (e.modo == HELP)       // checks if the game has started
         return 2;             // returns error code
-    if (i < 2)                // checks if there are too few arguments
+    if (nCmd < 2)             // checks if there are too few arguments
         return 3;             // returns error code
-    if (i > 2)                // checks if there are too many arguments
+    if (nCmd > 2)             // checks if there are too many arguments
         return 4;             // returns error code
     
     writeFile(0, cmd, *s);    //
@@ -189,7 +189,7 @@ int save(int i, char *cmd, ESTADO e, LState *s)
 /**
  * @brief Validates [J]est command
  *
- * @param[in] i Number of command arguments plus the command itself
+ * @param[in] nCmd Number of command arguments plus the command itself
  * @param[in] cmd[MAX_STR] Command beeing validated
  * @param[in,out] e State being played
  * @param[in,out] s Hostory stack
@@ -198,15 +198,15 @@ int save(int i, char *cmd, ESTADO e, LState *s)
  *
  * @see doPlay
  */
-int play(int i, char *cmd[MAX_STR], ESTADO *e, LState *s)
+int play(int nCmd, char *cmd[MAX_STR], ESTADO *e, LState *s)
 {
     if (e->modo == HELP)          // checks if the game has started
         return 2;                 // returns error code
     if (!e->nValids)              // checks if the game has ended
         return 13;                // returns error code
-    if (i < 3)                    // checks if there are too few arguments
+    if (nCmd < 3)                 // checks if there are too few arguments
         return 3;                 // returns error code
-    if (i > 3)                    // checks if there are too many arguments
+    if (nCmd > 3)                 // checks if there are too many arguments
         return 4;                 // returns error code
     if (strlen(cmd[1]) > 1)       // checks if first argument is too long
         return 5;                 // returns error code
@@ -232,18 +232,18 @@ int play(int i, char *cmd[MAX_STR], ESTADO *e, LState *s)
 /**
  * @brief Validates [S]how command
  *
- * @param[in] i Number of command arguments plus the command itself
+ * @param[in] nCmd Number of command arguments plus the command itself
  * @param[in,out] e State being played
  *
  * @return Error code
  */
-int valid(int i, ESTADO *e)
+int valid(int nCmd, ESTADO *e)
 {
     if (e->modo == HELP)    // checks if the game has started
         return 2;           // returns error code
     if (!e->nValids)        // checks if the game has ended
         return 13;          // returns error code
-    if (i > 1)              // checks if there are too many arguments
+    if (nCmd > 1)           // checks if there are too many arguments
         return 4;           // returns error code
     
     e->showValid = 1;       //
@@ -254,18 +254,18 @@ int valid(int i, ESTADO *e)
 /**
  * @brief Validates [H]elp command
  *
- * @param[in] i Number of command arguments plus the command itself
+ * @param[in] nCmd Number of command arguments plus the command itself
  * @param[in,out] e State being played
  *
  * @return Error code
  */
-int help(int i, ESTADO *e)
+int help(int nCmd, ESTADO *e)
 {
     if (e->modo == HELP)    // checks if the game has started
         return 2;           // returns error code
     if (!e->nValids)        // checks if the game has ended
         return 13;          // returns error code
-    if (i > 1)              // checks if there are too many arguments
+    if (nCmd > 1)           // checks if there are too many arguments
         return 4;           // returns error code
     
     e->showHelp = 1;        //
@@ -276,7 +276,7 @@ int help(int i, ESTADO *e)
 /**
  * @brief Validates [U]ndo command
  *
- * @param[in] i Number of command arguments plus the command itself
+ * @param[in] nCmd Number of command arguments plus the command itself
  * @param[in,out] e State being played
  * @param[in,out] s Hostory stack
  *
@@ -284,7 +284,7 @@ int help(int i, ESTADO *e)
  *
  * @see popundo
  */
-int undo(int i, ESTADO *e, LState *s)
+int undo(int nCmd, ESTADO *e, LState *s)
 {
     if (e->modo == HELP)    // checks if the game has started
         return 2;           // returns error code
@@ -292,7 +292,7 @@ int undo(int i, ESTADO *e, LState *s)
         return -1;          // 
     if (!e->nValids)        // checks if the game has ended
         return 13;          // returns error code
-    if (i > 1)              // checks if there are too many arguments
+    if (nCmd > 1)           // checks if there are too many arguments
         return 4;           // returns error code
     
     popUndo(e, s);          //
@@ -303,21 +303,21 @@ int undo(int i, ESTADO *e, LState *s)
 /**
  * @brief Validates [C]hampionship command
  *
- * @param i Number of command arguments plus the command itself
+ * @param nCmd Number of command arguments plus the command itself
  * @param cmd Command beeing validated
  * @param e Gaem state
  * @param s History Stack
  *
  * @return Error code
  */
-int championship(int i, char *cmd, ESTADO *e, LState *s)
+int championship(int nCmd, char *cmd, ESTADO *e, LState *s)
 {
-    if (i < 1)        // checks if there are too few arguments
-        return 3;     // returns error code
-    if (i > 2)        // checks if there are too many arguments
-        return 4;     // returns error code
+    if (nCmd < 1)      // checks if there are too few arguments
+        return 3;      // returns error code
+    if (nCmd > 2)      // checks if there are too many arguments
+        return 4;      // returns error code
     
-    if (i == 1)
+    if (nCmd == 1)
         cmd = NULL;
     
     return playChamp(cmd, e, s);
@@ -326,13 +326,13 @@ int championship(int i, char *cmd, ESTADO *e, LState *s)
 /**
  * @brief Validates [Q]uit command
  *
- * @param[in] i Number of command arguments plus the command itself
+ * @param[in] nCmd Number of command arguments plus the command itself
  *
  * @return Error code
  */
-int quit(int i, LState *s)
+int quit(int nCmd, LState *s)
 {
-    if (i > 1)       // checks if there are too many arguments
+    if (nCmd > 1)    // checks if there are too many arguments
         return 4;    // returns error code
     
     freeStack(s);    //

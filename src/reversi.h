@@ -96,26 +96,26 @@ typedef struct history {
 typedef struct minimax {
     double score;
     POSITION play;
-} MINIMAX;
+} NEGAMAX;
 
 // game_cycle.c
-void gameCycle(ESTADO e, LState s);
+void gameCycle(ESTADO e, LState *s);
 int botTurn(ESTADO *e, LState *s);
 int playerTurn(char cli[DIM][MAX_STR], ESTADO *e, LState *s);
 
 // interpreter.c
 int interpreter(ESTADO *e, LState *s, char *input);
 void errorHandling(int num, char cli[CLI][MAX_STR]);
-int newMode(int i, char *cmd, ESTADO *e, LState *s);
-int autoMode(int i, char *cmd[MAX_STR],ESTADO *e, LState *s);
-int load(int i, char *cmd, ESTADO *e, LState *s);
-int save(int i, char *cmd, ESTADO e, LState *s);
-int play(int i, char *cmd[MAX_STR], ESTADO *e, LState *s);
-int valid(int i, ESTADO *e);
-int help(int i, ESTADO *e);
-int undo(int i, ESTADO *e, LState *s);
-int championship(int i, char *cmd, ESTADO *e, LState *s);
-int quit(int i, LState *s);
+int newMode(int nCmd, char *cmd, ESTADO *e, LState *s);
+int autoMode(int nCmd, char *cmd[MAX_STR],ESTADO *e, LState *s);
+int load(int nCmd, char *cmd, ESTADO *e, LState *s);
+int save(int nCmd, char *cmd, ESTADO e, LState *s);
+int play(int nCmd, char *cmd[MAX_STR], ESTADO *e, LState *s);
+int valid(int nCmd, ESTADO *e);
+int help(int nCmd, ESTADO *e);
+int undo(int nCmd, ESTADO *e, LState *s);
+int championship(int nCmd, char *cmd, ESTADO *e, LState *s);
+int quit(int nCmd, LState *s);
 
 // game_start.c
 void start(char mode, VALOR piece, char lvl, ESTADO *e, LState *s);
@@ -159,20 +159,14 @@ void popUndo(ESTADO* e, LState *s);
 int bot1(ESTADO *e, LState *s);
 int bot2(ESTADO *e, LState *s);
 int bot3(ESTADO *e, LState *s);
-MINIMAX negaMax(ESTADO father, int depth, int player);
+NEGAMAX negaMax(ESTADO father, int depth, int player);
 int evalFunc(ESTADO e);
 
-//linked_lists.c
+// linked_list.c
 void freeStack(LState *s);
 void newGame(LState *s);
 void push(ESTADO e, LState *s);
 void altPush(ESTADO e, LState *s);
 void pop(LState *s);
-
-//
-int miniMax(ESTADO father, int depth, int minmax, POSITION *play);
-int negaScout(ESTADO father, int depth, int A, int B, int player, POSITION *play);
-int negaMax2(ESTADO father, int depth, int player, POSITION *play);
-int miniMaxAB(ESTADO father, int depth, int A, int B, int minmax, POSITION *play);
 
 #endif //PROJ_ESTADO_H

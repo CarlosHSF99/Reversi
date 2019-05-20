@@ -1,4 +1,4 @@
-#include "estado.h"
+#include "reversi.h"
 
 /**
  * @brief Updates game state
