@@ -10,17 +10,12 @@
  *
  * @return 
  */
-int readFile(char *file, int type, ESTADO *e, LEST* s)
+int readFile(char *file, ESTADO *e, LState* s)
 {
     FILE *fp;
-    char ch, file_path[MAX_STR];
+    char ch;
     
-    if (type)
-        sprintf(file_path, "../saves/%s.txt", file);
-    else
-        sprintf(file_path, "../../../../../../mnt/dav/%s.txt", file);
-    
-    if (!(fp = fopen(file_path, "r")))
+    if (!(fp = fopen(file, "r")))
         return 7;
     
     freeStack(s);
@@ -62,19 +57,16 @@ int readFile(char *file, int type, ESTADO *e, LEST* s)
  * @param file
  * @param s
  */
-void saveState(char* file, LEST s)
+void writeFile(int champ, char* file, LState s)
 {
     FILE *fp;
     int l, c;
-    char file_path[MAX_STR];
     
-    sprintf(file_path, "../saves/%s.txt", file);    // adds path and ".txt" extension to file name
-    
-    fp = fopen(file_path, "w");                     // opens file on write mode
+    fp = fopen(file, "w");                          // opens file on write mode
     
     for (; s; s = s->next)                          // iterates over game history
     {
-        saveFirstLine(&fp, s);                      // prints current first line (mode, piece and level) in file
+        writeFirstLine(&fp, s);                     // prints current first line (mode, piece and level) in file
         
         for(l = 0; l < DIM; l++)                    // iterates over board lines
             for(c = 0; c < DIM; c++)                // iterates over board columns
@@ -98,6 +90,9 @@ void saveState(char* file, LEST s)
                 fputc(c < CLI ? ' ' : '\n', fp);    // prints a blank space or a line break to separate columns and lines
             }
         
+        if (champ)
+            break;
+        
         if (s->next)
             fputc('\n', fp);                        // prints a blank line in file to separate states
     }
@@ -111,7 +106,7 @@ void saveState(char* file, LEST s)
  * @param fp
  * @param s
  */
-void saveFirstLine(FILE **fp, LEST s)
+void writeFirstLine(FILE **fp, LState s)
 {
     fprintf(*fp, "%c ", s->e.modo == '0' ? 'M' : 'A');        // prints game mode in file
     fprintf(*fp, "%c ", s->e.peca == VALOR_X ? 'X' : 'O');    // prints playing piece in file

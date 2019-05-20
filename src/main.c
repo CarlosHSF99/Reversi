@@ -7,7 +7,7 @@
  */
 int main()
 {
-    LEST s = calloc(1, sizeof(struct history));    // allocs memory to the stack setting every bit to zero
+    LState s = calloc(1, sizeof(struct history));    // allocs memory to the stack setting every bit to zero
     ESTADO e = {0};                                // declares a state "e" inicializing all its bits to zero
 
     if (!s)                                        // checks if there was an error allocing memory to s
@@ -21,12 +21,12 @@ int main()
     e.scoreX = 2;                                  // sets X score to 2
     e.scoreO = 2;                                  // sets O score to 2
     
-    boardInicial(e.grelha);                        // sets board to its inicial state
+    inicialBoard(e.grelha);                        // sets board to its inicial state
     
     s->e = e;                                      //
     s->next = NULL;                                //
     
-    interpreter(e, s);                             //
+    gameCycle(e, s);                             //
     
     freeStack(&s);                                 //
     

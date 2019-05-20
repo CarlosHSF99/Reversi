@@ -6,16 +6,16 @@
  *
  * @param s
  */
-void freeStack(LEST *s)
+void freeStack(LState *s)
 {
-    LEST* temp = s;         //
+    LState* temp = s;         //
     
     while (*s)              //
     {
         *temp = (*s);        //
         *s = (*s)->next;    //
         free(*temp);         //
-        *temp=NULL;
+        *temp = NULL;
     }
 }
 
@@ -25,13 +25,13 @@ void freeStack(LEST *s)
  *
  * @param s
  */
-void newGame(LEST *s)
+void newGame(LState *s)
 {
-    LEST temp = (*s);       //
+    LState temp = *s;       //
     
     while ((*s)->next)      //
     {
-        temp = (*s);        //
+        temp = *s;        //
         *s = (*s)->next;    //
         free(temp);         //
     }
@@ -44,11 +44,11 @@ void newGame(LEST *s)
  * @param e
  * @param s
  */
-void push(ESTADO e, LEST *s)
+void push(ESTADO e, LState *s)
 {
-    LEST new_s = malloc(sizeof(struct history));    //
+    LState new_s = malloc(sizeof(struct history));    //
     new_s->e = e;                                   //
-    new_s->next = (*s);                             //
+    new_s->next = *s;                             //
     *s = new_s;                                     //
 }
 
@@ -58,9 +58,9 @@ void push(ESTADO e, LEST *s)
  *
  * @param s
  */
-void pop(LEST *s)
+void pop(LState *s)
 {
-    LEST temp = (*s);                 //
+    LState temp = *s;                 //
     
     if((*s)->next == NULL)            //
         printf("\nStack vazia\n");    //
@@ -77,21 +77,23 @@ void pop(LEST *s)
  * @param e
  * @param s
  */
-void altPush(ESTADO e,LEST* s)
+void altPush(ESTADO e, LState* s)
 {  
-    if((*s)==NULL){
+    if(!(*s))
+    {
         *s = malloc(sizeof(struct history));
-        (*s)->e=e;
+        (*s)->e = e;
         (*s)->next=NULL;
     }
-    else{
-        LEST new_s = malloc(sizeof(struct history));
+    else
+    {
+        LState new_s = malloc(sizeof(struct history));
         new_s->e = e;
         new_s->next = NULL;
         
-        while((*s)->next!=NULL)
-            s=&((*s)->next);
-
+        while((*s)->next)
+            s = &((*s)->next);
+        
         (*s)->next = new_s;
     }
 }

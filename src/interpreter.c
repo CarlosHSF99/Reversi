@@ -1,92 +1,13 @@
 #include "estado.h"
 
 /**
- * @brief 
+ * @brief Interprets player command
  *
- * @param[in] e
- * @param[in] s
- */
-void interpreter(ESTADO e, LEST s)
-{
-    int num;
-    char cli[DIM][MAX_STR];
-
-    for (int i = 0; i < DIM; i++)                              // iterates over CLI lines
-        strcpy(cli[i], "\n");                                  // sets current CLI line to "\n" (blank)
-    
-    while (1)                                                  // loops infinitely. Every iteration curresponds to a command or a bot turn
-    {
-        printInterface(e, cli);                                // prints state and CLI
-        e.showValid = e.showHelp = 0;                          // resets showValid and showHelp print modifiers to 0
-        
-        if (e.modo == '1' && e.peca == e.bot && e.nValidas)    // checks if it's a bot turn
-            num = botTurn(&e, &s);                             // bot playes and returns error code
-        else                                                   // else it is a player turn
-            num = playerTurn(cli, &e, &s);                     // lets player input command and returns error code
-
-        if (num)                                               // if there's an error
-            errorHandling(num, cli);                           // handles error code
-    }
-}
-
-/**
- * @brief Bot's turn to play
+ * @param[in,out] e State beeing played
+ * @param[int,out] s History stack
+ * @param[in] input Player's input
  *
- * @param[in,out] e
- * @param[in,out] s
- *
- * @return 
- */
-int botTurn(ESTADO *e, LEST *s)
-{
-    fflush(stdout);               // flushes the output buffer before sleep() functions
-    
-    switch (e->botLVL)            // tests the bot level
-    {
-        case '1':                 // in case it is 1
-            sleep(1);             // waits one second to give time to visualize player move
-            return bot1(e, s);    // playes level 1 bot and returns error code
-        case '2':                 // in case it is 2
-            sleep(1);             // waits one second to give time to visualize player move
-            return bot2(e, s);    // playes level 2 bot and returns error code
-        case '3':                 // in case it is 3
-            return bot3(e, s);    // playes level 3 bot and returns error code
-        default:                  // by default
-            return -1;            // returns undefined error code
-    }
-}
-
-/**
- * @brief Player's turn to give command
- *
- * @param[out] cli[DIM][MAX_STR]
- * @param[in,out] e
- * @param[in,out] s
- *
- * @return 
- */
-int playerTurn(char cli[DIM][MAX_STR], ESTADO *e, LEST *s)
-{
-    char input[INPUT];
-    
-    updateCLI(cli);                             // updates CLI
-    
-    if (!fgets(input, MAX_STR, stdin))          // recieves input command
-        exit(0);                                // terminates program if there's an error getting input
-    
-    sprintf(cli[CLI], "reversi> %s", input);    // concatenates prompt with input
-    
-    return interpret(e, s, input);              // interpretes command and checks if an error code is returne
-}
-
-/**
- * @brief Interpretes player command
- *
- * @param[in,out] e
- * @param[int,out] s
- * @param[in] input
- *
- * @return 
+ * @return Erro code
  *
  * @see new
  * @see automatic
@@ -99,61 +20,61 @@ int playerTurn(char cli[DIM][MAX_STR], ESTADO *e, LEST *s)
  * @see championship
  * @see quit
  */
-int interpret(ESTADO *e, LEST *s, char *input)
+int interpreter(ESTADO *e, LState *s, char *input)
 {
     char *cmd[MAX_STR];
     int i;
     
-    cmd[0] = strtok(input, " \n");             // saves command to first index of cmd array
+    cmd[0] = strtok(input, " \n");              // saves command to first index of cmd array
     
-    if (!cmd[0])                               // checks if there's a command
-        return 0;                              // returns error code
-    else if (strlen(cmd[0]) > 1)               // else checks if the command is more than one character long
-        return 1;                              // returns error code
+    if (!cmd[0])                                // checks if there's a command
+        return 0;                               // returns error code
+    else if (strlen(cmd[0]) > 1)                // else checks if the command is more than one character long
+        return 1;                               // returns error code
     
-    for (i = 0; cmd[i]; i++)                   // iterates over cmd array
-        cmd[i+1] = strtok(NULL, " \n");        // saves arguments to cmd array
+    for (i = 0; cmd[i]; i++)                    // iterates over cmd array
+        cmd[i+1] = strtok(NULL, " \n");         // saves arguments to cmd array
     
-    switch (cmd[0][0])                         // tests command
+    switch (cmd[0][0])                          // tests command
     {
-        case 'n': case 'N':                    // in case it is [N]ew
-            return new(i, cmd[1], e, s);       // validates command and returns error code
-        case 'a': case 'A':                    // in case it is [A]utomatic
-            return automatic(i, cmd, e, s);    // validates command and returns error code
-        case 'l': case 'L':                    // in case it is [L]oad
-            return load(i, cmd[1], e, s);      // validates command and returns error code
-        case 'e': case 'E':                    // in case it is [E]ngrave
-            return save(i, cmd[1], *e, s);     // validates command and returns error code
-        case 'j': case 'J':                    // in case it is [J]est
-            return play(i, cmd, e, s);         // validates command and returns error code
-        case 's': case 'S':                    // in case it is [S]ave
-            return valid(i, e);                // validates command and returns error code
-        case 'h': case 'H':                    // in case it is [H]elp
-            return help(i, e);                 // validates command and returns error code
-        case 'u': case 'U':                    // in case it is [U]ndo
-            return undo(i, e, s);              // validates command and returns error code
-        case 'c': case 'C':                    // in case it is [C]hampionship
+        case 'n': case 'N':                     // in case it is [N]ew
+            return newMode(i, cmd[1], e, s);    // validates command and returns error code
+        case 'a': case 'A':                     // in case it is [A]utomatic
+            return autoMode(i, cmd, e, s);      // validates command and returns error code
+        case 'l': case 'L':                     // in case it is [L]oad
+            return load(i, cmd[1], e, s);       // validates command and returns error code
+        case 'e': case 'E':                     // in case it is [E]ngrave
+            return save(i, cmd[1], *e, s);      // validates command and returns error code
+        case 'j': case 'J':                     // in case it is [J]est
+            return play(i, cmd, e, s);          // validates command and returns error code
+        case 's': case 'S':                     // in case it is [S]ave
+            return valid(i, e);                 // validates command and returns error code
+        case 'h': case 'H':                     // in case it is [H]elp
+            return help(i, e);                  // validates command and returns error code
+        case 'u': case 'U':                     // in case it is [U]ndo
+            return undo(i, e, s);               // validates command and returns error code
+        case 'c': case 'C':                     // in case it is [C]hampionship
             return championship(i, cmd[1], e, s);    // validates command and returns error code
-        case 'q': case 'Q':                    // in case it is [Q]uit
-            return quit(i, s);                 // validates command and returns error code
-        default:                               // by default
-            return 1;                          // returns Invalid Command error code
+        case 'q': case 'Q':                     // in case it is [Q]uit
+            return quit(i, s);                  // validates command and returns error code
+        default:                                // by default
+            return 1;                           // returns Invalid Command error code
     }
 }
 
 /**
- * @brief Validates [N]ew commnad
+ * @brief Validates [N]ew command
  *
- * @param[in] i
- * @param[in] cmd
- * @param[in,out] e
- * @param[in,out] s
+ * @param[in] i Number of command arguments plus the command itself
+ * @param[in] cmd Command beeing validated
+ * @param[in,out] e State being played
+ * @param[in,out] s Hostory stack
  *
- * @return 
+ * @return Error code
  *
  * @see start
  */
-int new(int i, char *cmd, ESTADO *e, LEST *s)
+int newMode(int i, char *cmd, ESTADO *e, LState *s)
 {
     if (i < 2)                       // checks if there are too few arguments
         return 3;                    // returns error code
@@ -175,18 +96,18 @@ int new(int i, char *cmd, ESTADO *e, LEST *s)
 }
 
 /**
- * @brief Validates [A]utomatic commnad
+ * @brief Validates [A]utomatic command
  *
- * @param[in] i
- * @param[in] cmd[MAX_STR]
- * @param[in,out] e
- * @param[in,out] s
+ * @param[in] i Number of command arguments plus the command itself
+ * @param[in] cmd[MAX_STR] Command beeing validated
+ * @param[in,out] e State being played
+ * @param[in,out] s Hostory stack
  *
- * @return 
+ * @return Error code
  *
  * @see start
  */
-int automatic(int i, char *cmd[MAX_STR], ESTADO *e, LEST *s)
+int autoMode(int i, char *cmd[MAX_STR], ESTADO *e, LState *s)
 {
     if (i < 3)                        // checks if there are too few arguments
         return 3;                     // returns error code
@@ -218,70 +139,70 @@ int automatic(int i, char *cmd[MAX_STR], ESTADO *e, LEST *s)
 }
 
 /**
- * @brief Validates [L]oad commnad
+ * @brief Validates [L]oad command
  *
- * @param[in] i
- * @param[in] cmd
- * @param[in,out] e
- * @param[in,out] s
+ * @param[in] i Number of command arguments plus the command itself
+ * @param[in] cmd Command beeing validated
+ * @param[in,out] e State being played
+ * @param[in,out] s Hostory stack
  *
- * @return 
+ * @return Error code
  *
  * @see readFile
  */
-int load(int i, char *cmd, ESTADO *e, LEST *s)
+int load(int i, char *cmd, ESTADO *e, LState *s)
 {
-    if (i < 2)                        // checks if there are too few arguments
-        return 3;                     // returns error code
-    if (i > 2)                        // checks if there are too many arguments
-        return 4;                     // returns error code
+    if (i < 2)                     // checks if there are too few arguments
+        return 3;                  // returns error code
+    if (i > 2)                     // checks if there are too many arguments
+        return 4;                  // returns error code
     
-    return readFile(cmd, 1, e, s);    //
+    return readFile(cmd, e, s);    //
 }
 
 /**
- * @brief Validates [E]ngrave commnad
+ * @brief Validates [E]ngrave command
  *
- * @param[in] i
- * @param[in] cmd
- * @param[in,out] e
- * @param[in,out] s
+ * @param[in] i Number of command arguments plus the command itself
+ * @param[in] cmd Command beeing validated
+ * @param[in,out] e State being played
+ * @param[in,out] s Hostory stack
  *
- * @return 
+ * @return Error code
  *
  * @see saveState
  */
-int save(int i, char *cmd, ESTADO e, LEST *s)
+int save(int i, char *cmd, ESTADO e, LState *s)
 {
-    if (e.modo == HELP)    // checks if the game has started
-        return 2;          // returns error code
-    if (i < 2)             // checks if there are too few arguments
-        return 3;          // returns error code
-    if (i > 2)             // checks if there are too many arguments
-        return 4;          // returns error code
+    if (e.modo == HELP)       // checks if the game has started
+        return 2;             // returns error code
+    if (i < 2)                // checks if there are too few arguments
+        return 3;             // returns error code
+    if (i > 2)                // checks if there are too many arguments
+        return 4;             // returns error code
     
-    saveState(cmd, *s);    //
+    writeFile(0, cmd, *s);    //
     
-    return 0;              //
+    return 0;                 //
 }
 
 /**
- * @brief Validates [J]est commnad
+ * @brief Validates [J]est command
  *
- * @param[in] i
- * @param[in] cmd[MAX_STR]
- * @param[in,out] e
- * @param[in,out] s
+ * @param[in] i Number of command arguments plus the command itself
+ * @param[in] cmd[MAX_STR] Command beeing validated
+ * @param[in,out] e State being played
+ * @param[in,out] s Hostory stack
  *
- * @return 
+ * @return Error code
  *
  * @see doPlay
  */
-int play(int i, char *cmd[MAX_STR], ESTADO *e, LEST *s)
+int play(int i, char *cmd[MAX_STR], ESTADO *e, LState *s)
 {
     if (e->modo == HELP)          // checks if the game has started
         return 2;                 // returns error code
-    if (!e->nValidas)             // checks if the game has ended
+    if (!e->nValids)              // checks if the game has ended
         return 13;                // returns error code
     if (i < 3)                    // checks if there are too few arguments
         return 3;                 // returns error code
@@ -300,7 +221,7 @@ int play(int i, char *cmd[MAX_STR], ESTADO *e, LEST *s)
     if (cmd[1][1] > '7')          // checks if second argument is bigger than 7
         return 6;                 // returns error code
     
-    POSICAO play;
+    POSITION play;
     
     play.l = cmd[1][0] - '0';     // initializes l to the first argument
     play.c = cmd[2][0] - '0';     // initializes c to the second argument
@@ -309,18 +230,18 @@ int play(int i, char *cmd[MAX_STR], ESTADO *e, LEST *s)
 }
 
 /**
- * @brief Validates [S]how commnad
+ * @brief Validates [S]how command
  *
- * @param[in] i
- * @param[in,out] e
+ * @param[in] i Number of command arguments plus the command itself
+ * @param[in,out] e State being played
  *
- * @return 
+ * @return Error code
  */
 int valid(int i, ESTADO *e)
 {
     if (e->modo == HELP)    // checks if the game has started
         return 2;           // returns error code
-    if (!e->nValidas)       // checks if the game has ended
+    if (!e->nValids)        // checks if the game has ended
         return 13;          // returns error code
     if (i > 1)              // checks if there are too many arguments
         return 4;           // returns error code
@@ -331,18 +252,18 @@ int valid(int i, ESTADO *e)
 }
 
 /**
- * @brief Validates [H]elp commnad
+ * @brief Validates [H]elp command
  *
- * @param[in] i
- * @param[in,out] e
+ * @param[in] i Number of command arguments plus the command itself
+ * @param[in,out] e State being played
  *
- * @return 
+ * @return Error code
  */
 int help(int i, ESTADO *e)
 {
     if (e->modo == HELP)    // checks if the game has started
         return 2;           // returns error code
-    if (!e->nValidas)       // checks if the game has ended
+    if (!e->nValids)        // checks if the game has ended
         return 13;          // returns error code
     if (i > 1)              // checks if there are too many arguments
         return 4;           // returns error code
@@ -353,48 +274,48 @@ int help(int i, ESTADO *e)
 }
 
 /**
- * @brief Validates [U]ndo commnad
+ * @brief Validates [U]ndo command
  *
- * @param[in] i
- * @param[in,out] e
- * @param[in,out] s
+ * @param[in] i Number of command arguments plus the command itself
+ * @param[in,out] e State being played
+ * @param[in,out] s Hostory stack
  *
- * @return 
+ * @return Error code
  *
  * @see popundo
  */
-int undo(int i, ESTADO *e, LEST *s)
+int undo(int i, ESTADO *e, LState *s)
 {
     if (e->modo == HELP)    // checks if the game has started
         return 2;           // returns error code
     if (!(*s)->next)        // 
         return -1;          // 
-    if (!e->nValidas)       // checks if the game has ended
+    if (!e->nValids)        // checks if the game has ended
         return 13;          // returns error code
     if (i > 1)              // checks if there are too many arguments
         return 4;           // returns error code
     
-    popundo(e, s);          //
+    popUndo(e, s);          //
     
     return 0;               //
 }
 
 /**
- * @brief Validates [C]hampionship commnad
+ * @brief Validates [C]hampionship command
  *
- * @param[in] i
- * @param[in] cmd
+ * @param i Number of command arguments plus the command itself
+ * @param cmd Command beeing validated
+ * @param e Gaem state
+ * @param s History Stack
  *
- * @return 
- *
- * @see playBot
+ * @return Error code
  */
-int championship(int i, char *cmd, ESTADO *e, LEST *s)
+int championship(int i, char *cmd, ESTADO *e, LState *s)
 {
-    if (i < 1)              // checks if there are too few arguments
-        return 3;           // returns error code
-    if (i > 2)              // checks if there are too many arguments
-        return 4;           // returns error code
+    if (i < 1)        // checks if there are too few arguments
+        return 3;     // returns error code
+    if (i > 2)        // checks if there are too many arguments
+        return 4;     // returns error code
     
     if (i == 1)
         cmd = NULL;
@@ -403,13 +324,13 @@ int championship(int i, char *cmd, ESTADO *e, LEST *s)
 }
 
 /**
- * @brief Validates [Q]uit commnad
+ * @brief Validates [Q]uit command
  *
- * @param[in] i
+ * @param[in] i Number of command arguments plus the command itself
  *
- * @return 
+ * @return Error code
  */
-int quit(int i, LEST *s)
+int quit(int i, LState *s)
 {
     if (i > 1)       // checks if there are too many arguments
         return 4;    // returns error code
@@ -422,16 +343,16 @@ int quit(int i, LEST *s)
 /**
  * @brief Handles erro codes
  *
- * @param num
- * @param cli[CLI][MAX_STR]
+ * @param error Error code
+ * @param cli[CLI][MAX_STR] CLI where error message will be displayed
  *
  * @see updateCLI
  */
-void errorHandling(int num, char cli[CLI][MAX_STR])
+void errorHandling(int error, char cli[CLI][MAX_STR])
 {
     updateCLI(cli);
     
-    switch (num)
+    switch (error)
     {
         case 1:
             strcpy(cli[CLI], "reversi: Invalid Command\n");
@@ -450,6 +371,9 @@ void errorHandling(int num, char cli[CLI][MAX_STR])
             break;
         case 6:
             strcpy(cli[CLI], "reversi: Invalid second argument\n");
+            break;
+        case -7:
+            strcpy(cli[CLI], "reversi: Championship file created\n");
             break;
         case 7:
             strcpy(cli[CLI], "reversi: Invalid file name\n");
@@ -476,16 +400,4 @@ void errorHandling(int num, char cli[CLI][MAX_STR])
             strcpy(cli[CLI], "reversi: error\n");
             break;
     }
-}
-
-/**
- * @brief Updates CLI
- *
- * @param cli[DIM][MAX_STR]
- */
-void updateCLI(char cli[DIM][MAX_STR]/*, int n*/)
-{
-    //for (; n_times > 0; n_times--)     // iterates over n times
-        for (int i = 0; i < CLI; i++)    // iterates over CLI lines                                   
-            strcpy(cli[i], cli[i+1]);    // climbs CLI                                                
 }
